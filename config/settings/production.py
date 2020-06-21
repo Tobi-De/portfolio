@@ -197,5 +197,8 @@ sentry_logging = LoggingIntegration(
 )
 sentry_sdk.init(dsn=SENTRY_DSN, integrations=[sentry_logging, DjangoIntegration()])
 
-# Your stuff...
+# Maintencance mode
 # ------------------------------------------------------------------------------
+MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.CacheBackend"
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
