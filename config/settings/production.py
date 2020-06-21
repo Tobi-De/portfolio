@@ -136,18 +136,12 @@ INSTALLED_APPS += ["anymail"]  # noqa F405
 #     "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
 # }
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env("GMAIL_APP_USER")
-EMAIL_HOST_PASSWORD = env("GMAIL_APP_PASSWORD")
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = env("EMAIL_HOST")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 # Collectfast
 # ------------------------------------------------------------------------------
@@ -166,7 +160,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
