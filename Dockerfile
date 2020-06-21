@@ -2,7 +2,16 @@ FROM library/python:3.6.3-alpine
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apk update && apk upgrade && apk add --no-cache make g++ bash git openssh postgresql-dev curl
+RUN apk update \
+  # dependencies for building Python packages
+  && apk install -y build-essential \
+  # psycopg2 dependencies
+  && apk install -y libpq-dev \
+  # Translations dependencies
+  && apk install -y gettext \
+  # cleaning up unused files
+  && apk purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && rm -rf /var/lib/apt/lists/*
 
 # Create and set working directory
 RUN mkdir -p /usr/src/app,
