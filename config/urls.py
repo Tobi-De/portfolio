@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+from markdownx import urls as markdownx
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -11,8 +12,10 @@ urlpatterns = [
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
-    # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
+    path("markdownx/", include(markdownx)),
+    path("projects/", include("projects.urls", namespace="projects")),
+    path("collaborators/", include("projects.urls", namespace="collaborators")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

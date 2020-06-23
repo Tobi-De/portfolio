@@ -1,3 +1,6 @@
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
+from .models import Collaborator, Project
 
-# Register your models here.
+admin.site.register(Collaborator)
+admin.site.register(Project, MarkdownxModelAdmin)

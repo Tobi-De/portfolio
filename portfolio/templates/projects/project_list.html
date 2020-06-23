@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load markdown_extras %}
+
+{% block content %}
+  list projects <br>
+  {% for project in projects %}
+    <a href="{{ project.get_absolute_url }}">{{ project.title }}</a><br>
+  {% endfor %}
+
+{% endblock %}

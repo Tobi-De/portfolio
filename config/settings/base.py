@@ -68,12 +68,14 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "rest_framework",
     "rest_framework.authtoken",
+    "markdownx"
 ]
 
 LOCAL_APPS = [
     "projects.apps.ProjectsConfig",
     "newsletter.apps.NewsletterConfig",
-    "blog.apps.BlogConfig"
+    "blog.apps.BlogConfig",
+    "myadmin.apps.MyadminConfig"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

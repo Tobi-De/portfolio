@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load markdown_extras %}
+
+{% block content %}
+  {{ project }}
+
+  <a href="{% url "projects:project_update" slug=project.slug %}">update</a><br>
+  <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a><br>
+
+{% endblock %}
