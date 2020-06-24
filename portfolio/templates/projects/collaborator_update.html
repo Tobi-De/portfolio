@@ -2,10 +2,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <form action="{% url "projects:collaborator_create" %}" method="post">
+  <form  method="post">
     {% csrf_token %}
     {{ form | crispy }}
-    <button type="submit">submit</button>
+    <button type="submit">Update</button>
   </form>
 
 {% endblock %}

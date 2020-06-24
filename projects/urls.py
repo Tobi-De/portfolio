@@ -7,6 +7,8 @@ from .views import (
     ProjectUpdateView,
     ProjectDeleteView,
     CollaboratorCreateView,
+    CollaboratorUpdateView,
+    CollaboratorDeleteView,
     CollaboratorListView,
     CollaboratorDetailView,
 )
@@ -25,4 +27,6 @@ urlpatterns = [
         CollaboratorDetailView.as_view(),
         name="collaborator_detail",
     ),
+    path("update-cb/<str:slug>", CollaboratorUpdateView.as_view(), name="collaborator_update"),
+    path("delete-cb/<str:slug>", CollaboratorDeleteView.as_view(), name="collaborator_delete"),
 ]

@@ -4,8 +4,6 @@ from ..models import Collaborator, Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    author_name = serializers.CharField(max_length=60)
-
     class Meta:
         class Meta:
             model = Project

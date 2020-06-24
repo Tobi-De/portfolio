@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% load markdown_extras %}
 
 {% block content %}
   {{ collaborator }}
+
+  <a href="{% url "collaborators:collaborator_update" slug=collaborator.slug %}">update</a><br>
+  <a href="{% url "collaborators:collaborator_delete" slug=collaborator.slug %}">delete</a><br>
+
 
 {% endblock %}
