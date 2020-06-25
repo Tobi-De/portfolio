@@ -11,8 +11,17 @@ from django.views.generic import (
 )
 
 from .forms import BlogPostForm, BlogPostContentForm
-from .models import BlogPost
+from .models import BlogPost, BlogPostSeries
 from .viewmixins import PostPublishedRequiredMixin
+
+
+class HomeView(View):
+
+    def get(self, request, *args, **kwargs):
+        pass
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class BlogPostListView(ListView):
@@ -49,7 +58,7 @@ class BlogPostContentEditorView(SuperuserRequiredMixin, View):
             return redirect("blog:blogpost_content_editor", kwargs={"slug": blogpost})
 
 
-class BlogPostDetailView(PostPublishedRequiredMixin, FormValidMessageMixin, DetailView):
+class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
     model = BlogPost
 
 
@@ -69,4 +78,23 @@ class BlogPostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteVi
 
 
 class BlogPostSeriesCreateView(CreateView):
-    model = BlogPost
+    model = BlogPostSeries
+    template_name = "blog/blogpostseries_create.html"
+
+
+class BlogPostSeriesListView(ListView):
+    queryset = BlogPostSeries.objects.exclude(status=BlogPostSeries.STATUS.on_break)
+
+
+class BlogPostSeriesDetailView(DetailView):
+    model = BlogPostSeries
+
+
+class BlogPostSeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, UpdateView):
+    model = BlogPostSeries
+    template_name = "blog/blogpostseries_update.html"
+    form_valid_message = "Blog Series Created"
+
+
+class BlogPostSeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
+    model = BlogPostSeries

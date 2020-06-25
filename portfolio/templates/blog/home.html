@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  All <br>
+  {% for obj in blogposts %}
+    <a href="{{ blogpost.get_absolute_url }}">{{ blogpost.title }}</a><br>
+  {% endfor %}
+{% endblock %}

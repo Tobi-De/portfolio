@@ -1,3 +1,4 @@
+import environ
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Q
@@ -8,6 +9,9 @@ from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
+env = environ.Env()
+app_root_url = env("APP_ROOT_URL", default="http://0.0.0.0/")
+
 from .exceptions import AuthorDoesNotMatchError
 
 User = get_user_model()
@@ -15,6 +19,7 @@ User = get_user_model()
 
 # TODO need a monitor field to save the first time a blog is published
 # TODO schedule a date to publish the post
+# TODO default thumbnail for blog and projects
 
 
 class Blogable(models.Model):
@@ -88,31 +93,24 @@ class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel
     def get_absolute_url(self):
         return reverse(f"blog:blogpostseries_detail", kwargs={"slug": self.slug})
 
+    def auto_generated_body(self):
+        if not self.body:
+            self.body = f"##{self.title.upper()} Series\n\n###Blog post include\n\n"
+            self.save()
+
     def add_blogpost(self, blogpost):
         if blogpost.author != self.author:
             raise AuthorDoesNotMatchError
         blogpost.blogpostseries = self
         blogpost.save()
+        lenght = len(list(self.as_generator()))
+        self.body += f"{lenght + 1}. [{blogpost.title}]({app_root_url}{blogpost.get_absolute_url()})\n"
+        self.save()
 
     def delete_blogpost(self, blogpost):
         if blogpost.belongs_to_series(blogpostseries=self):
             blogpost.blogpostseries = None
             blogpost.save()
-
-    # def next_post(self, blogpost):
-    #     # get the next post of the series or raise EndOfSeriesError
-    #     if not blogpost.belongs_to_series(blogpostseries=self):
-    #         raise DoesNotBelongsToSeriesError
-    #     blogposts = self.as_generator()
-    #     for blogpost_ in blogposts:
-    #         if blogpost_ == blogpost:
-    #             return blogposts.__next__()
-    #
-    # def previous_post(self, blogpost):
-    #     # get the previous post of the series or raise EndOfSeriesError
-    #     if not blogpost.belongs_to_series(blogpostseries=self):
-    #         raise DoesNotBelongsToSeriesError
-    #     blogposts = self.as_generator()
 
     def as_generator(self):
         # return a generator fo all blogpost of this series
@@ -125,5 +123,7 @@ class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel
         categories = Category.objects.none()
         blogposts = self.as_generator()
         for blogpost in blogposts:
-            categories = Category.objects.filter(id__in=blogpost.categories.all() & Q(id__in=categories))
+            categories = Category.objects.filter(
+                id__in=blogpost.categories.all() & Q(id__in=categories)
+            )
         return categories
