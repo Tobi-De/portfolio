@@ -15,18 +15,26 @@ from .views import (
 
 app_name = "projects"
 urlpatterns = [
-    path("create/", ProjectCreateView.as_view(), name="project_create"),
-    path("list/", ProjectListView.as_view(), name="project_list"),
-    path("details/<str:slug>", ProjectDetailView.as_view(), name="project_detail"),
-    path("update/<str:slug>", ProjectUpdateView.as_view(), name="project_update"),
-    path("delete/<str:slug>", ProjectDeleteView.as_view(), name="project_delete"),
-    path("create-cb/", CollaboratorCreateView.as_view(), name="collaborator_create"),
-    path("list-cb/", CollaboratorListView.as_view(), name="collaborator_list"),
+    path("project-create/", ProjectCreateView.as_view(), name="project_create"),
+    path("project-list/", ProjectListView.as_view(), name="project_list"),
+    path("project-details/<str:slug>", ProjectDetailView.as_view(), name="project_detail"),
+    path("project-update/<str:slug>", ProjectUpdateView.as_view(), name="project_update"),
+    path("project-delete/<str:slug>", ProjectDeleteView.as_view(), name="project_delete"),
+    path("collaborator-create/", CollaboratorCreateView.as_view(), name="collaborator_create"),
+    path("collaborator-list/", CollaboratorListView.as_view(), name="collaborator_list"),
     path(
-        "details-cb/<str:slug>",
+        "collaborator-detail/<str:slug>",
         CollaboratorDetailView.as_view(),
         name="collaborator_detail",
     ),
-    path("update-cb/<str:slug>", CollaboratorUpdateView.as_view(), name="collaborator_update"),
-    path("delete-cb/<str:slug>", CollaboratorDeleteView.as_view(), name="collaborator_delete"),
+    path(
+        "collaborator-update/<str:slug>",
+        CollaboratorUpdateView.as_view(),
+        name="collaborator_update",
+    ),
+    path(
+        "collaborator-delete/<str:slug>",
+        CollaboratorDeleteView.as_view(),
+        name="collaborator_delete",
+    ),
 ]

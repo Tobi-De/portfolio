@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ blogpost }}
+
+  <a href="{% url "blog:blogpost_update" slug=blogpost.slug %}">update</a><br>
+  <a href="{% url "blog:blogpost_delete" slug=blogpost.slug %}">delete</a><br>
+
+
+{% endblock %}

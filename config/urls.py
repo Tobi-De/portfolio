@@ -15,7 +15,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("markdownx/", include(markdownx)),
     path("projects/", include("projects.urls", namespace="projects")),
-    path("collaborators/", include("projects.urls", namespace="collaborators")),
+    path("blog/", include("blog.urls", namespace="blog")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

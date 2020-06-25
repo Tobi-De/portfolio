@@ -3,6 +3,7 @@
 {% block content %}
   <a href={% url "projects:project_create" %}>create project</a> <br>
   <a href={% url "projects:project_list" %}>list project </a> <br>
-  <a href={% url "collaborators:collaborator_list" %}>collaborator list</a> <br>
-  <a href={% url "collaborators:collaborator_create" %}>collaborator create </a> <br>
+  <a href={% url "projects:collaborator_list" %}>collaborator list</a> <br>
+  <a href={% url "projects:collaborator_create" %}>collaborator create </a> <br>
+  <a href={% url "blog:blogpost_list" %}>blogpost</a>
 {% endblock %}

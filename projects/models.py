@@ -4,6 +4,7 @@ from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 from markdownx.models import MarkdownxField
 from model_utils import Choices
+from model_utils.fields import MonitorField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
 User = get_user_model()
@@ -19,7 +20,7 @@ class Collaborator(TimeStampedModel):
         return self.full_name
 
     def get_absolute_url(self):
-        return reverse("collaborators:collaborator_detail", kwargs={"slug": self.slug})
+        return reverse("projects:collaborator_detail", kwargs={"slug": self.slug})
 
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
@@ -30,8 +31,10 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     slug = AutoSlugField(populate_from=["title"])
     what_ive_learned = MarkdownxField("What I've learned", blank=True)
     github_link = models.URLField("Github repository link", blank=True)
+    status_changed = MonitorField(monitor="status")
     deployed_version_link = models.URLField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.CharField(max_length=60)
     collaborators = models.ManyToManyField(Collaborator, blank=True)
 
     def __str__(self):

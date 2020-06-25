@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  blogposts collaborators <br>
+  {% for blogpost in blogposts %}
+    <a href="{{ blogpost.get_absolute_url }}">{{ blogpost.title }}</a><br>
+  {% endfor %}
+
+
+{% endblock %}
