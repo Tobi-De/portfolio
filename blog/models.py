@@ -20,7 +20,7 @@ User = get_user_model()
 class Blogable(models.Model):
     thumbnail = models.ImageField(blank=True)
     title = models.CharField(max_length=150)
-    body = MarkdownxField()
+    body = MarkdownxField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -53,10 +53,10 @@ class Comment(TimeStampedModel, SoftDeletableModel):
 
 
 class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
-    STATUS = Choices("not_published", "published")
-    status = StatusField(default=STATUS.not_published)
+    STATUS = Choices("draft", "published")
+    status = StatusField(default=STATUS.draft)
     status_changed = MonitorField(monitor="status")
-    categories = models.ManyToManyField(Category, blank=True)
+    categories = models.ManyToManyField(Category)
     blogpostseries = models.ForeignKey(
         "blog.BlogPostSeries", null=True, blank=True, on_delete=models.SET_NULL
     )
@@ -70,7 +70,7 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @property
     def published_on(self):
-        if self.published:
+        if self.is_published:
             return self.status_changed
 
     def belongs_to_series(self, blogpostseries):
