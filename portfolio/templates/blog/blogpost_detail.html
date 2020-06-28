@@ -7,4 +7,12 @@
   <a href="{% url "blog:blogpost_delete" slug=blogpost.slug %}">delete</a><br>
 
 
+  {% if blogpost.previous_post %}
+    <a href="{{ blogpost.previous_post }}">previous</a><br>
+  {% endif %}
+  {% if blogpost.next_post %}
+    <a href="{{ blogpost.next_post.get_absolute_url }}">next</a><br>
+  {% endif %}
+
+
 {% endblock %}

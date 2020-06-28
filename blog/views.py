@@ -1,4 +1,5 @@
 from braces.views import SuperuserRequiredMixin, FormValidMessageMixin
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import (
@@ -10,7 +11,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import BlogPostForm, BlogPostContentForm
+from .forms import BlogPostContentForm
 from .models import BlogPost, BlogPostSeries
 from .viewmixins import PostPublishedRequiredMixin
 
@@ -18,21 +19,37 @@ from .viewmixins import PostPublishedRequiredMixin
 class HomeView(View):
 
     def get(self, request, *args, **kwargs):
-        pass
+        context = {
+            "recent_posts": BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-created")[:3],
+            "recent_series": BlogPostSeries.objects.all().order_by("-created")[:3]
+        }
+        return render(request, "blog/home.html", context)
 
     def post(self, request, *args, **kwargs):
         pass
 
 
 class BlogPostListView(ListView):
-    queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published)
     context_object_name = "blogposts"
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-created")
+        category = self.request.GET.get("category")
+        q = self.request.GET.get("q")
+        if category:
+            queryset = queryset.filter(categories__name=category)
+        if q:
+            queryset = queryset.filter(Q(title__icontains=q) | Q(body__icontains=q)).distinct()
+        return queryset
 
 
 class BlogPostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
     model = BlogPost
     template_name = "blog/blogpost_create.html"
-    form_class = BlogPostForm
+    fields = [
+        "thumbnail", "title", "status", "categories", "author", "blogpostseries", "scheduled_publish_date"
+    ]
     form_valid_message = "Blog post created"
 
     def get_success_url(self) -> str:
@@ -65,7 +82,9 @@ class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
 class BlogPostUpdateView(SuperuserRequiredMixin, PostPublishedRequiredMixin, FormValidMessageMixin, UpdateView):
     model = BlogPost
     template_name = "blog/blogpost_update.html"
-    form_class = BlogPostForm
+    fields = [
+        "thumbnail", "title", "status", "categories", "author", "blogpostseries", "scheduled_publish_date"
+    ]
     form_valid_message = "Blog post updated"
 
 
@@ -79,11 +98,15 @@ class BlogPostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteVi
 
 class BlogPostSeriesCreateView(CreateView):
     model = BlogPostSeries
+    fields = ["thumbnail", "title", "body", "status", "author"]
     template_name = "blog/blogpostseries_create.html"
 
 
 class BlogPostSeriesListView(ListView):
-    queryset = BlogPostSeries.objects.exclude(status=BlogPostSeries.STATUS.on_break)
+    model = BlogPostSeries
+    ordering = ["-created"]
+    paginate_by = 5
+    context_object_name = "series"
 
 
 class BlogPostSeriesDetailView(DetailView):
@@ -92,9 +115,14 @@ class BlogPostSeriesDetailView(DetailView):
 
 class BlogPostSeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, UpdateView):
     model = BlogPostSeries
+    fields = ["thumbnail", "title", "body", "status", "author"]
     template_name = "blog/blogpostseries_update.html"
     form_valid_message = "Blog Series Created"
 
 
 class BlogPostSeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
     model = BlogPostSeries
+    form_valid_message = "Blogpost Series Deleted"
+
+    def get_success_url(self):
+        return reverse("blog:blogpostseries_list")

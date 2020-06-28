@@ -2,7 +2,7 @@
 
 {% block content %}
   blogposts <br>
-  {% for blogpost in blogposts %}
-    <a href="{{ blogpost.get_absolute_url }}">{{ blogpost.title }}</a><br>
+  {% for blogpostseries in series %}
+    <a href="{{ blogpostseries.get_absolute_url }}">{{ blogpostseries.title }}</a><br>
   {% endfor %}
 {% endblock %}

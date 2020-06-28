@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  blogposts <br>
-  {% for blogpost in blogposts %}
-    <a href="{{ blogpost.get_absolute_url }}">{{ blogpost.title }}</a><br>
-  {% endfor %}
+  {{ blogpostseries }}
+  <a href="{% url "blog:blogpostseries_update" slug=blogpostseries.slug %}">update</a><br>
+  <a href="{% url "blog:blogpostseries_delete" slug=blogpostseries.slug %}">delete</a><br>
 {% endblock %}
