@@ -84,6 +84,10 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
             return None
         return blogposts[queryset_index_of(blogposts, self) - 1]
 
+    @property
+    def comments(self):
+        return Comment.objects.filter(blogpost=self).order_by("-created")
+
     def belongs_to_series(self, blogpostseries):
         return self.blogpostseries == blogpostseries
 
@@ -116,8 +120,8 @@ class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel
 
 class Comment(TimeStampedModel):
     user_name = models.CharField(max_length=30)
-    parent = models.ForeignKey("self", on_delete=models.CASCADE, blank=True, null=True)
     content = models.TextField()
+    response = models.TextField(blank=True)
     blogpost = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
 
     def __str__(self):

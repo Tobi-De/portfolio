@@ -11,7 +11,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import BlogPostContentForm
+from .forms import BlogPostContentForm, CommentForm
 from .models import BlogPost, BlogPostSeries
 from .viewmixins import PostPublishedRequiredMixin
 
@@ -77,6 +77,11 @@ class BlogPostContentEditorView(SuperuserRequiredMixin, View):
 
 class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
     model = BlogPost
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["comment_form"] = CommentForm()
+        return context
 
 
 class BlogPostUpdateView(SuperuserRequiredMixin, PostPublishedRequiredMixin, FormValidMessageMixin, UpdateView):

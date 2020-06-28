@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   {{ blogpost }}
@@ -14,5 +15,10 @@
     <a href="{{ blogpost.next_post.get_absolute_url }}">next</a><br>
   {% endif %}
 
+  <form method="post">
+    {% csrf_token %}
+    {{ comment_form | crispy }}
+    <button type="submit">submit</button>
+  </form>
 
 {% endblock %}
