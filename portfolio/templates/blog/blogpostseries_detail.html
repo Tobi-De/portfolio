@@ -22,10 +22,12 @@
                 <a href="{% url "blog:blogpost_list" %}?category={{ cat.name }}">{{ cat }}</a>
               {% endfor %}
             </div>
-            <div>
-              <a href="{% url 'blog:blogpostseries_update' blogpostseries.slug %}">Update</a>
-              <a href="{% url 'blog:blogpostseries_delete' blogpostseries.slug %}">Delete</a>
-            </div>
+            {% if user.is_superuser %}
+              <div>
+                <a href="{% url 'blog:blogpostseries_update' blogpostseries.slug %}">Update</a>
+                <a href="{% url 'blog:blogpostseries_delete' blogpostseries.slug %}">Delete</a>
+              </div>
+            {% endif %}
           </div>
           <h1>{{ blogpostseries.title }}</h1>
           <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"

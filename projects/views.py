@@ -8,8 +8,8 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .forms import ProjectForm, CollaboratorForm
-from .models import Project, Collaborator
+from .forms import ProjectForm
+from .models import Project
 
 
 class ProjectCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
@@ -40,33 +40,3 @@ class ProjectDeleteView(FormValidMessageMixin, SuperuserRequiredMixin, DeleteVie
 
     def get_success_url(self) -> str:
         return reverse("projects:project_list")
-
-
-class CollaboratorCreateView(FormValidMessageMixin, CreateView):
-    form_class = CollaboratorForm
-    form_valid_message = "Collaborator Created"
-    template_name = "projects/collaborator_create.html"
-
-
-class CollaboratorListView(ListView):
-    model = Collaborator
-    context_object_name = "collaborators"
-
-
-class CollaboratorDetailView(DetailView):
-    model = Collaborator
-
-
-class CollaboratorUpdateView(FormValidMessageMixin, SuperuserRequiredMixin, UpdateView):
-    model = Collaborator
-    form_class = CollaboratorForm
-    template_name = "projects/collaborator_update.html"
-    form_valid_message = "collaborator Updated"
-
-
-class CollaboratorDeleteView(FormValidMessageMixin, SuperuserRequiredMixin, DeleteView):
-    model = Collaborator
-    form_valid_message = "collaborator deleted"
-
-    def get_success_url(self) -> str:
-        return reverse("projects:collaborator_list")

@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <input type="submit" value="confirm"/>
-  </form>
+  <div class="container">
+    <main>
+      <form method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="confirm"/>
+      </form>
+    </main>
+  </div>
 {% endblock %}

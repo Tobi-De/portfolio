@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    list collaborators <br>
-  {% for collaborator in collaborators %}
-    <a href="{{ collaborator.get_absolute_url }}">{{ collaborator.full_name }}</a><br>
-  {% endfor %}
-
-{% endblock %}
