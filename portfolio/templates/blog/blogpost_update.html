@@ -2,11 +2,18 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form | crispy }}
-    <button type="submit">Update</button>
-  </form>
-  {{ form.media }}
+  <div class="container">
+    <main>
+      <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <div class="form-group">
+          <a href="{% url "blog:blogpost_detail" blogpost.slug %}" class="btn btn-secondary">back</a>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+      {{ form.media }}
+    </main>
+  </div>
 
 {% endblock %}

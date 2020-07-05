@@ -17,7 +17,7 @@ from .views import (
 
 app_name = "blog"
 urlpatterns = [
-    path("", HomeView.as_view(), name="home"),
+    path("New", HomeView.as_view(), name="newpost"),
     path("blogpost-list/", BlogPostListView.as_view(), name="blogpost_list"),
     path("blogpost-create/", BlogPostCreateView.as_view(), name="blogpost_create"),
     path(

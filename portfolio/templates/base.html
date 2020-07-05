@@ -8,56 +8,59 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <![endif]-->
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
   {% block css %}
 
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
-    <!-- Your stuff: Third-party CSS libraries go here -->
-
-    <!-- This file stores project-specific CSS -->
-
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-
-
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontastic.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <link rel="stylesheet" href="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'css/style.blue.css' %}" id="theme-stylesheet">#}
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
   {% endblock %}
+
 
 </head>
 
 <body>
 
-<div class="mb-1">
-  <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="{% url 'projects:project_list' %}">Tobi</a>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'projects:project_list' %}">Projects<span
-                  class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'blog:home' %}">Blog</a>
-        </li>
-      </ul>
+<header class="header">
+  <!-- Main Navbar-->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <!-- Navbar Brand -->
+      <div class="navbar-header d-flex align-items-center justify-content-between">
+        <!-- Navbar Brand --><a href="{% url "projects:project_list" %}" class="navbar-brand">Portfolio</a>
+        <!-- Toggle Button-->
+        <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse"
+                aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler">
+          <span></span><span></span><span></span></button>
+      </div>
+      <!-- Navbar Menu -->
+      <div id="navbarcollapse" class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a href="{% url "projects:project_list" %}" class="nav-link active ">Projects</a>
+          </li>
+          <li class="nav-item"><a href="{% url "blog:blogpost_list" %}" class="nav-link ">Blog</a>
+          </li>
+          <li class="nav-item"><a href="#" class="nav-link ">Contact</a>
+          </li>
+          {% if user.is_superuser %}
+            <li class="nav-item"><a href="{% url "blog:newpost" %}" class="nav-link ">New</a>
+            </li>
+            <li class="nav-item"><a href="{% url "admin:index" %}" class="nav-link ">Admin</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </nav>
-
-</div>
+</header>
 
 <div class="container">
 
@@ -70,31 +73,34 @@
     {% endfor %}
   {% endif %}
 
-  {% block content %}
-  {% endblock content %}
-
-</div> <!-- /container -->
+</div>
+{% block content %}
+{% endblock content %}
 
 {% block modal %}{% endblock modal %}
+
+<!-- Page Footer-->
+<footer class="main-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        <p>&copy; 2017. All rights reserved. Your great site.</p>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 {% block javascript %}
 
-  <!-- Bootstrap JS and its dependencies-->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-          crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-          crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-          crossorigin="anonymous"></script>
-
-  <script src="{% static 'js/project.js' %}"></script>
-
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/popper.js/umd/popper.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'vendor/jquery.cookie/jquery.cookie.js' %}"></script>
+  <script src="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.js' %}"></script>
+  <script src="{% static 'js/front.js' %}"></script>
 {% endblock javascript %}
 </body>
 </html>

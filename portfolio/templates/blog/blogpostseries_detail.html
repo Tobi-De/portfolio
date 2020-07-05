@@ -1,7 +1,58 @@
 {% extends "base.html" %}
+{% load markdown_extras %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-  {{ blogpostseries }}
-  <a href="{% url "blog:blogpostseries_update" slug=blogpostseries.slug %}">update</a><br>
-  <a href="{% url "blog:blogpostseries_delete" slug=blogpostseries.slug %}">delete</a><br>
+  <style>
+    .post-body img {
+      width: 100%;
+    }
+  </style>
+
+  <div class="container">
+    <main class="post blog-post">
+      <div class="post-single">
+        <div class="post-thumbnail"><img src="https://via.placeholder.com/1200x600.pg" alt="..."
+                                         class="img-fluid">
+        </div>
+        <div class="post-details">
+          <div class="post-meta d-flex justify-content-between">
+            <div class="category">
+              {% for cat in blogpostseries.categories %}
+                <a href="{% url "blog:blogpost_list" %}?category={{ cat.name }}">{{ cat }}</a>
+              {% endfor %}
+            </div>
+            <div>
+              <a href="{% url 'blog:blogpostseries_update' blogpostseries.slug %}">Update</a>
+              <a href="{% url 'blog:blogpostseries_delete' blogpostseries.slug %}">Delete</a>
+            </div>
+          </div>
+          <h1>{{ blogpostseries.title }}</h1>
+          <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
+                                                                                        class="author d-flex align-items-center flex-wrap">
+            <div class="avatar"><img src="https://via.placeholder.com/30.pg" alt="..." class="img-fluid"></div>
+            <div class="title"><span>{{ blogpostseries.author }}</span></div>
+          </a>
+            <div class="d-flex align-items-center flex-wrap">
+              <div class="date"><i class="icon-clock"></i> {{ blogpostseries.created|timesince }} ago</div>
+              <div class="views"><i class="icon-eye"></i> 500</div>
+              <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+            </div>
+          </div>
+          <div class="post-body">
+            {{ blogpostseries.body|markdown|safe }}
+          </div>
+          <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
+            <a href="{{ blogpostseries.all_blogpost.first.get_absolute_url }}"
+               class="next-post text-right d-flex align-items-center justify-content-end">
+              <div class="text"><strong class="text-primary">Start Reading</strong>
+                <h6>{{ blogpostseries.all_blogpost.first.title }}</h6>
+              </div>
+              <div class="icon next"><i class="fa fa-angle-right"> </i></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 {% endblock %}

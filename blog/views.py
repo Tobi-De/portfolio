@@ -1,9 +1,11 @@
 from braces.views import SuperuserRequiredMixin, FormValidMessageMixin
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import (
     View,
+    TemplateView,
     ListView,
     CreateView,
     DeleteView,
@@ -12,21 +14,12 @@ from django.views.generic import (
 )
 
 from .forms import BlogPostContentForm, CommentForm
-from .models import BlogPost, BlogPostSeries
+from .models import BlogPost, BlogPostSeries, Comment
 from .viewmixins import PostPublishedRequiredMixin
 
 
-class HomeView(View):
-
-    def get(self, request, *args, **kwargs):
-        context = {
-            "recent_posts": BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-created")[:3],
-            "recent_series": BlogPostSeries.objects.all().order_by("-created")[:3]
-        }
-        return render(request, "blog/home.html", context)
-
-    def post(self, request, *args, **kwargs):
-        pass
+class HomeView(SuperuserRequiredMixin, TemplateView):
+    template_name = "blog/new.html"
 
 
 class BlogPostListView(ListView):
@@ -62,7 +55,7 @@ class BlogPostContentEditorView(SuperuserRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
         form = BlogPostContentForm(initial={"body": blogpost.body})
-        return render(request, "blog/blogpost_content_editor.html", {"form": form})
+        return render(request, "blog/blogpost_content_editor.html", {"form": form, "slug": blogpost.slug})
 
     def post(self, request, *args, **kwargs):
         blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
@@ -70,6 +63,7 @@ class BlogPostContentEditorView(SuperuserRequiredMixin, View):
         if form.is_valid():
             blogpost.body = form.cleaned_data["body"]
             blogpost.save()
+            messages.success(request, "Post Updated")
             return redirect("blog:blogpost_detail", slug=blogpost.slug)
         else:
             return redirect("blog:blogpost_content_editor", kwargs={"slug": blogpost})
@@ -80,8 +74,14 @@ class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["comment_form"] = CommentForm()
+        context["form"] = CommentForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            Comment.objects.create(blogpost=self.get_object(), **form.cleaned_data)
+        return redirect("blog:blogpost_detail", slug=self.get_object().slug)
 
 
 class BlogPostUpdateView(SuperuserRequiredMixin, PostPublishedRequiredMixin, FormValidMessageMixin, UpdateView):
@@ -122,7 +122,7 @@ class BlogPostSeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, Up
     model = BlogPostSeries
     fields = ["thumbnail", "title", "body", "status", "author"]
     template_name = "blog/blogpostseries_update.html"
-    form_valid_message = "Blog Series Created"
+    form_valid_message = "Blog Series Updated"
 
 
 class BlogPostSeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):

@@ -24,11 +24,14 @@ class Collaborator(TimeStampedModel):
 
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
+    STACK_CHOICES = Choices("django_vue", "django", "vue")
     STATUS = Choices("in_development", "deployed")
     thumbnail = models.ImageField(blank=True)
     title = models.CharField(max_length=60)
     description = MarkdownxField()
     slug = AutoSlugField(populate_from=["title"])
+    tech_stack = models.CharField(max_length=15, choices=STACK_CHOICES, default=STACK_CHOICES.django)
+    featured = models.BooleanField(default=False)
     what_ive_learned = MarkdownxField("What I've learned", blank=True)
     github_link = models.URLField("Github repository link", blank=True)
     status_changed = MonitorField(monitor="status")
@@ -42,3 +45,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
 
     def get_absolute_url(self):
         return reverse("projects:project_detail", kwargs={"slug": self.slug})
+
+    @property
+    def get_stack(self):
+        return self.tech_stack.split("_")

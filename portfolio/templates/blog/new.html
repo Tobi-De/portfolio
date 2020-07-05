@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <main>
+      <a href={% url "blog:blogpost_create" %}>blogpost create</a><br>
+      <a href={% url "blog:blogpostseries_create" %}>blogpostseries create</a>
+    </main>
+  </div>
+{% endblock %}

@@ -1,8 +1,51 @@
 {% extends "base.html" %}
+{% load markdown_extras %}
 
 {% block content %}
-  blogposts <br>
-  {% for blogpostseries in series %}
-    <a href="{{ blogpostseries.get_absolute_url }}">{{ blogpostseries.title }}</a><br>
-  {% endfor %}
+  <div class="container">
+    <div class="row">
+      <!-- Latest Posts -->
+      <main class="posts-listing col-lg-8">
+        <div class="container">
+          <div class="row">
+            {% for blogpost in series %}
+              <div class="post col-xl-6">
+                <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
+                        src="https://via.placeholder.com/400.png" alt="..."
+                        class="img-fluid"></a></div>
+                <div class="post-details">
+                  <div class="post-meta d-flex justify-content-between">
+                    <div class="date meta-last">20 May | 2016</div>
+                    <div class="category"><a href="#">Business</a></div>
+                  </div>
+                  <a href="{{ blogpost.get_absolute_url }}">
+                    <h3 class="h4">{{ blogpost.title }}</h3></a>
+                  <p class="text-muted">{{ blogpost.body|markdown|safe|linebreaks|truncatechars:100 }}</p>
+                  <footer class="post-footer d-flex align-items-center"><a href="#"
+                                                                           class="author d-flex align-items-center flex-wrap">
+                    <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
+                    <div class="title"><span>John Doe</span></div>
+                  </a>
+                    <div class="date"><i class="icon-clock"></i> 2 months ago</div>
+                    <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+                  </footer>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-template d-flex justify-content-center">
+              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+              <li class="page-item"><a href="#" class="page-link active">1</a></li>
+              <li class="page-item"><a href="#" class="page-link">2</a></li>
+              <li class="page-item"><a href="#" class="page-link">3</a></li>
+              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+            </ul>
+          </nav>
+        </div>
+      </main>
+      {% include "sidebar.html" with blogposts=series %}
+    </div>
+  </div>
 {% endblock %}

@@ -113,7 +113,7 @@ class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel
         blogposts = self.all_blogpost()
         for blogpost in blogposts:
             categories = Category.objects.filter(
-                id__in=blogpost.categories.all() & Q(id__in=categories)
+                Q(id__in=blogpost.categories.all()) | Q(id__in=categories)
             )
         return categories
 

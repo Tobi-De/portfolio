@@ -2,10 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+   <div class="container">
+    <main>
   <form method="post">
     {% csrf_token %}
     {{ form | crispy }}
-    <button type="submit">submit</button>
+    <button type="submit" class="btn btn-primary">Create</button>
   </form>
   {{ form.media }}
+    </main>
+   </div>
 {% endblock %}

@@ -2,9 +2,58 @@
 {% load markdown_extras %}
 
 {% block content %}
-  list projects <br>
-  {% for project in projects %}
-    <a href="{{ project.get_absolute_url }}">{{ project.title }}</a><br>
-  {% endfor %}
-
+  <div class="container">
+    <!-- Intro Section-->
+    <section class="intro">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <h2 class="h3">Some great intro here</h2>
+            <p class="text-big">Place a nice <strong>introduction</strong> here <strong>to catch reader's
+              attention</strong>. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud nisi ut aliquip ex ea
+              commodo consequat. Duis aute irure dolor in reprehenderi.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="featured-posts no-padding-top">
+      <div class="container">
+        <!-- Post-->
+        {% for project in projects %}
+          <div class="row d-flex align-items-stretch">
+            {% if not forloop.counter|divisibleby:2 %}
+              <div class="image col-lg-5"><img src="https://via.placeholder.com/600x300.png" alt="..."></div>
+            {% endif %}
+            <div class="text col-lg-7">
+              <div class="text-inner d-flex align-items-center">
+                <div class="content">
+                  <header class="project-header">
+                    <div class="category">
+                      {% for category in project.categories.all %}
+                        <a href="#">{{ category }}</a>
+                      {% endfor %}
+                    </div>
+                    <a href="{{ project.get_absolute_url }}"><h2 class="h4">{{ project.title }}</h2></a>
+                  </header>
+                  <p>{{ project.overview }}</p>
+                  <footer class="project-footer d-flex align-items-center"><a href="#"
+                                                                              class="author d-flex align-items-center flex-wrap">
+                    <div class="avatar"><img src="{{ project.author.profile_picture.url }}" alt="..." class="img-fluid">
+                    </div>
+                    <div class="title"><span>{{ project.author }}</span></div>
+                  </a>
+                    <div class="date"><i class="icon-clock"></i>{{ project.created | timesince }} ago</div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+            {% if forloop.counter|divisibleby:2 %}
+              <div class="image col-lg-5"><img src="https://via.placeholder.com/600x300.png" alt="..."></div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
 {% endblock %}
