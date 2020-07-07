@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load markdown_extras %}
 
 {% block content %}
@@ -6,48 +7,65 @@
     <div class="row">
       <!-- Latest Posts -->
       <main class="posts-listing col-lg-8">
-        <div class="container">
-          <div class="row">
-            {% for blogpost in blogposts %}
-              <div class="post col-xl-6">
-                <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
-                        src="https://via.placeholder.com/400.png" alt="..."
-                        class="img-fluid"></a></div>
-                <div class="post-details">
-                  <div class="post-meta d-flex justify-content-between">
-                    <div class="date meta-last">20 May | 2016</div>
-                    <div class="category">
-                      {% for cat in blogpost.categories.all %}
-                        <a href="{% url "blog:blogpost_list" %}?category={{ cat.name }}">{{ cat }}</a>
-                      {% endfor %}
+        {% if page_obj %}
+          <div class="container">
+            <div class="row">
+              {% for blogpost in page_obj %}
+                <div class="post col-xl-6">
+                  <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
+                          src="https://via.placeholder.com/400.png" alt="..."
+                          class="img-fluid"></a></div>
+                  <div class="post-details">
+                    <div class="post-meta d-flex justify-content-between">
+                      <div class="category">
+                        {% for category in blogpost.categories.all %}
+                          <a href="{{ category.get_list_url }}">{{ category }}</a>
+                        {% endfor %}
+                      </div>
                     </div>
+                    <a href="{{ blogpost.get_absolute_url }}">
+                      <h3 class="h4">{{ blogpost.title }}</h3></a>
+                    <p class="text-muted">{{ blogpost.body|markdown|safe|linebreaks|truncatechars:100 }}</p>
+                    <footer class="post-footer d-flex align-items-center"><a href="#"
+                                                                             class="author d-flex align-items-center flex-wrap">
+                      <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid">
+                      </div>
+                      <div class="title"><span>John Doe</span></div>
+                    </a>
+                      <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
+                      <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
+                    </footer>
                   </div>
-                  <a href="{{ blogpost.get_absolute_url }}">
-                    <h3 class="h4">{{ blogpost.title }}</h3></a>
-                  <p class="text-muted">{{ blogpost.body|markdown|safe|linebreaks|truncatechars:100 }}</p>
-                  <footer class="post-footer d-flex align-items-center"><a href="#"
-                                                                           class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
-                    <div class="title"><span>John Doe</span></div>
-                  </a>
-                    <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
-                    <div class="comments meta-last"><i class="icon-comment"></i>12</div>
-                  </footer>
                 </div>
-              </div>
-            {% endfor %}
+              {% endfor %}
+            </div>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-template d-flex justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
+                          class="fa fa-angle-left"></i></a></li>
+                  <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
+                                           class="page-link">{{ page_obj.number|add:-1 }}</a></li>
+                {% endif %}
+                <li class="page-item"><a href="?page={{ page_obj.number }}"
+                                         class="page-link active">{{ page_obj.number }}</a></li>
+                {% if page_obj.has_next %}
+                  <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
+                                           class="page-link">{{ page_obj.number|add:1 }}</a></li>
+                  <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
+                          class="fa fa-angle-right"></i></a></li>
+                {% endif %}
+              </ul>
+            </nav>
           </div>
-          <!-- Pagination -->
-          <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-template d-flex justify-content-center">
-              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
-              <li class="page-item"><a href="#" class="page-link active">1</a></li>
-              <li class="page-item"><a href="#" class="page-link">2</a></li>
-              <li class="page-item"><a href="#" class="page-link">3</a></li>
-              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
-            </ul>
-          </nav>
-        </div>
+        {% else %}
+          <p class="text-center h4">Sorry nothing found<img class="center"
+                                                            src="https://img.icons8.com/ios-glyphs/60/000000/nothing-found.png"
+                                                            alt=";("/>
+          </p>
+
+        {% endif %}
       </main>
       {% include "sidebar.html" %}
     </div>

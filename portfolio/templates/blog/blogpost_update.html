@@ -9,6 +9,10 @@
         {{ form | crispy }}
         <div class="form-group">
           <a href="{% url "blog:blogpost_detail" blogpost.slug %}" class="btn btn-secondary">back</a>
+          {% if user.is_superuser and not blogpost.is_published %}
+            <a href="{% url "blog:blogpost_publish" blogpost.slug %}" class="btn btn-secondary">Publish</a>
+          {% endif %}
+          <a href="{% url 'blog:blogpost_content_editor' blogpost.slug %}" class="btn btn-secondary">Edit Content</a>
           <button type="submit" class="btn btn-primary">Update</button>
         </div>
       </form>

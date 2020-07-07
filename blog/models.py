@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
+from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
 from markdownx.models import MarkdownxField
 from model_utils import Choices
@@ -13,13 +14,12 @@ from .utils import queryset_index_of
 User = get_user_model()
 
 
-# TODO need a monitor field to save the first time a blog is published
 # TODO schedule a date to publish the post
 # TODO default thumbnail for blog and projects
 
 
 class Blogable(models.Model):
-    thumbnail = models.ImageField(blank=True)
+    thumbnail = models.ImageField(upload_to='blog', default='code_review.svg')
     title = models.CharField(max_length=150)
     body = MarkdownxField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
@@ -39,8 +39,13 @@ class Category(TimeStampedModel):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("blog:blogpost_list", kwargs={"category": self.name})
+    def get_list_url(self):
+        url = reverse("blog:blogpost_list") + f"?category={self.name}"
+        return url
+
+    @property
+    def posts_count(self):
+        return BlogPost.objects.filter(categories__name=self.name, status=BlogPost.STATUS.published).count()
 
 
 class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
@@ -60,11 +65,6 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
     @property
     def is_published(self):
         return self.status == BlogPost.STATUS.published
-
-    @property
-    def published_on(self):
-        if self.is_published:
-            return self.status_changed
 
     @property
     def next_post(self):
@@ -92,8 +92,9 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
         return self.blogpostseries == blogpostseries
 
     def publish(self):
-        # set publication date
-        pass
+        self.status = BlogPost.STATUS.published
+        self.publish_date = timezone.now()
+        self.save()
 
 
 class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):

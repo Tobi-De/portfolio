@@ -1,5 +1,6 @@
 from braces.views import SuperuserRequiredMixin, FormValidMessageMixin
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -14,20 +15,39 @@ from django.views.generic import (
 )
 
 from .forms import BlogPostContentForm, CommentForm
-from .models import BlogPost, BlogPostSeries, Comment
+from .models import BlogPost, BlogPostSeries, Comment, Category
 from .viewmixins import PostPublishedRequiredMixin
 
 
-class HomeView(SuperuserRequiredMixin, TemplateView):
-    template_name = "blog/new.html"
+class NewPostView(SuperuserRequiredMixin, TemplateView):
+    template_name = "blog/create.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        drafts = BlogPost.objects.filter(status=BlogPost.STATUS.draft).order_by("-created")
+        paginator = Paginator(drafts, 6)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["page_obj"] = page_obj
+        return context
+
+
+class PublishPostView(SuperuserRequiredMixin, TemplateView):
+    template_name = "blog/blogpost_confirm_publish.html"
+
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
+        post.publish()
+        messages.success(request, "Post published")
+        return redirect("blog:blogpost_list")
 
 
 class BlogPostListView(ListView):
     context_object_name = "blogposts"
-    paginate_by = 5
+    paginate_by = 4
 
     def get_queryset(self):
-        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-created")
+        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-publish_date")
         category = self.request.GET.get("category")
         q = self.request.GET.get("q")
         if category:
@@ -35,6 +55,12 @@ class BlogPostListView(ListView):
         if q:
             queryset = queryset.filter(Q(title__icontains=q) | Q(body__icontains=q)).distinct()
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["latests"] = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-publish_date")[:3]
+        context["categories"] = Category.objects.all()
+        return context
 
 
 class BlogPostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
@@ -110,8 +136,14 @@ class BlogPostSeriesCreateView(CreateView):
 class BlogPostSeriesListView(ListView):
     model = BlogPostSeries
     ordering = ["-created"]
-    paginate_by = 5
+    paginate_by = 4
     context_object_name = "series"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["latests"] = self.get_queryset()[:3]
+        context["categories"] = Category.objects.all()
+        return context
 
 
 class BlogPostSeriesDetailView(DetailView):

@@ -12,20 +12,20 @@
   <div class="container">
     <main class="post blog-post">
       <div class="post-single">
-        <div class="post-thumbnail"><img src="https://via.placeholder.com/1200x600.pg" alt="..."
+        <div class="post-thumbnail"><img src="{{ blogpost.thumbnail.url }}" alt="..."
                                          class="img-fluid">
         </div>
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
             <div class="category">
-              {% for cat in blogpost.categories.all %}
-                <a href="{% url "blog:blogpost_list" %}?category={{ cat.name }}">{{ cat }}</a>
+              {% for category in blogpost.categories.all %}
+                <a href="{{ category.get_list_url }}">{{ category }}</a>
               {% endfor %}
             </div>
             {% if user.is_superuser %}
               <div>
-                <a href="{% url 'blog:blogpost_update' blogpost.slug %}">Update</a>
-                <a href="{% url 'blog:blogpost_content_editor' blogpost.slug %}">Edit Content</a>
+                <a href="{% url 'blog:blogpost_update' blogpost.slug %}">Update</a>|
+                <a href="{% url 'blog:blogpost_content_editor' blogpost.slug %}">Edit Content</a>|
                 <a href="{% url 'blog:blogpost_delete' blogpost.slug %}">Delete</a>
               </div>
             {% endif %}
@@ -38,12 +38,14 @@
           </a>
             <div class="d-flex align-items-center flex-wrap">
               <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
-              <div class="views"><i class="icon-eye"></i> 500</div>
-              <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+              <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
             </div>
           </div>
           <div class="post-body">
             {{ blogpost.body|markdown|safe }}
+            {% if user.is_superuser and not blogpost.is_published %}
+              <a href="{% url "blog:blogpost_publish" blogpost.slug %}" class="btn btn-primary">Publish</a>
+            {% endif %}
           </div>
           <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
             {% if blogpost.previous_post %}

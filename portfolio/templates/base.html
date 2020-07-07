@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="{% static 'css/fontastic.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.css' %}">
-    {#    <link rel="stylesheet" href="{% static 'css/style.blue.css' %}" id="theme-stylesheet">#}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
   {% endblock %}
 
@@ -51,7 +50,7 @@
           <li class="nav-item"><a href="#" class="nav-link ">Contact</a>
           </li>
           {% if user.is_superuser %}
-            <li class="nav-item"><a href="{% url "blog:newpost" %}" class="nav-link ">New</a>
+            <li class="nav-item"><a href="{% url "blog:post_create" %}" class="nav-link ">Create</a>
             </li>
             <li class="nav-item"><a href="{% url "admin:index" %}" class="nav-link ">Admin</a>
             </li>

@@ -8,14 +8,13 @@
       <main class="posts-listing col-lg-8">
         <div class="container">
           <div class="row">
-            {% for blogpost in series %}
+            {% for blogpost in page_obj %}
               <div class="post col-xl-6">
                 <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
                         src="https://via.placeholder.com/400.png" alt="..."
                         class="img-fluid"></a></div>
                 <div class="post-details">
                   <div class="post-meta d-flex justify-content-between">
-                    <div class="date meta-last">20 May | 2016</div>
                     <div class="category">
                       {% for cat in blogpost.categories %}
                         <a href="{% url "blog:blogpost_list" %}?category={{ cat.name }}">{{ cat }}</a>
@@ -30,8 +29,7 @@
                     <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
                     <div class="title"><span>John Doe</span></div>
                   </a>
-                    <div class="date"><i class="icon-clock"></i> 2 months ago</div>
-                    <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+                    <div class="date"><i class="icon-clock"></i>{{ blogpostseries.created|timesince }} ago</div>
                   </footer>
                 </div>
               </div>
@@ -40,11 +38,20 @@
           <!-- Pagination -->
           <nav aria-label="Page navigation example">
             <ul class="pagination pagination-template d-flex justify-content-center">
-              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
-              <li class="page-item"><a href="#" class="page-link active">1</a></li>
-              <li class="page-item"><a href="#" class="page-link">2</a></li>
-              <li class="page-item"><a href="#" class="page-link">3</a></li>
-              <li class="page-item"><a href="#" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+              {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
+                        class="fa fa-angle-left"></i></a></li>
+                <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
+                                         class="page-link">{{ page_obj.number|add:-1 }}</a></li>
+              {% endif %}
+              <li class="page-item"><a href="?page={{ page_obj.number }}"
+                                       class="page-link active">{{ page_obj.number }}</a></li>
+              {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
+                                         class="page-link">{{ page_obj.number|add:1 }}</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
+                        class="fa fa-angle-right"></i></a></li>
+              {% endif %}
             </ul>
           </nav>
         </div>
