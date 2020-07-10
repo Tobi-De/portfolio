@@ -12,9 +12,11 @@
   <div class="container">
     <main class="post blog-post">
       <div class="post-single">
-        <div class="post-thumbnail"><img src="{{ blogpost.thumbnail.url }}" alt="..."
-                                         class="img-fluid">
-        </div>
+        {% if blogpost.thumbnail %}
+          <div class="post-thumbnail"><img src="{{ blogpost.thumbnail.url }}" alt="..."
+                                           class="img-fluid">
+          </div>
+        {% endif %}
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
             <div class="category">
@@ -39,9 +41,11 @@
             <div class="d-flex align-items-center flex-wrap">
               <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
               <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
+              <div class="views"><i class="icon-eye"></i> {{ blogpost.reading_time }} minutes read</div>
             </div>
           </div>
           <div class="post-body">
+            <p>{{ blogpost.overview }}</p>
             {{ blogpost.body|markdown|safe }}
             {% if user.is_superuser and not blogpost.is_published %}
               <a href="{% url "blog:blogpost_publish" blogpost.slug %}" class="btn btn-primary">Publish</a>
@@ -67,50 +71,53 @@
               </a>
             {% endif %}
           </div>
-          <div class="post-comments">
-            <header>
-              <h3 class="h6">Post Comments<span class="no-of-comments">({{ blogpost.comments.count }})</span></h3>
-            </header>
-            {% for comment in blogpost.comments %}
-              <div class="comment">
-                <div class="comment-header d-flex justify-content-between">
-                  <div class="user d-flex align-items-center">
-                    <div class="image">
-                      {% if comment.user_name %}
-                        <img src="https://via.placeholder.com/40.png" alt="..."
-                             class="img-fluid rounded-circle">
-                      {% else %}
-                        <img src="https://via.placeholder.com/30.pg" alt="..." class="img-fluid rounded-circle">
-                      {% endif %}
-                    </div>
-                    <div class="title"><strong>{{ comment.user_name }}</strong><span
-                            class="date">{{ comment.created|timesince }} ago</span></div>
-                  </div>
-                </div>
-                <div class="comment-body">
-                  <p>{{ comment.content }}</p>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-          <div class="add-comment">
-            <header>
-              <h3 class="h6">Leave a reply</h3>
-            </header>
-            <form method="POST" action="{% url "blog:blogpost_detail" blogpost.slug %}" class="commenting-form">
-              {% csrf_token %}
-              <div class="row">
-                <div class="form-group col-md-12">
-                  {{ form|crispy }}
-                </div>
-                <div class="form-group col-md-12">
-                  <button type="submit" class="btn btn-secondary">Submit Comment</button>
-                </div>
-              </div>
-            </form>
-          </div>
         </div>
       </div>
+      <div class="post-comments" style="background-color: white; padding: 10px; margin-bottom: 5px">
+        <header>
+          <h3 class="h6">Post Comments<span class="no-of-comments">({{ blogpost.comments.count }})</span></h3>
+        </header>
+        {% for comment in blogpost.comments %}
+          <div class="comment">
+            <div class="comment-header d-flex justify-content-between">
+              <div class="user d-flex align-items-center">
+                <div class="image">
+                  {% if comment.user_name %}
+                    <img src="https://via.placeholder.com/40.png" alt="..."
+                         class="img-fluid rounded-circle">
+                  {% else %}
+                    <img src="https://via.placeholder.com/30.pg" alt="..." class="img-fluid rounded-circle">
+                  {% endif %}
+                </div>
+                <div class="title"><strong>{{ comment.user_name }}</strong><span
+                        class="date">{{ comment.created|timesince }} ago</span></div>
+              </div>
+            </div>
+            <div class="comment-body">
+              <p>{{ comment.content }}</p>
+              {#                  {{ comment.response }}#}
+            </div>
+          </div>
+        {% endfor %}
+        <div class="add-comment">
+          <header>
+            <h3 class="h6">Leave a reply</h3>
+          </header>
+          <form method="POST" action="{% url "blog:blogpost_detail" blogpost.slug %}" class="commenting-form">
+            {% csrf_token %}
+            <div class="row">
+              <div class="form-group col-md-12">
+                {{ form|crispy }}
+              </div>
+              <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-secondary">Submit Comment</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+      {% include "newsletter.html" with n_form=newsletter_form %}
     </main>
   </div>
 {% endblock %}

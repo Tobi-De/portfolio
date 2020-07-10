@@ -19,8 +19,9 @@ User = get_user_model()
 
 
 class Blogable(models.Model):
-    thumbnail = models.ImageField(upload_to='blog', default='code_review.svg')
+    thumbnail = models.ImageField(upload_to='blog', blank=True)
     title = models.CharField(max_length=150)
+    overview = models.TextField(max_length=200)
     body = MarkdownxField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -53,6 +54,7 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
     status = StatusField(default=STATUS.draft)
     status_changed = MonitorField(monitor="status")
     categories = models.ManyToManyField(Category)
+    reading_time = models.IntegerField()
     publish_date = models.DateTimeField(null=True, blank=True)
     scheduled_publish_date = models.DateTimeField(null=True, blank=True)
     blogpostseries = models.ForeignKey(
@@ -120,6 +122,10 @@ class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel
                 Q(id__in=blogpost.categories.all()) | Q(id__in=categories)
             )
         return categories
+
+    @property
+    def reading_time(self):
+        return 10
 
 
 class Comment(TimeStampedModel):

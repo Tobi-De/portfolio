@@ -14,6 +14,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from newsletter.forms import SubscriptionForm
 from .forms import BlogPostContentForm, CommentForm
 from .models import BlogPost, BlogPostSeries, Comment, Category
 from .viewmixins import PostPublishedRequiredMixin
@@ -24,7 +25,9 @@ class NewPostView(SuperuserRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        drafts = BlogPost.objects.filter(status=BlogPost.STATUS.draft).order_by("-created")
+        drafts = BlogPost.objects.filter(status=BlogPost.STATUS.draft).order_by(
+            "-created"
+        )
         paginator = Paginator(drafts, 6)
         page_number = self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)
@@ -47,19 +50,26 @@ class BlogPostListView(ListView):
     paginate_by = 4
 
     def get_queryset(self):
-        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-publish_date")
+        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by(
+            "-publish_date"
+        )
         category = self.request.GET.get("category")
         q = self.request.GET.get("q")
         if category:
             queryset = queryset.filter(categories__name=category)
         if q:
-            queryset = queryset.filter(Q(title__icontains=q) | Q(body__icontains=q)).distinct()
+            queryset = queryset.filter(
+                Q(title__icontains=q) | Q(body__icontains=q)
+            ).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["latests"] = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by("-publish_date")[:3]
+        context["latests"] = BlogPost.objects.filter(
+            status=BlogPost.STATUS.published
+        ).order_by("-publish_date")[:3]
         context["categories"] = Category.objects.all()
+        context["newsletter_form"] = SubscriptionForm()
         return context
 
 
@@ -67,7 +77,14 @@ class BlogPostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateVi
     model = BlogPost
     template_name = "blog/blogpost_create.html"
     fields = [
-        "thumbnail", "title", "status", "categories", "author", "blogpostseries", "scheduled_publish_date"
+        "thumbnail",
+        "title",
+        "overview",
+        "status",
+        "categories",
+        "author",
+        "blogpostseries",
+        "scheduled_publish_date",
     ]
     form_valid_message = "Blog post created"
 
@@ -77,11 +94,14 @@ class BlogPostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateVi
 
 
 class BlogPostContentEditorView(SuperuserRequiredMixin, View):
-
     def get(self, request, *args, **kwargs):
         blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
         form = BlogPostContentForm(initial={"body": blogpost.body})
-        return render(request, "blog/blogpost_content_editor.html", {"form": form, "slug": blogpost.slug})
+        return render(
+            request,
+            "blog/blogpost_content_editor.html",
+            {"form": form, "slug": blogpost.slug},
+        )
 
     def post(self, request, *args, **kwargs):
         blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
@@ -101,6 +121,7 @@ class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = CommentForm()
+        context["newsletter_form"] = SubscriptionForm()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -110,11 +131,23 @@ class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
         return redirect("blog:blogpost_detail", slug=self.get_object().slug)
 
 
-class BlogPostUpdateView(SuperuserRequiredMixin, PostPublishedRequiredMixin, FormValidMessageMixin, UpdateView):
+class BlogPostUpdateView(
+    SuperuserRequiredMixin,
+    PostPublishedRequiredMixin,
+    FormValidMessageMixin,
+    UpdateView,
+):
     model = BlogPost
     template_name = "blog/blogpost_update.html"
     fields = [
-        "thumbnail", "title", "status", "categories", "author", "blogpostseries", "scheduled_publish_date"
+        "thumbnail",
+        "title",
+        "overview",
+        "status",
+        "categories",
+        "author",
+        "blogpostseries",
+        "scheduled_publish_date",
     ]
     form_valid_message = "Blog post updated"
 
@@ -129,7 +162,7 @@ class BlogPostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteVi
 
 class BlogPostSeriesCreateView(CreateView):
     model = BlogPostSeries
-    fields = ["thumbnail", "title", "body", "status", "author"]
+    fields = ["thumbnail", "title", "overview", "body", "status", "author"]
     template_name = "blog/blogpostseries_create.html"
 
 
@@ -143,21 +176,31 @@ class BlogPostSeriesListView(ListView):
         context = super().get_context_data(**kwargs)
         context["latests"] = self.get_queryset()[:3]
         context["categories"] = Category.objects.all()
+        context["newsletter_form"] = SubscriptionForm()
         return context
 
 
 class BlogPostSeriesDetailView(DetailView):
     model = BlogPostSeries
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["newsletter_form"] = SubscriptionForm()
+        return context
 
-class BlogPostSeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, UpdateView):
+
+class BlogPostSeriesUpdateView(
+    SuperuserRequiredMixin, FormValidMessageMixin, UpdateView
+):
     model = BlogPostSeries
-    fields = ["thumbnail", "title", "body", "status", "author"]
+    fields = ["thumbnail", "title", "overview", "body", "status", "author"]
     template_name = "blog/blogpostseries_update.html"
     form_valid_message = "Blog Series Updated"
 
 
-class BlogPostSeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
+class BlogPostSeriesDeleteView(
+    SuperuserRequiredMixin, FormValidMessageMixin, DeleteView
+):
     model = BlogPostSeries
     form_valid_message = "Blogpost Series Deleted"
 

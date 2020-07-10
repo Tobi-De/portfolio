@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "pythonPath": "/home/tobi/.virtualenvs/portfolio/bin/python3.8",
+      "program": "${workspaceRoot}/manage.py",
+      "args": ["runserver"],
+      "env": {
+        "DJANGO_DEBUG": "True"
+      }
+    }
+  ]
+}

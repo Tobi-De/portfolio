@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load markdown_extras %}
 
 {% block content %}
   <div class="container">
@@ -11,10 +10,12 @@
           <div class="container">
             <div class="row">
               {% for blogpost in page_obj %}
-                <div class="post col-xl-6">
-                  <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
-                          src="https://via.placeholder.com/400.png" alt="..."
-                          class="img-fluid"></a></div>
+                <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
+                  {% if blogpost.thumbnail %}
+                    <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
+                            src="{{ blogpost.thumbnail }}" alt="..." width="1OO%"
+                            class="img-fluid"></a></div>
+                  {% endif %}
                   <div class="post-details">
                     <div class="post-meta d-flex justify-content-between">
                       <div class="category">
@@ -25,7 +26,7 @@
                     </div>
                     <a href="{{ blogpost.get_absolute_url }}">
                       <h3 class="h4">{{ blogpost.title }}</h3></a>
-                    <p class="text-muted">{{ blogpost.body|markdown|safe|linebreaks|truncatechars:100 }}</p>
+                    <p class="text-muted">{{ blogpost.overview }}</p>
                     <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                              class="author d-flex align-items-center flex-wrap">
                       <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid">
@@ -33,6 +34,7 @@
                       <div class="title"><span>John Doe</span></div>
                     </a>
                       <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
+                      <div class="views"><i class="icon-eye"></i> {{ blogpost.reading_time }} minutes read</div>
                       <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
                     </footer>
                   </div>
@@ -67,7 +69,7 @@
 
         {% endif %}
       </main>
-      {% include "sidebar.html" %}
+      {% include "sidebar.html" with form=newsletter_form %}
     </div>
   </div>
 {% endblock %}

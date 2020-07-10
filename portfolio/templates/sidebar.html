@@ -1,6 +1,7 @@
 {% load humanize %}
+{% load crispy_forms_tags %}
 
-<aside class="col-lg-4"  style="background-color: white">
+<aside class="col-lg-4">
   <!-- Widget [Search Bar Widget]-->
   <div class="widget search">
     <header>
@@ -25,7 +26,8 @@
             <div class="image"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
             <div class="title"><strong>{{ latest.title }}</strong>
               <div class="d-flex align-items-center">
-                <div class="text-muted text-small">{{ latest.created|naturalday }}</div> |
+                <div class="text-muted text-small">{{ latest.created|naturalday }}</div>
+                |
                 <div class="comments"><i class="icon-comment"></i>{{ latest.comments.count }}</div>
               </div>
             </div>
@@ -60,10 +62,8 @@
     <p>Subscribe to get notified about new great blog posts about Web Development</p>
     <form method="post">
       {% csrf_token %}
-      <div class="form-row">
-        <input type="email" name="email" placeholder="Enter your email address">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
+      {{ form | crispy }}
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 </aside>
