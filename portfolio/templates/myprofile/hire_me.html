@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
-{% load markdown_extras %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <div class="container">
@@ -10,12 +9,11 @@
           <div class="card-body">
             <div class="row">
               <div class="col-xl-12">
-                <form action="{% url "projects:project_create" %}" method="post">
+                <form method="post">
                   {% csrf_token %}
                   {{ form | crispy }}
-                  <button type="submit" class="btn btn-primary">Create</button>
+                  <button type="submit" class="btn btn-primary">Send</button>
                 </form>
-                {{ form.media }}
               </div>
             </div>
           </div>

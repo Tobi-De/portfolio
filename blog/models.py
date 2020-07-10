@@ -96,6 +96,9 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
         self.publish_date = timezone.now()
         self.save()
 
+    def popular_posts(self):
+        pass
+
 
 class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")

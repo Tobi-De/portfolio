@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Collaborator, Project
+from ..models import Contributor, Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -19,5 +19,5 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class CollaboratorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Collaborator
+        model = Contributor
         fields = ["full_name", "github_link", "contacts"]

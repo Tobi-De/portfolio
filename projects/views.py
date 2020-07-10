@@ -12,6 +12,17 @@ from .forms import ProjectForm
 from .models import Project
 
 
+class ProjectListView(ListView):
+    model = Project
+    ordering = ["-created"]
+    paginate_by = 6
+    context_object_name = "projects"
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+
+
 class ProjectCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
     form_class = ProjectForm
     form_valid_message = "Project Created"
@@ -23,15 +34,6 @@ class ProjectUpdateView(FormValidMessageMixin, SuperuserRequiredMixin, UpdateVie
     form_class = ProjectForm
     template_name = "projects/project_update.html"
     form_valid_message = "Project Updated"
-
-
-class ProjectListView(ListView):
-    model = Project
-    context_object_name = "projects"
-
-
-class ProjectDetailView(DetailView):
-    model = Project
 
 
 class ProjectDeleteView(FormValidMessageMixin, SuperuserRequiredMixin, DeleteView):

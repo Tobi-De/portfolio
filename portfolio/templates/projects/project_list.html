@@ -3,57 +3,57 @@
 
 {% block content %}
   <div class="container">
-    <!-- Intro Section-->
-    <section class="intro">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8">
-            <h2 class="h3">Some great intro here</h2>
-            <p class="text-big">Place a nice <strong>introduction</strong> here <strong>to catch reader's
-              attention</strong>. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud nisi ut aliquip ex ea
-              commodo consequat. Duis aute irure dolor in reprehenderi.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="featured-posts no-padding-top">
-      <div class="container">
-        <!-- Post-->
-        {% for project in projects %}
-          <div class="row d-flex align-items-stretch">
-            {% if not forloop.counter|divisibleby:2 %}
-              <div class="image col-lg-5"><img src="https://via.placeholder.com/600x300.png" alt="..."></div>
-            {% endif %}
-            <div class="text col-lg-7">
-              <div class="text-inner d-flex align-items-center">
-                <div class="content">
-                  <header class="project-header">
+    <div class="row">
+      <main class="posts-listing col-lg-12">
+        <div class="container">
+          {% if user.is_superuser %}
+            <a href="{% url "projects:project_create" %}" class="btn btn-primary mb-4">New</a>
+          {% endif %}
+          <div class="row">
+            {% for project in page_obj %}
+              <div class="post col-xl-4 border-dark">
+                <div class="post-thumbnail"><a href="{{ project.get_absolute_url }}"><img
+                        src="https://via.placeholder.com/400.png" alt="..."
+                        class="img-fluid"></a></div>
+                <div class="post-details">
+                  <div class="post-meta d-flex justify-content-between">
                     <div class="category">
-                      {% for tech in project.get_stack %}
-                        {{ tech }}
+                      {% for stack in project.get_stack %}
+                        {{ stack }}
                       {% endfor %}
                     </div>
-                    <a href="{{ project.get_absolute_url }}"><h2 class="h4">{{ project.title }}</h2></a>
-                  </header>
-                  <p>{{ project.description|markdown|safe|linebreaks|truncatechars:100 }}</p>
-                  <footer class="project-footer d-flex align-items-center"><a href="#"
-                                                                              class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src="https://via.placeholder.com/30.png" alt="..." class="img-fluid">
-                    </div>
-                    <div class="title"><span>{{ project.author }}</span></div>
-                  </a>
-                    <div class="date"><i class="icon-clock"></i>{{ project.created | timesince }} ago</div>
+                  </div>
+                  <a href="{{ project.get_absolute_url }}">
+                    <h3 class="h4">{{ project.title }}</h3></a>
+                  <p class="text-muted">{{ project.description|markdown|safe|linebreaks|truncatechars:50 }}</p>
+                  <footer class="post-footer d-flex align-items-center">
+                    <div class="date"><i class="icon-clock"></i> {{ project.created|timesince }} ago</div>
                   </footer>
                 </div>
               </div>
-            </div>
-            {% if forloop.counter|divisibleby:2 %}
-              <div class="image col-lg-5"><img src="https://via.placeholder.com/600x300.png" alt="..."></div>
-            {% endif %}
+            {% endfor %}
           </div>
-        {% endfor %}
-      </div>
-    </section>
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-template d-flex justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
+                        class="fa fa-angle-left"></i></a></li>
+                <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
+                                         class="page-link">{{ page_obj.number|add:-1 }}</a></li>
+              {% endif %}
+              <li class="page-item"><a href="?page={{ page_obj.number }}"
+                                       class="page-link active">{{ page_obj.number }}</a></li>
+              {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
+                                         class="page-link">{{ page_obj.number|add:1 }}</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
+                        class="fa fa-angle-right"></i></a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </main>
+    </div>
   </div>
 {% endblock %}

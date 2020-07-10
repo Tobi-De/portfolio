@@ -9,7 +9,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("markdownx/", include(markdownx)),
-    path("", include("projects.urls", namespace="projects")),
+    path("", include("myprofile.urls")),
+    path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

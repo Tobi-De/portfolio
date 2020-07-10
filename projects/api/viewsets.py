@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import ProjectSerializer, CollaboratorSerializer
-from ..models import Project, Collaborator
+from ..models import Project, Contributor
 
 
 class ProjectViewSet(ModelViewSet):
@@ -16,5 +16,5 @@ class ProjectViewSet(ModelViewSet):
 
 
 class CollaboratorViewSet(ModelViewSet):
-    queryset = Collaborator.objects.all()
+    queryset = Contributor.objects.all()
     serializer_class = CollaboratorSerializer

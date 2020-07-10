@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Project, Collaborator
+from .models import Project
 
 
 class ProjectForm(forms.ModelForm):
@@ -13,12 +13,6 @@ class ProjectForm(forms.ModelForm):
             "github_link",
             "deployed_version_link",
             "author",
-            "collaborators",
+            "contributors",
             "thumbnail",
         ]
-
-
-class CollaboratorForm(forms.ModelForm):
-    class Meta:
-        model = Collaborator
-        fields = ["full_name", "github_link", "contacts"]

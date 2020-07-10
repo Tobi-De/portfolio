@@ -10,17 +10,13 @@ from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 User = get_user_model()
 
 
-class Collaborator(TimeStampedModel):
+class Contributor(TimeStampedModel):
     full_name = models.CharField(max_length=60)
-    slug = AutoSlugField(populate_from="full_name")
     github_link = models.URLField(blank=True)
-    contacts = models.CharField(max_length=150, blank=True)
+    contact = models.CharField(max_length=150, blank=True)
 
     def __str__(self):
         return self.full_name
-
-    def get_absolute_url(self):
-        return reverse("projects:collaborator_detail", kwargs={"slug": self.slug})
 
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
@@ -38,7 +34,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     deployed_version_link = models.URLField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     owner = models.CharField(max_length=60)
-    collaborators = models.ManyToManyField(Collaborator, blank=True)
+    contributors = models.ManyToManyField(Contributor, blank=True)
 
     def __str__(self):
         return self.title
