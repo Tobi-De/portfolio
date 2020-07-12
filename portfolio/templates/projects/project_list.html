@@ -14,7 +14,7 @@
             {% for project in page_obj %}
               <div class="col-md-4">
                 <div class="card mb-4 box-shadow">
-                  <img src="https://via.placeholder.com/200.png"
+                  <img class="img-thumbnail" src="{{ project.thumbnail.url }}"
                        alt="Card image cap">
                   <div class="card-body">
                     <h5 class="card-title">{{ project.title }}</h5>

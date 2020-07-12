@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load markdown_extras %}
 {% load crispy_forms_tags %}
 
@@ -12,60 +13,60 @@
   <div class="container">
     <main class="post blog-post">
       <div class="post-single">
-        {% if blogpost.thumbnail %}
-          <div class="post-thumbnail"><img src="{{ blogpost.thumbnail.url }}" alt="..."
-                                           class="img-fluid">
+        {% if post.thumbnail %}
+          <div class="img-thumbnail"><img src="{{ post.thumbnail.url }}" alt="..."
+                                          class="img-fluid">
           </div>
         {% endif %}
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
             <div class="category">
-              {% for category in blogpost.categories.all %}
+              {% for category in post.categories.all %}
                 <a href="{{ category.get_list_url }}">{{ category }}</a>
               {% endfor %}
             </div>
             {% if user.is_superuser %}
               <div>
-                <a href="{% url 'blog:blogpost_update' blogpost.slug %}">Update</a>|
-                <a href="{% url 'blog:blogpost_content_editor' blogpost.slug %}">Edit Content</a>|
-                <a href="{% url 'blog:blogpost_delete' blogpost.slug %}">Delete</a>
+                <a href="{% url 'blog:post_update' post.slug %}">Update</a>|
+                <a href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>|
+                <a href="{% url 'blog:post_delete' post.slug %}">Delete</a>
               </div>
             {% endif %}
           </div>
-          <h1>{{ blogpost.title }}</h1>
+          <h1>{{ post.title }}</h1>
           <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
                                                                                         class="author d-flex align-items-center flex-wrap">
-            <div class="avatar"><img src="https://via.placeholder.com/30.pg" alt="..." class="img-fluid"></div>
-            <div class="title"><span>{{ blogpost.author }}</span></div>
+            <div class="avatar"><img src="{{ post.author.profile.picture.url }}" alt="..." class="img-fluid"></div>
+            <div class="title"><span>{{ post.author }}</span></div>
           </a>
             <div class="d-flex align-items-center flex-wrap">
-              <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
-              <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
-              <div class="views"><i class="icon-eye"></i> {{ blogpost.reading_time }} minutes read</div>
+              <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
+              <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comments.count }}</div>
+              <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
             </div>
           </div>
           <div class="post-body">
-            <p>{{ blogpost.overview }}</p>
-            {{ blogpost.body|markdown|safe }}
-            {% if user.is_superuser and not blogpost.is_published %}
-              <a href="{% url "blog:blogpost_publish" blogpost.slug %}" class="btn btn-primary">Publish</a>
+            <p>{{ post.overview }}</p>
+            {{ post.body|markdown|safe }}
+            {% if user.is_superuser and not post.is_published %}
+              <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-primary">Publish</a>
             {% endif %}
           </div>
           <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
-            {% if blogpost.previous_post %}
-              <a href="{{ blogpost.previous_post.get_absolute_url }}"
+            {% if post.previous_post %}
+              <a href="{{ post.previous_post.get_absolute_url }}"
                  class="prev-post text-left d-flex align-items-center">
                 <div class="icon prev"><i class="fa fa-angle-left"></i></div>
                 <div class="text"><strong class="text-primary">Previous Post </strong>
-                  <h6>{{ blogpost.previous_post.title }}</h6>
+                  <h6>{{ post.previous_post.title }}</h6>
                 </div>
               </a>
             {% endif %}
-            {% if blogpost.next_post %}
-              <a href="{{ blogpost.next_post.get_absolute_url }}"
+            {% if post.next_post %}
+              <a href="{{ post.next_post.get_absolute_url }}"
                  class="next-post text-right d-flex align-items-center justify-content-end">
                 <div class="text"><strong class="text-primary">Next Post </strong>
-                  <h6>{{ blogpost.next_post.title }}</h6>
+                  <h6>{{ post.next_post.title }}</h6>
                 </div>
                 <div class="icon next"><i class="fa fa-angle-right"> </i></div>
               </a>
@@ -75,19 +76,15 @@
       </div>
       <div class="post-comments" style="background-color: white; padding: 10px; margin-bottom: 5px">
         <header>
-          <h3 class="h6">Post Comments<span class="no-of-comments">({{ blogpost.comments.count }})</span></h3>
+          <h3 class="h6">Post Comments<span class="no-of-comments">({{ post.comments.count }})</span></h3>
         </header>
-        {% for comment in blogpost.comments %}
+        {% for comment in post.comments %}
           <div class="comment">
             <div class="comment-header d-flex justify-content-between">
               <div class="user d-flex align-items-center">
                 <div class="image">
-                  {% if comment.user_name %}
-                    <img src="https://via.placeholder.com/40.png" alt="..."
-                         class="img-fluid rounded-circle">
-                  {% else %}
-                    <img src="https://via.placeholder.com/30.pg" alt="..." class="img-fluid rounded-circle">
-                  {% endif %}
+                  <img src="{% static "images/default.jpg" %}" alt="..."
+                       class="img-fluid rounded-circle">
                 </div>
                 <div class="title"><strong>{{ comment.user_name }}</strong><span
                         class="date">{{ comment.created|timesince }} ago</span></div>
@@ -103,7 +100,7 @@
           <header>
             <h3 class="h6">Leave a reply</h3>
           </header>
-          <form method="POST" action="{% url "blog:blogpost_detail" blogpost.slug %}" class="commenting-form">
+          <form method="POST" action="{% url "blog:post_detail" post.slug %}" class="commenting-form">
             {% csrf_token %}
             <div class="row">
               <div class="form-group col-md-12">

@@ -9,15 +9,11 @@
           <div class="card-body">
             <div class="row">
               <div class="col-xl-12">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                   {% csrf_token %}
                   {{ form | crispy }}
-                  <div class="form-group">
-                    <a href="{% url "blog:blogpost_detail" slug %}" class="btn btn-secondary">back</a>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                  </div>
+                  <button type="submit" class="btn btn-primary">Create</button>
                 </form>
-                {{ form.media }}
               </div>
             </div>
           </div>

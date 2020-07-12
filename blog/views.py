@@ -16,16 +16,16 @@ from django.views.generic import (
 
 from newsletter.forms import SubscriptionForm
 from .forms import BlogPostContentForm, CommentForm
-from .models import BlogPost, BlogPostSeries, Comment, Category
+from .models import Post, Series, Comment, Category
 from .viewmixins import PostPublishedRequiredMixin
 
 
 class NewPostView(SuperuserRequiredMixin, TemplateView):
-    template_name = "blog/create.html"
+    template_name = "blog/new_post.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        drafts = BlogPost.objects.filter(status=BlogPost.STATUS.draft).order_by(
+        drafts = Post.objects.filter(status=Post.STATUS.draft).order_by(
             "-created"
         )
         paginator = Paginator(drafts, 6)
@@ -36,21 +36,21 @@ class NewPostView(SuperuserRequiredMixin, TemplateView):
 
 
 class PublishPostView(SuperuserRequiredMixin, TemplateView):
-    template_name = "blog/blogpost_confirm_publish.html"
+    template_name = "blog/post_confirm_publish.html"
 
     def post(self, request, *args, **kwargs):
-        post = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
+        post = get_object_or_404(Post, slug=kwargs.get("slug"))
         post.publish()
         messages.success(request, "Post published")
-        return redirect("blog:blogpost_list")
+        return redirect("blog:post_list")
 
 
-class BlogPostListView(ListView):
-    context_object_name = "blogposts"
+class PostListView(ListView):
+    context_object_name = "posts"
     paginate_by = 4
 
     def get_queryset(self):
-        queryset = BlogPost.objects.filter(status=BlogPost.STATUS.published).order_by(
+        queryset = Post.objects.filter(status=Post.STATUS.published).order_by(
             "-publish_date"
         )
         category = self.request.GET.get("category")
@@ -65,58 +65,61 @@ class BlogPostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["latests"] = BlogPost.objects.filter(
-            status=BlogPost.STATUS.published
+        context["latests"] = Post.objects.filter(
+            status=Post.STATUS.published
         ).order_by("-publish_date")[:3]
         context["categories"] = Category.objects.all()
         context["newsletter_form"] = SubscriptionForm()
+        context["popular"] = Post.popular_posts()
         return context
 
 
-class BlogPostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
-    model = BlogPost
-    template_name = "blog/blogpost_create.html"
+class PostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
+    model = Post
+    template_name = "blog/post_create.html"
     fields = [
         "thumbnail",
         "title",
         "overview",
         "status",
+        "reading_time",
         "categories",
         "author",
-        "blogpostseries",
+        "series",
         "scheduled_publish_date",
     ]
     form_valid_message = "Blog post created"
 
     def get_success_url(self) -> str:
-        blogpost = self.get_context_data().get("blogpost")
-        return reverse("blog:blogpost_content_editor", kwargs={"slug": blogpost.slug})
+        post = self.get_context_data().get("post")
+        return reverse("blog:post_content_editor", kwargs={"slug": post.slug})
 
 
-class BlogPostContentEditorView(SuperuserRequiredMixin, View):
+class PostContentEditorView(SuperuserRequiredMixin, View):
+
     def get(self, request, *args, **kwargs):
-        blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
-        form = BlogPostContentForm(initial={"body": blogpost.body})
+        post = get_object_or_404(Post, slug=kwargs.get("slug"))
+        form = BlogPostContentForm(initial={"body": post.body})
         return render(
             request,
-            "blog/blogpost_content_editor.html",
-            {"form": form, "slug": blogpost.slug},
+            "blog/post_content_editor.html",
+            {"form": form, "slug": post.slug},
         )
 
     def post(self, request, *args, **kwargs):
-        blogpost = get_object_or_404(BlogPost, slug=kwargs.get("slug"))
+        post = get_object_or_404(Post, slug=kwargs.get("slug"))
         form = BlogPostContentForm(request.POST)
         if form.is_valid():
-            blogpost.body = form.cleaned_data["body"]
-            blogpost.save()
+            post.body = form.cleaned_data["body"]
+            post.save()
             messages.success(request, "Post Updated")
-            return redirect("blog:blogpost_detail", slug=blogpost.slug)
+            return redirect("blog:post_detail", slug=post.slug)
         else:
-            return redirect("blog:blogpost_content_editor", kwargs={"slug": blogpost})
+            return redirect("blog:post_content_editor", kwargs={"slug": post})
 
 
-class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
-    model = BlogPost
+class PostDetailView(PostPublishedRequiredMixin, DetailView):
+    model = Post
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -127,18 +130,18 @@ class BlogPostDetailView(PostPublishedRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
         if form.is_valid():
-            Comment.objects.create(blogpost=self.get_object(), **form.cleaned_data)
-        return redirect("blog:blogpost_detail", slug=self.get_object().slug)
+            Comment.objects.create(post=self.get_object(), **form.cleaned_data)
+        return redirect("blog:post_detail", slug=self.get_object().slug)
 
 
-class BlogPostUpdateView(
+class PostUpdateView(
     SuperuserRequiredMixin,
     PostPublishedRequiredMixin,
     FormValidMessageMixin,
     UpdateView,
 ):
-    model = BlogPost
-    template_name = "blog/blogpost_update.html"
+    model = Post
+    template_name = "blog/post_update.html"
     fields = [
         "thumbnail",
         "title",
@@ -146,28 +149,28 @@ class BlogPostUpdateView(
         "status",
         "categories",
         "author",
-        "blogpostseries",
+        "series",
         "scheduled_publish_date",
     ]
     form_valid_message = "Blog post updated"
 
 
-class BlogPostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
-    model = BlogPost
+class PostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
+    model = Post
     form_valid_message = "Blog post deleted"
 
     def get_success_url(self) -> str:
-        return reverse("blog:blogpost_list")
+        return reverse("blog:post_list")
 
 
-class BlogPostSeriesCreateView(CreateView):
-    model = BlogPostSeries
+class SeriesCreateView(CreateView):
+    model = Series
     fields = ["thumbnail", "title", "overview", "body", "status", "author"]
-    template_name = "blog/blogpostseries_create.html"
+    template_name = "blog/series_create.html"
 
 
-class BlogPostSeriesListView(ListView):
-    model = BlogPostSeries
+class SeriesListView(ListView):
+    model = Series
     ordering = ["-created"]
     paginate_by = 4
     context_object_name = "series"
@@ -177,11 +180,12 @@ class BlogPostSeriesListView(ListView):
         context["latests"] = self.get_queryset()[:3]
         context["categories"] = Category.objects.all()
         context["newsletter_form"] = SubscriptionForm()
+        context["popular"] = Post.popular_posts()
         return context
 
 
-class BlogPostSeriesDetailView(DetailView):
-    model = BlogPostSeries
+class SeriesDetailView(DetailView):
+    model = Series
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -189,20 +193,20 @@ class BlogPostSeriesDetailView(DetailView):
         return context
 
 
-class BlogPostSeriesUpdateView(
+class SeriesUpdateView(
     SuperuserRequiredMixin, FormValidMessageMixin, UpdateView
 ):
-    model = BlogPostSeries
+    model = Series
     fields = ["thumbnail", "title", "overview", "body", "status", "author"]
-    template_name = "blog/blogpostseries_update.html"
+    template_name = "blog/series_update.html"
     form_valid_message = "Blog Series Updated"
 
 
-class BlogPostSeriesDeleteView(
+class SeriesDeleteView(
     SuperuserRequiredMixin, FormValidMessageMixin, DeleteView
 ):
-    model = BlogPostSeries
+    model = Series
     form_valid_message = "Blogpost Series Deleted"
 
     def get_success_url(self):
-        return reverse("blog:blogpostseries_list")
+        return reverse("blog:series_list")

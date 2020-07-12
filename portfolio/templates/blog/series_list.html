@@ -7,31 +7,32 @@
       <main class="posts-listing col-lg-8">
         <div class="container">
           <div class="row">
-            {% for blogpostseries in page_obj %}
+            {% for series in page_obj %}
               <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
-                {% if blogpostseries.thumbnail %}
-                  <div class="post-thumbnail"><a href="{{ blogpostseries.get_absolute_url }}"><img
-                          src="{{ blogpostseries.thumbnail.url }}" alt="..."
+                {% if series.thumbnail %}
+                  <div class="post-thumbnail"><a href="{{ series.get_absolute_url }}"><img
+                          src="{{ series.thumbnail.url }}" width="100%" alt="..."
                           class="img-fluid"></a></div>
                 {% endif %}
                 <div class="post-details">
                   <div class="post-meta d-flex justify-content-between">
                     <div class="category">
-                      {% for category in blogpostseries.categories %}
-                        <a href="{% url "blog:blogpost_list" %}?category={{ category.name }}">{{ category }}</a>
+                      {% for category in series.categories %}
+                        <a href="{% url "blog:post_list" %}?category={{ category.name }}">{{ category }}</a>
                       {% endfor %}
                     </div>
                   </div>
-                  <a href="{{ blogpostseries.get_absolute_url }}">
-                    <h3 class="h4">{{ blogpostseries.title }}</h3></a>
-                  <p class="text-muted">{{ blogpostseries.overview }}</p>
+                  <a href="{{ series.get_absolute_url }}">
+                    <h3 class="h4">{{ series.title }}</h3></a>
+                  <p class="text-muted">{{ series.overview }}</p>
                   <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                            class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
-                    <div class="title"><span>John Doe</span></div>
+                    <div class="avatar"><img src="{{ series.author.profile.picture.url }}" alt="..." class="img-fluid">
+                    </div>
+                    <div class="title"><span>{{ series.author }}</span></div>
                   </a>
-                    <div class="date"><i class="icon-clock"></i>{{ blogpostseries.created|timesince }} ago</div>
-                    <div class="views"><i class="icon-eye"></i> {{ blogpostseries.reading_time }} minutes read</div>
+                    <div class="date"><i class="icon-clock"></i>{{ series.created|timesince }} ago</div>
+                    <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>
                   </footer>
                 </div>
               </div>
@@ -58,7 +59,7 @@
           </nav>
         </div>
       </main>
-      {% include "sidebar.html" with blogposts=series form=newsletter_form %}
+      {% include "sidebar.html" with form=newsletter_form %}
     </div>
   </div>
 {% endblock %}

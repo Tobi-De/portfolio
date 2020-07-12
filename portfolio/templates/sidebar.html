@@ -1,3 +1,4 @@
+{% load static %}
 {% load humanize %}
 {% load crispy_forms_tags %}
 
@@ -7,7 +8,7 @@
     <header>
       <h3 class="h6">Search the blog</h3>
     </header>
-    <form method="get" class="search-form" action="{% url "blog:blogpost_list" %}">
+    <form method="get" class="search-form" action="{% url "blog:post_list" %}">
       <div class="form-group">
         <input type="search" name="q" placeholder="What are you looking for?">
         <button type="submit" class="submit"><i class="icon-search"></i></button>
@@ -17,18 +18,42 @@
   <!-- Widget [Latest Posts Widget]        -->
   <div class="widget latest-posts">
     <header>
-      <h3 class="h6">Latest Posts</h3>
+      <h3 class="h6">Latest</h3>
     </header>
     <div class="blog-posts">
       {% for latest in latests %}
         <a href="{{ latest.get_absolute_url }}">
           <div class="item d-flex align-items-center">
-            <div class="image"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid"></div>
+            {% if latest.thumbnail %}
+              <div class="image"><img src="{{ latest.thumbnail.url }}" alt="..." class="img-fluid"></div>
+            {% endif %}
             <div class="title"><strong>{{ latest.title }}</strong>
               <div class="d-flex align-items-center">
-                <div class="text-muted text-small">{{ latest.created|naturalday }}</div>
-                |
+                <div class="views"><i class="icon-eye"></i> {{ latest.reading_time }} minutes read</div>
                 <div class="comments"><i class="icon-comment"></i>{{ latest.comments.count }}</div>
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Widget [Popular Posts Widget]        -->
+  <div class="widget latest-posts">
+    <header>
+      <h3 class="h6">Popular Posts</h3>
+    </header>
+    <div class="blog-posts">
+      {% for post in popular %}
+        <a href="{{ post.get_absolute_url }}">
+          <div class="item d-flex align-items-center">
+            {% if post.thumbnail %}
+              <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
+            {% endif %}
+            <div class="title"><strong>{{ post.title }}</strong>
+              <div class="d-flex align-items-center">
+                <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
+                <div class="comments"><i class="icon-comment"></i>{{ post.comments.count }}</div>
               </div>
             </div>
           </div>
@@ -41,9 +66,9 @@
     <header>
       <h3 class="h6">Type</h3>
     </header>
-    <div class="item d-flex justify-content-between"><a href="{% url "blog:blogpost_list" %}">Posts</a>
+    <div class="item d-flex justify-content-between"><a href="{% url "blog:post_list" %}">Posts</a>
     </div>
-    <div class="item d-flex justify-content-between"><a href="{% url "blog:blogpostseries_list" %}">Posts Series</a>
+    <div class="item d-flex justify-content-between"><a href="{% url "blog:series_list" %}">Posts Series</a>
     </div>
   </div>
   <!-- Widget [Categories Widget]-->
@@ -59,11 +84,38 @@
   </div>
   <!-- Widget [Newsletter Widget]-->
   <div class="widget">
-    <p>Subscribe to get notified about new great blog posts about Web Development</p>
+    <p>Subscribe to our Mailing list to get notified about new posts.</p>
     <form method="post">
       {% csrf_token %}
       {{ form | crispy }}
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  </div>
+  <!-- Widget [Books Widget]-->
+  <div class="widget categories">
+    <header>
+      <h3 class="h6">Recommended Books</h3>
+    </header>
+    <div>
+      <a href="https://www.feldroy.com/products/two-scoops-of-django-3-x" target="_blank">
+        <img src="{% static "images/two_scoops_of_django.webp" %}" alt="two scoops of django"
+             class="img-fluid img-thumbnail">
+        <h6>
+          <ins>Two Scoops of django 3</ins>
+        </h6>
+      </a>
+    </div>
+    <hr>
+    <div>
+      <a href="https://spellbookpress.com/books/temple-of-django-database-performance/" target="_blank">
+        <img src="{% static "images/temple_of_django_database.png" %}" alt="temple of django database performance"
+             class="img-fluid img-thumbnail">
+        <h6>
+          <ins>Temple of django database
+            performance
+          </ins>
+        </h6>
+      </a>
+    </div>
   </div>
 </aside>

@@ -34,8 +34,7 @@
     <div class="container">
       <!-- Navbar Brand -->
       <div class="navbar-header d-flex align-items-center justify-content-between">
-        {#        <!-- Navbar Brand --><a href="{% url "home" %}" class="navbar-brand">Portfolio</a>#}
-        <a href="{% url "home" %}" class="navbar-brand"><img src="https://via.placeholder.com/150.png" alt="..."
+        <a href="{% url "home" %}" class="navbar-brand"><img src="{{ user.profile.picture.url }}" alt="..."
                                                              class="img-fluid rounded-circle">
           <span class="text-big text-bold text-white">lorem ipsum, backend dev</span>
         </a>
@@ -50,12 +49,12 @@
           <li class="nav-item"><a href="{% url "projects:project_list" %}"
                                   class="nav-link active text-white">Projects</a>
           </li>
-          <li class="nav-item"><a href="{% url "blog:blogpost_list" %}" class="nav-link text-white">Blog</a>
+          <li class="nav-item"><a href="{% url "blog:post_list" %}" class="nav-link text-white">Blog</a>
           </li>
           <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-white">Hire Me</a>
           </li>
           {% if user.is_superuser %}
-            <li class="nav-item"><a href="{% url "blog:post_create" %}" class="nav-link text-white">Create</a>
+            <li class="nav-item"><a href="{% url "blog:new_post" %}" class="nav-link text-white">New</a>
             </li>
             <li class="nav-item"><a href="{% url "admin:index" %}" class="nav-link text-white">Admin</a>
             </li>
@@ -87,11 +86,7 @@
 <footer class="bg-dark text-white">
   <section class="section-py pb-0 mobile-padding-t">
     <div class="container">
-      <div class="row mb-4">
-        <div class="col-12 col-lg-4 pt-md-4 pt-lg-0">
-          Contact
-        </div>
-      </div>
+      <p>&copy; copyrigth 2020</p>
     </div>
   </section>
 </footer>

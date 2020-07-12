@@ -11,7 +11,7 @@
               <div class="col-xl-12">
                 <div class="row">
                   <div class="col-md-6">
-                    <img src="https://via.placeholder.com/400x300.png" width="100%" alt="...">
+                    <img src="{{  project.thumbnail.url }}" class="img-fluid img-thumbnail" alt="...">
                     {% if user.is_superuser %}
                       <a href="{% url "projects:project_update" slug=project.slug %}">update</a>
                       <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>

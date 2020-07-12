@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count, Sum
 from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
@@ -18,7 +18,7 @@ User = get_user_model()
 # TODO default thumbnail for blog and projects
 
 
-class Blogable(models.Model):
+class Postable(models.Model):
     thumbnail = models.ImageField(upload_to='blog', blank=True)
     title = models.CharField(max_length=150)
     overview = models.TextField(max_length=200)
@@ -41,15 +41,15 @@ class Category(TimeStampedModel):
         return self.name
 
     def get_list_url(self):
-        url = reverse("blog:blogpost_list") + f"?category={self.name}"
+        url = reverse("blog:post_list") + f"?category={self.name}"
         return url
 
     @property
     def posts_count(self):
-        return BlogPost.objects.filter(categories__name=self.name, status=BlogPost.STATUS.published).count()
+        return Post.objects.filter(categories__name=self.name, status=Post.STATUS.published).count()
 
 
-class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
+class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("draft", "published")
     status = StatusField(default=STATUS.draft)
     status_changed = MonitorField(monitor="status")
@@ -57,82 +57,93 @@ class BlogPost(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
     reading_time = models.IntegerField()
     publish_date = models.DateTimeField(null=True, blank=True)
     scheduled_publish_date = models.DateTimeField(null=True, blank=True)
-    blogpostseries = models.ForeignKey(
-        "blog.BlogPostSeries", null=True, blank=True, on_delete=models.SET_NULL
+    series = models.ForeignKey(
+        "blog.Series", null=True, blank=True, on_delete=models.SET_NULL
     )
 
     def get_absolute_url(self):
-        return reverse("blog:blogpost_detail", kwargs={"slug": self.slug})
+        return reverse("blog:post_detail", kwargs={"slug": self.slug})
 
     @property
     def is_published(self):
-        return self.status == BlogPost.STATUS.published
+        return self.status == Post.STATUS.published
 
     @property
     def next_post(self):
-        if not self.blogpostseries:
+        if not self.series:
             return None
-        blogposts = self.blogpostseries.all_blogpost()
-        if self == blogposts.last():
+        posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
+        if self == posts.last():
             return None
-        return blogposts[queryset_index_of(blogposts, self) + 1]
+        return posts[queryset_index_of(posts, self) + 1]
 
     @property
     def previous_post(self):
-        if not self.blogpostseries:
+        if not self.series:
             return None
-        blogposts = self.blogpostseries.all_blogpost()
-        if self == blogposts.first():
+        posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
+        if self == posts.first():
             return None
-        return blogposts[queryset_index_of(blogposts, self) - 1]
+        return posts[queryset_index_of(posts, self) - 1]
 
     @property
     def comments(self):
-        return Comment.objects.filter(blogpost=self).order_by("-created")
+        return Comment.objects.filter(post=self).order_by("-created")
 
-    def belongs_to_series(self, blogpostseries):
-        return self.blogpostseries == blogpostseries
+    def belongs_to_series(self, series):
+        return self.series == series
 
     def publish(self):
-        self.status = BlogPost.STATUS.published
+        self.status = Post.STATUS.published
         self.publish_date = timezone.now()
         self.save()
 
-    def popular_posts(self):
-        pass
+    @classmethod
+    def popular_posts(cls):
+        posts_with_comment = Post.objects.annotate(comment_nums=Count("comment"))
+        first = second = third = posts_with_comment[0]
+        for post in posts_with_comment:
+            if post.comment_nums > first.comment_nums:
+                first, second, third = post, first, second
+            elif post.comment_nums > second.comment_nums:
+                second, third = post, second
+            elif post.comment_nums > third.comment_nums:
+                third = post
+        return {first, second, third}
 
 
-class BlogPostSeries(Blogable, StatusModel, TimeStampedModel, SoftDeletableModel):
+class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)
     status_changed = MonitorField(monitor="status")
 
     def get_absolute_url(self):
-        return reverse("blog:blogpostseries_detail", kwargs={"slug": self.slug})
+        return reverse("blog:series_detail", kwargs={"slug": self.slug})
 
     def all_blogpost(self):
-        return BlogPost.objects.filter(blogpostseries=self).order_by("created")
+        return Post.objects.filter(series=self).order_by("created")
 
     @property
     def categories(self):
         categories = Category.objects.none()
-        blogposts = self.all_blogpost()
-        for blogpost in blogposts:
+        posts = self.all_blogpost()
+        for post in posts:
             categories = Category.objects.filter(
-                Q(id__in=blogpost.categories.all()) | Q(id__in=categories)
+                Q(id__in=post.categories.all()) | Q(id__in=categories)
             )
         return categories
 
     @property
     def reading_time(self):
-        return 10
+        all_posts = self.all_blogpost()
+        return all_posts.aggregate(Sum("reading_time")).get("reading_time__sum")
 
 
 class Comment(TimeStampedModel):
     user_name = models.CharField(max_length=30)
     content = models.TextField()
     response = models.TextField(blank=True)
-    blogpost = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.content

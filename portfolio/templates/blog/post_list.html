@@ -9,33 +9,33 @@
         {% if page_obj %}
           <div class="container">
             <div class="row">
-              {% for blogpost in page_obj %}
-                <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
-                  {% if blogpost.thumbnail %}
-                    <div class="post-thumbnail"><a href="{{ blogpost.get_absolute_url }}"><img
-                            src="{{ blogpost.thumbnail }}" alt="..." width="1OO%"
+              {% for post in page_obj %}
+                <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px;">
+                  {% if post.thumbnail %}
+                    <div class="img-thumbnail"><a href="{{ post.get_absolute_url }}"><img
+                            src="{{ post.thumbnail.url }}" alt="..."
                             class="img-fluid"></a></div>
                   {% endif %}
                   <div class="post-details">
                     <div class="post-meta d-flex justify-content-between">
                       <div class="category">
-                        {% for category in blogpost.categories.all %}
+                        {% for category in post.categories.all %}
                           <a href="{{ category.get_list_url }}">{{ category }}</a>
                         {% endfor %}
                       </div>
                     </div>
-                    <a href="{{ blogpost.get_absolute_url }}">
-                      <h3 class="h4">{{ blogpost.title }}</h3></a>
-                    <p class="text-muted">{{ blogpost.overview }}</p>
+                    <a href="{{ post.get_absolute_url }}">
+                      <h3 class="h4">{{ post.title }}</h3></a>
+                    <p class="text-muted">{{ post.overview }}</p>
                     <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                              class="author d-flex align-items-center flex-wrap">
-                      <div class="avatar"><img src="https://via.placeholder.com/50.png" alt="..." class="img-fluid">
+                      <div class="avatar"><img src="{{ post.author.profile.picture.url }}" alt="..." class="img-fluid">
                       </div>
-                      <div class="title"><span>John Doe</span></div>
+                      <div class="title"><span>{{ post.author }}</span></div>
                     </a>
-                      <div class="date"><i class="icon-clock"></i> {{ blogpost.created|timesince }} ago</div>
-                      <div class="views"><i class="icon-eye"></i> {{ blogpost.reading_time }} minutes read</div>
-                      <div class="comments meta-last"><i class="icon-comment"></i>{{ blogpost.comments.count }}</div>
+                      <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
+                      <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
+                      <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comments.count }}</div>
                     </footer>
                   </div>
                 </div>

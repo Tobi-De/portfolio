@@ -11,7 +11,7 @@
             <div class="card-body">
               <h5 class="card-title">POST</h5>
               <p class="card-text">Create a new blog post.</p>
-              <a href="{% url "blog:blogpost_create" %}" class="btn btn-primary">Create</a>
+              <a href="{% url "blog:post_create" %}" class="btn btn-primary">Create</a>
             </div>
           </div>
         </div>
@@ -20,7 +20,7 @@
             <div class="card-body">
               <h5 class="card-title">Series</h5>
               <p class="card-text">Create a new series of post.</p>
-              <a href="{% url "blog:blogpostseries_create" %}" class="btn btn-primary">Create</a>
+              <a href="{% url "blog:series_create" %}" class="btn btn-primary">Create</a>
             </div>
           </div>
         </div>
@@ -30,24 +30,24 @@
       <h4 class="text-center">DRAFTS</h4>
       <br>
       <div class="row">
-        {% for blogpost in page_obj %}
+        {% for post in page_obj %}
           <div class="col-12 col-sm-6 col-lg-4 mb-4">
             <div class="card service-card">
               <div class="card-body">
-                <h4 class="card-title">{{ blogpost.title }}</h4>
+                <h4 class="card-title">{{ post.title }}</h4>
                 <p class="card-text">
                   {{ blogpost.body|markdown|safe|linebreaks|truncatechars:200 }}
                 </p>
-                <a href="{% url "blog:blogpost_detail" slug=blogpost.slug %}" class="btn btn-primary">Continue</a>
+                <a href="{% url "blog:post_detail" post.slug %}" class="btn btn-primary">Continue</a>
               </div>
               <div class="card-footer text-muted">
                 <p>
                   Categories:
-                  {% for category in blogpost.categories.all %}
+                  {% for category in post.categories.all %}
                     {{ category.name }},
                   {% endfor %}
                 </p>
-                <i class="icon-clock"></i> {{ blogpost.created|naturalday }}
+                <i class="icon-clock"></i> {{ post.created|naturalday }}
               </div>
             </div>
           </div>
