@@ -2,12 +2,23 @@ from django.contrib import admin
 
 from .models import Category, Comment, Post, Series
 
-admin.site.register(Category)
 admin.site.register(Comment)
-admin.site.register(Series)
 
 
 @admin.register(Post)
-class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ["title", "status", "publish_date", "author", "created"]
+class PostAdmin(admin.ModelAdmin):
+    list_display = ["title", "status", "overview", "reading_time", "publish_date", "author", "created"]
     list_filter = ["categories", "status"]
+    search_fields = ["title"]
+
+
+@admin.register(Series)
+class SeriesAdmin(admin.ModelAdmin):
+    list_display = ["title", "status", "overview", "reading_time", "author", "created"]
+    list_filter = ["status"]
+    search_fields = ["title"]
+
+
+@admin.register(Category)
+class CatergoryAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "created"]

@@ -3,19 +3,13 @@
 {% block content %}
   <div class="container">
     <main>
-      <div class="col-md-12 col-lg-12 col-xl-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-xl-12">
-                <p>Are you sure you want to delete this post ?</p>
-                <form method="post">
-                  {% csrf_token %}
-                  <input type="submit" class="btn btn-danger" value="confirm"/>
-                </form>
-              </div>
-            </div>
-          </div>
+      <div class="card">
+        <div class="card-body">
+          <p>Are you sure you want to delete this post ?</p>
+          <form method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="confirm"/>
+          </form>
         </div>
       </div>
     </main>

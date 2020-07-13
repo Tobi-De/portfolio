@@ -37,6 +37,9 @@ class Category(TimeStampedModel):
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True)
 
+    class Meta:
+        verbose_name_plural = "categories"
+
     def __str__(self):
         return self.name
 
@@ -100,7 +103,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @classmethod
     def popular_posts(cls):
-        posts_with_comment = Post.objects.annotate(comment_nums=Count("comment"))
+        posts_with_comment = Post.objects.filter(status=Post.STATUS.published).annotate(comment_nums=Count("comment"))
         try:
             first = second = third = posts_with_comment[0]
         except IndexError:
@@ -119,6 +122,9 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)
     status_changed = MonitorField(monitor="status")
+
+    class Meta:
+        verbose_name_plural = "series"
 
     def get_absolute_url(self):
         return reverse("blog:series_detail", kwargs={"slug": self.slug})
