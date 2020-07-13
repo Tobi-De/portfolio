@@ -101,7 +101,10 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     @classmethod
     def popular_posts(cls):
         posts_with_comment = Post.objects.annotate(comment_nums=Count("comment"))
-        first = second = third = posts_with_comment[0]
+        try:
+            first = second = third = posts_with_comment[0]
+        except IndexError:
+            return []
         for post in posts_with_comment:
             if post.comment_nums > first.comment_nums:
                 first, second, third = post, first, second
