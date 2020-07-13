@@ -45,3 +45,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     @property
     def get_stack(self):
         return self.tech_stack.split("_")
+
+    @property
+    def has_contributors(self):
+        return self.contributors.count() > 0

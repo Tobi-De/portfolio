@@ -10,7 +10,7 @@
             {% for series in page_obj %}
               <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
                 {% if series.thumbnail %}
-                  <div class="post-thumbnail"><a href="{{ series.get_absolute_url }}"><img
+                  <div><a href="{{ series.get_absolute_url }}"><img
                           src="{{ series.thumbnail.url }}" width="100%" alt="..."
                           class="img-fluid"></a></div>
                 {% endif %}

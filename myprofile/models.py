@@ -9,3 +9,6 @@ class Profile(TimeStampedModel):
     phone_number = models.CharField(max_length=12, blank=True)
     github_profile = models.URLField()
     linkedIn_profile = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.user.username

@@ -4,24 +4,18 @@
 {% block content %}
   <div class="container">
     <main>
-      <div class="col-md-12 col-lg-12 col-xl-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-xl-12">
-                <form method="post" enctype="multipart/form-data">
-                  {% csrf_token %}
-                  {{ form | crispy }}
-                  <div class="form-group">
-                    <a href="{% url "blog:series_detail" series.slug %}"
-                       class="btn btn-secondary">back</a>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                  </div>
-                </form>
-                {{ form.media }}
-              </div>
+      <div class="card">
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <div class="form-group">
+              <a href="{% url "blog:series_detail" series.slug %}"
+                 class="btn btn-secondary">back</a>
+              <button type="submit" class="btn btn-primary">Update</button>
             </div>
-          </div>
+          </form>
+          {{ form.media }}
         </div>
       </div>
     </main>
