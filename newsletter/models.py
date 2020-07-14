@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
@@ -53,7 +55,6 @@ class Newsletter(TimeStampedModel):
     title = models.CharField(max_length=60)
     slug = AutoSlugField(populate_from=["title"])
     description = models.TextField(blank=True)
-    users = models.ManyToManyField(User)
 
     def __str__(self):
         return self.title
@@ -67,17 +68,26 @@ class Newsletter(TimeStampedModel):
     def process_bulk_mail(self):
         pass
 
+    def send_confirmation_email(self, submission):
+        pass
+
 
 class Submission(TimeStampedModel):
     email = models.EmailField()
     uuid = ShortUUIDField()
-    verified = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False)
+    newsletter = models.ManyToManyField("Newsletter")
 
     def __str__(self):
         return self.email
 
-    def verifiy_email(self):
-        pass
+    def is_email_valid(self):
+        email_pattern = re.compile(r"^([\w\-.]+)@([\w\-.]+)\.([a-zA-Z]{2,5})$")
+        return email_pattern.fullmatch(self.email)
+
+    def confirm(self):
+        self.confirmed = True
+        self.save()
 
     def get_confirmation_link(self):
         return reverse("newsletter:subscription_confirm", kwargs={"uuid": self.uuid})
