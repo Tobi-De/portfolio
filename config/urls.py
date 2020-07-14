@@ -12,6 +12,7 @@ urlpatterns = [
     path("", include("myprofile.urls")),
     path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),
+    path("newsletter/", include("newsletter.urls", namespace="newsletter")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

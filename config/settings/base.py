@@ -75,8 +75,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "myprofile.apps.MyprofileConfig",
     "projects.apps.ProjectsConfig",
-    "newsletter.apps.NewsletterConfig",
     "blog.apps.BlogConfig",
+    "newsletter.apps.NewsletterConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -227,4 +227,19 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+}
+
+# Django Q
+# -------------------------------------------------------------------------------
+Q_CLUSTER = {
+    'name': 'facturexpress',
+    'workers': 8,
+    'recycle': 500,
+    'timeout': 120,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': env('REDIS_URL', default="redis://localhost:6379")
 }
