@@ -4,7 +4,7 @@ Pillow==7.1.2  # https://github.com/python-pillow/Pillow
 argon2-cffi==19.2.0  # https://github.com/hynek/argon2_cffi
 redis==3.5.0  # https://github.com/andymccurdy/redis-py
 hiredis==1.0.1  # https://github.com/redis/hiredis-py
-shortuuid=1.0.1
+shortuuid==1.0.1
 
 
 # Django
