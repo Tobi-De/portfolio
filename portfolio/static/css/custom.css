@@ -4,6 +4,14 @@
   margin-bottom: 20px;
 }
 
+.site-footer {
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  padding: 40px 0;
+  text-align: center;
+  border-top: 1px solid #CCC;
+}
 
 .asteriskField {
   display: none;
