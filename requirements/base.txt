@@ -17,7 +17,8 @@ django-redis==4.11.0  # https://github.com/jazzband/django-redis
 django-maintenance-mode==0.14.0 # https://github.com/fabiocaccamo/django-maintenance-mode.git
 django-markdownx==3.0.1 # https://neutronx.github.io/django-markdownx/installation/
 django-extensions==2.2.9  # https://github.com/django-extensions/django-extensions
-django-braces==1.14.0
-django-q==1.3.1
+django-braces==1.14.0 #https://django-braces.readthedocs.io/en/latest/
+django-q==1.3.1 # https://django-q.readthedocs.io/en/latest/
+django-comments-xtd==2.7.1 # https://django-comments-xtd.readthedocs.io/en/latest/quickstart.html
 # Django REST Framework
 djangorestframework==3.11.1  # https://github.com/encode/django-rest-framework

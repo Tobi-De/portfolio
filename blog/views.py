@@ -15,8 +15,8 @@ from django.views.generic import (
 )
 
 from newsletter.forms import SubscriptionForm
-from .forms import BlogPostContentForm, CommentForm
-from .models import Post, Series, Comment, Category
+from .forms import BlogPostContentForm
+from .models import Post, Series, Category
 from .viewmixins import PostPublishedRequiredMixin
 
 
@@ -123,15 +123,8 @@ class PostDetailView(PostPublishedRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm()
         context["newsletter_form"] = SubscriptionForm()
         return context
-
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            Comment.objects.create(post=self.get_object(), **form.cleaned_data)
-        return redirect("blog:post_detail", slug=self.get_object().slug)
 
 
 class PostUpdateView(

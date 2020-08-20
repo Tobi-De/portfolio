@@ -69,7 +69,9 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_q",
-    "markdownx"
+    "markdownx",
+    "django_comments_xtd",
+    "django_comments"
 ]
 
 LOCAL_APPS = [
@@ -241,5 +243,12 @@ Q_CLUSTER = {
     'queue_limit': 500,
     'cpu_affinity': 1,
     'label': 'Django Q',
-    'redis': env('REDIS_URL', default="redis://localhost:6379")
+    'redis': env('REDIS_URL', default="redis://localhost:6800")
 }
+
+# COMMENTS
+# -------------------------------------------------------------------------------
+# COMMENTS_APP = 'django_comments_xtd'
+# COMMENTS_XTD_MAX_THREAD_LEVEL = 2
+# COMMENTS_XTD_CONFIRM_EMAIL = False
+

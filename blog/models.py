@@ -89,10 +89,6 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
             return None
         return posts[queryset_index_of(posts, self) - 1]
 
-    @property
-    def comments(self):
-        return Comment.objects.filter(post=self).order_by("-created")
-
     def belongs_to_series(self, series):
         return self.series == series
 
@@ -146,13 +142,3 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def reading_time(self):
         all_posts = self.all_blogpost()
         return all_posts.aggregate(Sum("reading_time")).get("reading_time__sum")
-
-
-class Comment(TimeStampedModel):
-    user_name = models.CharField(max_length=30)
-    content = models.TextField()
-    response = models.TextField(blank=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.content

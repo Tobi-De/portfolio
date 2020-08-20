@@ -203,3 +203,8 @@ sentry_sdk.init(dsn=SENTRY_DSN, integrations=[sentry_logging, DjangoIntegration(
 MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.CacheBackend"
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True
+
+# COMMENTS
+# -------------------------------------------------------------------------------
+# COMMENTS_XTD_FROM_EMAIL = DEFAULT_FROM_EMAIL
+# COMMENTS_XTD_CONTACT_EMAIL = env("CONTACT_MAIL", default="contact@tobidegnon.com")
