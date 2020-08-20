@@ -211,5 +211,6 @@ THUMBNAIL_FORCE_OVERWRITE = True
 
 # COMMENTS
 # -------------------------------------------------------------------------------
-# COMMENTS_XTD_FROM_EMAIL = DEFAULT_FROM_EMAIL
-# COMMENTS_XTD_CONTACT_EMAIL = env("CONTACT_MAIL", default="contact@tobidegnon.com")
+COMMENTS_XTD_CONFIRM_EMAIL = True
+COMMENTS_XTD_FROM_EMAIL = DEFAULT_FROM_EMAIL
+COMMENTS_XTD_CONTACT_EMAIL = env("CONTACT_MAIL", default="contact@tobidegnon.com")

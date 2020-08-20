@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import (
     SubmissionView,
-    SubmissionFailView,
     SubscriptionConfirmView,
     UnsubscribeView,
     SendMassMails,
@@ -11,7 +10,6 @@ from .views import (
 app_name = "newsletter"
 urlpatterns = [
     path("submission/", SubmissionView.as_view(), name="submission"),
-    path("submission-fail/", SubmissionFailView.as_view(), name="submission_fail"),
     path(
         "subscription-confirm/<str:uuid>",
         SubscriptionConfirmView.as_view(),

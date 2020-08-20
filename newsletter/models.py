@@ -29,6 +29,11 @@ class Submission(TimeStampedModel):
     def get_confirmation_link(self):
         return reverse("submission:subscription_confirm", kwargs={"uuid": self.uuid})
 
+    @classmethod
+    def add_subscriber(cls, email):
+        # send confirmation email link asynchronously
+        pass
+
 
 class Mailable(TimeStampedModel):
     subject = models.CharField(max_length=60)
