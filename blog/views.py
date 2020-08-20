@@ -20,6 +20,8 @@ from .models import Post, Series, Category
 from .viewmixins import PostPublishedRequiredMixin
 
 
+# TODO template for date widget
+
 class NewPostView(SuperuserRequiredMixin, TemplateView):
     template_name = "blog/new_post.html"
 
@@ -141,7 +143,6 @@ class PostUpdateView(
         "overview",
         "status",
         "categories",
-        "author",
         "series",
         "scheduled_publish_date",
     ]
@@ -190,7 +191,7 @@ class SeriesUpdateView(
     SuperuserRequiredMixin, FormValidMessageMixin, UpdateView
 ):
     model = Series
-    fields = ["thumbnail", "title", "overview", "body", "status", "author"]
+    fields = ["thumbnail", "title", "overview", "body", "status"]
     template_name = "blog/series_update.html"
     form_valid_message = "Blog Series Updated"
 

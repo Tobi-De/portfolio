@@ -8,18 +8,18 @@ from .models import (
 )
 
 
-class MailableAdminMixin(admin.ModelAdmin):
+class MailableAdmin:
     list_display = ["subject", "body", "created"]
 
 
 @admin.register(TransactionalMail)
-class TransactionMailAdmin(MailableAdminMixin):
+class TransactionMailAdmin(admin.ModelAdmin):
     pass
 
 
 @admin.register(BulkMail)
-class BulkMailAdmin(MailableAdminMixin):
-    list_display = MailableAdminMixin.list_display + ["dispatch_date"]
+class BulkMailAdmin(admin.ModelAdmin):
+    list_display = MailableAdmin.list_display + ["dispatch_date"]
 
 
 @admin.register(Submission)

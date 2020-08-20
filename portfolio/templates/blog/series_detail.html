@@ -11,10 +11,10 @@
 
   <div class="container">
     <main class="post blog-post">
-      <div class="post-single">
+      <div class="post-single" style="background-color: white; padding: 20px; border-radius: 5px">
         {% if series.thumbnail %}
           <div><img src="{{ series.thumbnail.url }}" alt="..."
-                                           class="img-fluid">
+                    class="img-fluid">
           </div>
         {% endif %}
         <div class="post-details">
@@ -42,7 +42,7 @@
               <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>
             </div>
           </div>
-          <div class="post-body">
+          <div class="post-body jumbotron" style="background-color: white">
             <p>{{ series.overview }}</p>
             {{ series.body|markdown|safe }}
           </div>

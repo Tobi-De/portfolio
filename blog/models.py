@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Q, Count, Sum
+from django.db.models import Q, Sum
 from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
@@ -76,7 +76,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         if not self.series:
             return None
         posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
-        if self == posts.last():
+        if self == posts.last() or self not in posts:
             return None
         return posts[queryset_index_of(posts, self) + 1]
 
@@ -85,7 +85,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         if not self.series:
             return None
         posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
-        if self == posts.first():
+        if self == posts.first() or self not in posts:
             return None
         return posts[queryset_index_of(posts, self) - 1]
 
@@ -99,19 +99,20 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @classmethod
     def popular_posts(cls):
-        posts_with_comment = Post.objects.filter(status=Post.STATUS.published).annotate(comment_nums=Count("comment"))
-        try:
-            first = second = third = posts_with_comment[0]
-        except IndexError:
-            return []
-        for post in posts_with_comment:
-            if post.comment_nums > first.comment_nums:
-                first, second, third = post, first, second
-            elif post.comment_nums > second.comment_nums:
-                second, third = post, second
-            elif post.comment_nums > third.comment_nums:
-                third = post
-        return {first, second, third}
+        # posts_with_comment = Post.objects.filter(status=Post.STATUS.published).annotate(comment_nums=Count("comment"))
+        # try:
+        #     first = second = third = posts_with_comment[0]
+        # except IndexError:
+        #     return []
+        # for post in posts_with_comment:
+        #     if post.comment_nums > first.comment_nums:
+        #         first, second, third = post, first, second
+        #     elif post.comment_nums > second.comment_nums:
+        #         second, third = post, second
+        #     elif post.comment_nums > third.comment_nums:
+        #         third = post
+        # return {first, second, third}
+        return Post.objects.all()
 
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):

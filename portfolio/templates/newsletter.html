@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
-<div style="background-color: white; padding: 20px; border: 1px solid #eee;">
+<div style="background-color: white; padding: 20px; border-radius: 5px">
   <p>Subscribe to get notified about new great blog posts about python, django and computer science in general.</p>
-  <form method="post"  action="{% url "newsletter:submission" %}">
+  <form method="post" action="{% url "newsletter:submission" %}">
     {% csrf_token %}
     {{ n_form | crispy }}
     <button type="submit" class="btn btn-primary">Submit</button>

@@ -204,6 +204,11 @@ MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.CacheBackend"
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 
+# Sorl thumbnail
+# -------------------------------------------------------------------------------
+# avoid sorl thumbnail to overly query the S3 API.
+THUMBNAIL_FORCE_OVERWRITE = True
+
 # COMMENTS
 # -------------------------------------------------------------------------------
 # COMMENTS_XTD_FROM_EMAIL = DEFAULT_FROM_EMAIL

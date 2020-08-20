@@ -71,7 +71,8 @@ THIRD_PARTY_APPS = [
     "django_q",
     "markdownx",
     "django_comments_xtd",
-    "django_comments"
+    "django_comments",
+    "sorl.thumbnail",
 ]
 
 LOCAL_APPS = [
@@ -234,16 +235,16 @@ REST_FRAMEWORK = {
 # Django Q
 # -------------------------------------------------------------------------------
 Q_CLUSTER = {
-    'name': 'facturexpress',
-    'workers': 8,
-    'recycle': 500,
-    'timeout': 120,
-    'compress': True,
-    'save_limit': 250,
-    'queue_limit': 500,
-    'cpu_affinity': 1,
-    'label': 'Django Q',
-    'redis': env('REDIS_URL', default="redis://localhost:6800")
+    "name": "facturexpress",
+    "workers": 8,
+    "recycle": 500,
+    "timeout": 120,
+    "compress": True,
+    "save_limit": 250,
+    "queue_limit": 500,
+    "cpu_affinity": 1,
+    "label": "Django Q",
+    "redis": env("REDIS_URL", default="redis://localhost:6800"),
 }
 
 # COMMENTS
@@ -251,4 +252,3 @@ Q_CLUSTER = {
 # COMMENTS_APP = 'django_comments_xtd'
 # COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 # COMMENTS_XTD_CONFIRM_EMAIL = False
-
