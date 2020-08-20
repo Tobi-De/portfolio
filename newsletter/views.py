@@ -1,19 +1,16 @@
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic import View, FormView, TemplateView
 
 from .forms import SubscriptionForm
-from .helpers import add_newsletter_subscriber
-from .models import Newsletter, Submission
+from .models import Submission
 
 
 class SubmissionView(View):
     def post(self, request, *args, **kwargs):
         form = SubscriptionForm(request.POST)
-        newsletter = get_object_or_404(Newsletter, title="default")
         if form.is_valid():
-            if not add_newsletter_subscriber(email=form.cleaned_data["email"], newsletter=newsletter):
-                return redirect("newsletter:submission_fail")
+            pass
         return render(request, "newsletter/submission.html", {"email": form.cleaned_data["email"]})
 
 
