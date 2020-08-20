@@ -2,8 +2,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from .permissions import IsOwnerOrReadOnly
-from .serializers import ProjectSerializer, CollaboratorSerializer
-from ..models import Project, Contributor
+from .serializers import ProjectSerializer
+from ..models import Project
 
 
 class ProjectViewSet(ModelViewSet):
@@ -13,8 +13,3 @@ class ProjectViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-
-class CollaboratorViewSet(ModelViewSet):
-    queryset = Contributor.objects.all()
-    serializer_class = CollaboratorSerializer

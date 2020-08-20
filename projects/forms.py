@@ -10,9 +10,9 @@ class ProjectForm(forms.ModelForm):
             "title",
             "description",
             "what_ive_learned",
+            "tech_stack",
             "github_link",
-            "deployed_version_link",
-            "author",
-            "contributors",
+            "web_link",
+            "featured",
             "thumbnail",
         ]

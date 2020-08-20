@@ -9,7 +9,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("markdownx/", include(markdownx)),
-    path("", include("myprofile.urls")),
+    path("", include("core.urls")),
     path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("newsletter/", include("newsletter.urls", namespace="newsletter")),

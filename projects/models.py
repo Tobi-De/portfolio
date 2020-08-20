@@ -10,31 +10,19 @@ from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 User = get_user_model()
 
 
-class Contributor(TimeStampedModel):
-    full_name = models.CharField(max_length=60)
-    github_link = models.URLField(blank=True)
-    contact = models.CharField(max_length=150, blank=True)
-
-    def __str__(self):
-        return self.full_name
-
-
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
-    STACK_CHOICES = Choices("django_vue", "django", "vue")
+    STACK_CHOICES = Choices("django_vuejs", "django", "vuejs", "wagtail", "wagtail_vuejs")
     STATUS = Choices("in_development", "deployed")
     thumbnail = models.ImageField(blank=True)
     title = models.CharField(max_length=60)
-    description = MarkdownxField()
+    description = models.TextField()
     slug = AutoSlugField(populate_from=["title"])
-    tech_stack = models.CharField(max_length=15, choices=STACK_CHOICES, default=STACK_CHOICES.django)
+    tech_stack = models.CharField(max_length=20, choices=STACK_CHOICES, default=STACK_CHOICES.django)
     featured = models.BooleanField(default=False)
     what_ive_learned = MarkdownxField("What I've learned", blank=True)
     github_link = models.URLField("Github repository link", blank=True)
     status_changed = MonitorField(monitor="status")
-    deployed_version_link = models.URLField(blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    owner = models.CharField(max_length=60)
-    contributors = models.ManyToManyField(Contributor, blank=True)
+    web_link = models.URLField(blank=True)
 
     def __str__(self):
         return self.title
@@ -45,7 +33,3 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     @property
     def get_stack(self):
         return self.tech_stack.split("_")
-
-    @property
-    def has_contributors(self):
-        return self.contributors.count() > 0

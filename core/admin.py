@@ -5,4 +5,4 @@ from .models import Profile
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "github_profile", "created"]
+    list_display = ["user", "github_profile", "modified", "created"]

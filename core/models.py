@@ -4,7 +4,7 @@ from model_utils.models import TimeStampedModel
 
 
 class Profile(TimeStampedModel):
-    picture = models.ImageField(default="profile/default.jpg")
+    picture = models.ImageField()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=12, blank=True)
     github_profile = models.URLField()

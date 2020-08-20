@@ -19,7 +19,7 @@
                   </div>
                   <div class="col-md-6">
                     <h2 class="text-center">{{ project.title }}</h2>
-                    <p>{{ project.description|markdown|safe }}</p>
+                    <p>{{ project.description }}</p>
                   </div>
                 </div>
                 <div>
@@ -43,17 +43,7 @@
                   </div>
                   <div class="mb-4">
                     <h6>Deployed version link</h6>
-                    <p>{{ project.deployed_version_link }}</p>
-                  </div>
-                  <div class="mb-4">
-                    {% if project.has_contributors %}
-                      <h6>Contributors</h6>
-                      <ul class="col-md-4">
-                        {% for contributor in project.contributors.all %}
-                          <li>{{ contributor.full_name }}</li>
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
+                    <p>{{ project.web_link }}</p>
                   </div>
                 </div>
               </div>

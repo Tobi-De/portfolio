@@ -73,7 +73,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "myprofile.apps.MyprofileConfig",
+    "core.apps.CoreConfig",
     "projects.apps.ProjectsConfig",
     "blog.apps.BlogConfig",
     "newsletter.apps.NewsletterConfig",
