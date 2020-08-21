@@ -12,6 +12,7 @@ def home(request):
     return render(request, "core/home.html", context)
 
 
+# TODO write a telegram bot that send message whenever a message is sent
 class HireMeView(FormView):
     form_class = HireMeForm
     template_name = "core/hire_me.html"

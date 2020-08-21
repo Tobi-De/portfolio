@@ -1,6 +1,12 @@
 from django import forms
 
-from .models import Submission
+from .models import Submission, UnsubscriptionReason
+
+
+# For testing purpose
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Enter your email address"}), label="")
 
 
 class SubscriptionForm(forms.ModelForm):
@@ -16,3 +22,9 @@ class SubscriptionForm(forms.ModelForm):
 
 class NewsForm(forms.Form):
     subject = forms.CharField(max_length=130)
+
+
+class UnsubscriptionReasonForm(forms.ModelForm):
+    class Meta:
+        model = UnsubscriptionReason
+        fields = "__all__"

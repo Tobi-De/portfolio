@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
-from model_utils.models import TimeStampedModel
+from model_utils.models import TimeStampedModel, SoftDeletableModel
 
 env = environ.Env()
 
@@ -18,7 +18,7 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="contact@tobidegnon.com")
 User = get_user_model()
 
 
-class Submission(TimeStampedModel):
+class Submission(TimeStampedModel, SoftDeletableModel):
     email = models.EmailField(unique=True)
     uuid = ShortUUIDField()
     confirmed = models.BooleanField(default=False)
@@ -36,9 +36,20 @@ class Submission(TimeStampedModel):
             self.save()
             self.send_welcome_mail()
 
+    @classmethod
+    def add_subscriber(cls, email, request):
+        sub = Submission(email=email)
+        sub.save()
+        sub.send_confirmation_mail(request=request)
+
     def get_confirmation_link(self, request):
         return request.build_absolute_uri(
             reverse("newsletter:subscription_confirm", kwargs={"uuid": self.uuid})
+        )
+
+    def get_unsubscribe_link(self, request):
+        return request.build_absolute_uri(
+            reverse("newsletter:unsubscribe", kwargs={"uuid": self.uuid})
         )
 
     def send_welcome_mail(self):
@@ -66,11 +77,17 @@ class Submission(TimeStampedModel):
             recipient_list=[self.email],
         )
 
-    @classmethod
-    def add_subscriber(cls, email, request):
-        sub = Submission(email=email)
-        sub.save()
-        sub.send_confirmation_mail(request=request)
+    # for testing purpose
+    def send_unsubscription_link(self, request):
+        subject = "Unsubscribe"
+        message = f"Unsubscription link {self.get_unsubscribe_link(request=request)}"
+        async_task(
+            send_mail,
+            subject=subject,
+            message=message,
+            from_email=DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email],
+        )
 
 
 class Mailable(TimeStampedModel):
@@ -90,3 +107,7 @@ class TransactionalMail(Mailable):
 
 class BulkMail(Mailable):
     dispatch_date = models.DateTimeField()
+
+
+class UnsubscriptionReason(TimeStampedModel):
+    pass
