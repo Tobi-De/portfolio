@@ -5,8 +5,12 @@ from .models import Submission, UnsubscriptionReason
 
 # For testing purpose
 
+
 class EmailForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Enter your email address"}), label="")
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={"placeholder": "Enter your email address"}),
+        label="",
+    )
 
 
 class SubscriptionForm(forms.ModelForm):
@@ -28,3 +32,9 @@ class UnsubscriptionReasonForm(forms.ModelForm):
     class Meta:
         model = UnsubscriptionReason
         fields = "__all__"
+
+    def __int__(self, *args, **kwargs):
+        super().__int__(*args, **kwargs)
+        self.fields["message"].widget.attrs[
+            "placeholder"
+        ] = "Please explain here in few lines why you are leaving us."

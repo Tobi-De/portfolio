@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
-from model_utils.models import TimeStampedModel, SoftDeletableModel
+from model_utils.models import TimeStampedModel
 
 env = environ.Env()
 
@@ -18,7 +18,7 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="contact@tobidegnon.com")
 User = get_user_model()
 
 
-class Submission(TimeStampedModel, SoftDeletableModel):
+class Submission(TimeStampedModel):
     email = models.EmailField(unique=True)
     uuid = ShortUUIDField()
     confirmed = models.BooleanField(default=False)
@@ -42,6 +42,18 @@ class Submission(TimeStampedModel, SoftDeletableModel):
         sub.save()
         sub.send_confirmation_mail(request=request)
 
+    @classmethod
+    def remove_subscriber(cls, sub_obj, message):
+        subject = "Somebody Unsubscribed"
+        _message = f"Email :{sub_obj.email}\nMessage: {message}"
+        send_mail(
+            subject=subject,
+            message=_message,
+            from_email=DEFAULT_FROM_EMAIL,
+            recipient_list=["contact@tobidegnon.com"],
+        )
+        sub_obj.delete()
+
     def get_confirmation_link(self, request):
         return request.build_absolute_uri(
             reverse("newsletter:subscription_confirm", kwargs={"uuid": self.uuid})
@@ -53,7 +65,7 @@ class Submission(TimeStampedModel, SoftDeletableModel):
         )
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/messages/welcome_email.txt", ).format(
+        message = render_to_string("newsletter/messages/welcome_email.txt",).format(
             "utf-8"
         )
         async_task(
@@ -110,4 +122,4 @@ class BulkMail(Mailable):
 
 
 class UnsubscriptionReason(TimeStampedModel):
-    pass
+    message = models.TextField(blank=True, null=True)

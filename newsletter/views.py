@@ -1,8 +1,11 @@
+from braces.views import SuperuserRequiredMixin
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import View, FormView
+from django.views.generic import View, FormView, TemplateView
 
 from .forms import SubscriptionForm, NewsForm, UnsubscriptionReasonForm, EmailForm
 from .models import Submission
+from django_q.tasks import async_task
 
 
 class SubmissionView(View):
@@ -36,32 +39,43 @@ class UnsubscribeView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["obj"] = get_object_or_404(Submission, uuid=kwargs.get("uuid"))
+        context["obj"] = get_object_or_404(Submission, uuid=self.kwargs.get("uuid"))
         return context
 
     def form_valid(self, form):
-        obj = self.get_context_data().get("obj")
-        obj.delete()
-        return redirect("unsubscribe_confirmation")
+        async_task(
+            Submission.remove_subscriber,
+            sub_obj=self.get_context_data().get("obj"),
+            message=form.cleaned_data["message"],
+        )
+        return redirect("newsletter:unsubscribe_confirmation")
 
 
-def unsubscribe_confirmation(request):
-    return render(request, "newsletter/unsubscribe_confirmation.html")
+class UnsubscribeConfirmationView(TemplateView):
+    template_name = "newsletter/unsubscribe_confirmation.html"
 
 
-# for testing_purpose
-def send_unsubscription_link(request):
-    if request.method == "POST":
+class SendUnsubscribeLinkView(SuperuserRequiredMixin, View):
+    """THis views is only for testing purpose, test if the unbubscribe link
+        is really sent
+    """
+
+    def get(self, request, *args, **kwargs):  # noqa
+        return render(
+            request, "newsletter/unsubscribe_test.html", context={"form": EmailForm()}
+        )
+
+    def post(self, request, *args, **kwargs):  # noqa
         form = EmailForm(request.POST)
         if form.is_valid():
-            sub = Submission.objects.create(email=form.cleaned_data["email"], confirmed=True)
+            sub = Submission.objects.create(
+                email=form.cleaned_data["email"], confirmed=True
+            )
             sub.send_unsubscription_link(request=request)
-    else:
-        form = EmailForm()
-    context = {
-        "form": form
-    }
-    return render(request, "newsletter/unsubscribe_test.html", context=context)
+            messages.success(request, "Link Sent")
+        return render(
+            request, "newsletter/unsubscribe_test.html", context={"form": form}
+        )
 
 
 class SendNews(FormView):
