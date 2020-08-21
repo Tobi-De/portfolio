@@ -1,17 +1,11 @@
 from rest_framework import serializers
 
-from ..models import TransactionalMail, Submission, BulkMail
+from ..models import News, Submission
 
 
-class BulkMailSerializer(serializers.ModelSerializer):
+class NewsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BulkMail
-        fields = "__all__"
-
-
-class TransactionalMailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TransactionalMail
+        model = News
         fields = "__all__"
 
 

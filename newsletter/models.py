@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
@@ -43,9 +44,9 @@ class Submission(TimeStampedModel):
         sub.send_confirmation_mail(request=request)
 
     @classmethod
-    def remove_subscriber(cls, sub_obj, message):
+    def remove_subscriber(cls, sub_obj, title, message, **kwargs):
         subject = "Somebody Unsubscribed"
-        _message = f"Email :{sub_obj.email}\nMessage: {message}"
+        _message = f"Email :{sub_obj.email}\nTitle: {title}\nMessage: {message}"
         send_mail(
             subject=subject,
             message=_message,
@@ -65,7 +66,7 @@ class Submission(TimeStampedModel):
         )
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/messages/welcome_email.txt",).format(
+        message = render_to_string("newsletter/messages/welcome_email.txt", ).format(
             "utf-8"
         )
         async_task(
@@ -102,24 +103,16 @@ class Submission(TimeStampedModel):
         )
 
 
-class Mailable(TimeStampedModel):
+class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
     body = MarkdownxField()
+    dispatch_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        abstract = True
+        verbose_name_plural = "news"
 
     def __str(self):
         return self.subject
 
-
-class TransactionalMail(Mailable):
-    pass
-
-
-class BulkMail(Mailable):
-    dispatch_date = models.DateTimeField()
-
-
-class UnsubscriptionReason(TimeStampedModel):
-    message = models.TextField(blank=True, null=True)
+    def send(self):
+        print("here")

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Submission, UnsubscriptionReason
+from .models import Submission, News
 
 
 # For testing purpose
@@ -24,17 +24,24 @@ class SubscriptionForm(forms.ModelForm):
         self.fields["email"].label = ""
 
 
-class NewsForm(forms.Form):
-    subject = forms.CharField(max_length=130)
+class UnsubscriptionForm(forms.Form):
+    title = forms.CharField(
+        max_length=60,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Short title to describe your reason"}
+        ),
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "placeholder": "Please explain here in few lines why you are leaving us."
+            }
+        ),
+        required=False,
+    )
 
 
-class UnsubscriptionReasonForm(forms.ModelForm):
+class NewsForm(forms.ModelForm):
     class Meta:
-        model = UnsubscriptionReason
+        model = News
         fields = "__all__"
-
-    def __int__(self, *args, **kwargs):
-        super().__int__(*args, **kwargs)
-        self.fields["message"].widget.attrs[
-            "placeholder"
-        ] = "Please explain here in few lines why you are leaving us."

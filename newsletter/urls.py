@@ -26,5 +26,5 @@ urlpatterns = [
     path(
         "unsubscribe-test/", SendUnsubscribeLinkView.as_view(), name="unsubscribe_test",
     ),
-    path("send-news", SendNews.as_view(), name="send_news"),
+    path("send-news/", SendNews.as_view(), name="send_news"),
 ]

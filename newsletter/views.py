@@ -1,11 +1,10 @@
-from braces.views import SuperuserRequiredMixin
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View, FormView, TemplateView
-
-from .forms import SubscriptionForm, NewsForm, UnsubscriptionReasonForm, EmailForm
-from .models import Submission
 from django_q.tasks import async_task
+
+from .forms import SubscriptionForm, NewsForm, UnsubscriptionForm, EmailForm
+from .models import Submission
 
 
 class SubmissionView(View):
@@ -35,7 +34,7 @@ class SubscriptionConfirmView(View):
 
 class UnsubscribeView(FormView):
     template_name = "newsletter/unsubscribe.html"
-    form_class = UnsubscriptionReasonForm
+    form_class = UnsubscriptionForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,7 +45,7 @@ class UnsubscribeView(FormView):
         async_task(
             Submission.remove_subscriber,
             sub_obj=self.get_context_data().get("obj"),
-            message=form.cleaned_data["message"],
+            **form.cleaned_data,
         )
         return redirect("newsletter:unsubscribe_confirmation")
 
@@ -55,12 +54,14 @@ class UnsubscribeConfirmationView(TemplateView):
     template_name = "newsletter/unsubscribe_confirmation.html"
 
 
-class SendUnsubscribeLinkView(SuperuserRequiredMixin, View):
+class SendUnsubscribeLinkView(View):
     """THis views is only for testing purpose, test if the unbubscribe link
         is really sent
     """
 
     def get(self, request, *args, **kwargs):  # noqa
+        if not self.request.user.is_superuser:
+            return redirect("home")
         return render(
             request, "newsletter/unsubscribe_test.html", context={"form": EmailForm()}
         )
@@ -81,3 +82,11 @@ class SendUnsubscribeLinkView(SuperuserRequiredMixin, View):
 class SendNews(FormView):
     template_name = "newsletter/send_news.html"
     form_class = NewsForm
+
+    def form_valid(self, form):
+        news = form.save()
+        async_task(news.send)
+        messages.success(self.request, "Pending")
+        return render(
+            self.request, "newsletter/send_news.html", context={"form": NewsForm()}
+        )
