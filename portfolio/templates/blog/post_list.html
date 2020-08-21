@@ -62,11 +62,12 @@
             </nav>
           </div>
         {% else %}
-          <p class="text-center h4">Sorry nothing found<img class="center"
-                                                            src="https://img.icons8.com/ios-glyphs/60/000000/nothing-found.png"
-                                                            alt=";("/>
-          </p>
-
+          <div style="background-color: white">
+            <p class="text-center h4">Sorry nothing found<img class="center"
+                                                              src="https://img.icons8.com/ios-glyphs/60/000000/nothing-found.png"
+                                                              alt=";("/>
+            </p>
+          </div>
         {% endif %}
       </main>
       {% include "sidebar.html" with form=newsletter_form %}

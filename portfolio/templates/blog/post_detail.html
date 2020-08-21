@@ -45,8 +45,9 @@
               <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
             </div>
           </div>
-          <div class="post-body jumbotron" style="background-color: white">
+          <div class="post-body jumbotron">
             <p>{{ post.overview }}</p>
+            <hr>
             {{ post.body|markdown|safe }}
           </div>
           {% if user.is_superuser and not post.is_published %}

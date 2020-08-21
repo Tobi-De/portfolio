@@ -1,17 +1,25 @@
 import re
 
+import environ
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.db import models
 from django.shortcuts import reverse
+from django.template.loader import render_to_string
 from django_extensions.db.fields import ShortUUIDField
+from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
+
+env = environ.Env()
+
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="contact@tobidegnon.com")
 
 User = get_user_model()
 
 
 class Submission(TimeStampedModel):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     uuid = ShortUUIDField()
     confirmed = models.BooleanField(default=False)
 
@@ -23,16 +31,46 @@ class Submission(TimeStampedModel):
         return email_pattern.fullmatch(self.email)
 
     def confirm(self):
-        self.confirmed = True
-        self.save()
+        if not self.confirmed:
+            self.confirmed = True
+            self.save()
+            self.send_welcome_mail()
 
-    def get_confirmation_link(self):
-        return reverse("submission:subscription_confirm", kwargs={"uuid": self.uuid})
+    def get_confirmation_link(self, request):
+        return request.build_absolute_uri(
+            reverse("newsletter:subscription_confirm", kwargs={"uuid": self.uuid})
+        )
+
+    def send_welcome_mail(self):
+        message = render_to_string("newsletter/messages/welcome_email.txt", ).format(
+            "utf-8"
+        )
+        async_task(
+            send_mail,
+            subject="Welcome to my Newsletter",
+            message=message,
+            from_email=DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email],
+        )
+
+    def send_confirmation_mail(self, request):
+        message = render_to_string(
+            "newsletter/messages/confirmation_email.txt",
+            {"link": self.get_confirmation_link(request=request)},
+        ).format("utf-8")
+        async_task(
+            send_mail,
+            subject="Confirm Email",
+            message=message,
+            from_email=DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email],
+        )
 
     @classmethod
-    def add_subscriber(cls, email):
-        # send confirmation email link asynchronously
-        pass
+    def add_subscriber(cls, email, request):
+        sub = Submission(email=email)
+        sub.save()
+        sub.send_confirmation_mail(request=request)
 
 
 class Mailable(TimeStampedModel):

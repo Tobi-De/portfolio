@@ -4,7 +4,7 @@ from .views import (
     SubmissionView,
     SubscriptionConfirmView,
     UnsubscribeView,
-    SendMassMails,
+    SendNews,
 )
 
 app_name = "newsletter"
@@ -16,5 +16,5 @@ urlpatterns = [
         name="subscription_confirm",
     ),
     path("unsubscribe/<str:uuid>", UnsubscribeView.as_view(), name="unsubscribe"),
-    path("mass-mailing", SendMassMails.as_view(), name="mass-mailings"),
+    path("send-news", SendNews.as_view(), name="send_news"),
 ]
