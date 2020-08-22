@@ -1,12 +1,12 @@
 from bootstrap_datepicker_plus import DateTimePickerInput
+from ckeditor.fields import RichTextFormField
 from django import forms
-from markdownx.fields import MarkdownxFormField
 
 from .models import Post
 
 
 class BlogPostContentForm(forms.Form):
-    body = MarkdownxFormField()
+    body = RichTextFormField()
 
 
 class PostForm(forms.ModelForm):

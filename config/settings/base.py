@@ -69,7 +69,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "django_q",
-    "markdownx",
+    "ckeditor",
     "django_comments_xtd",
     "django_comments",
     "sorl.thumbnail",
@@ -254,3 +254,35 @@ COMMENTS_APP = 'django_comments_xtd'
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 COMMENTS_XTD_SALT = (b"Timendi causa est nescire. "
                      b"Aequam memento rebus in arduis servare mentem.")
+
+# CKEDITOR
+# -------------------------------------------------------------------------------
+CKEDITOR_CONFIGS = {
+    # django-ckeditor defaults
+    'default': {
+        # Editor Width Adaptation
+        'width': 'auto',
+        'height': '250px',
+        # tab key conversion space number
+        'tabSpaces': 4,
+        # Toolbar Style
+        'toolbar': 'Custom',
+        # Toolbar buttons
+        'toolbar_Custom': [
+            # Emotional Code Block
+            ['Smiley', 'CodeSnippet'],
+            # Font Style
+            ['Bold', 'Italic', 'Underline', 'RemoveFormat', 'Blockquote'],
+            # Font color
+            ['TextColor', 'BGColor'],
+            # Link link
+            ['Link', 'Unlink'],
+            # List of items
+            ['NumberedList', 'BulletedList'],
+            # Maximization
+            ['Maximize']
+        ],
+        # Add Code Block Plug-ins
+        'extraPlugins': ','.join(['codesnippet']),
+    }
+}

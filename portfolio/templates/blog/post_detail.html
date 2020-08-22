@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load markdown_extras %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -46,9 +45,9 @@
             </div>
           </div>
           <div class="post-body jumbotron">
-            <p>{{ post.overview }}</p>
+            <p>{{ post.overview|safe }}</p>
             <hr>
-            {{ post.body|markdown|safe }}
+            {{ post.body|safe }}
           </div>
           {% if user.is_superuser and not post.is_published %}
             <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-primary">Publish</a>

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load markdown_extras %}
 {% load humanize %}
 
 {% block content %}
@@ -36,7 +35,7 @@
               <div class="card-body">
                 <h4 class="card-title">{{ post.title }}</h4>
                 <p class="card-text">
-                  {{ blogpost.body|markdown|safe|linebreaks|truncatechars:200 }}
+                  {{ blogpost.body|safe|linebreaks|truncatechars:200 }}
                 </p>
                 <a href="{% url "blog:post_detail" post.slug %}" class="btn btn-primary">Continue</a>
               </div>

@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models, IntegrityError, ProgrammingError, OperationalError
@@ -7,7 +8,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
 from django_q.tasks import Schedule, schedule
-from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
@@ -25,8 +25,8 @@ User = get_user_model()
 class Postable(models.Model):
     thumbnail = models.ImageField(upload_to="blog", blank=True)
     title = models.CharField(max_length=150)
-    overview = models.TextField(max_length=200)
-    body = MarkdownxField(blank=True)
+    overview = RichTextField()
+    body = RichTextField()
     slug = AutoSlugField(populate_from=["title"])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 

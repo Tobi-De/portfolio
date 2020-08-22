@@ -13,6 +13,7 @@ from django_q.tasks import Chain
 from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
+from ckeditor.fields import RichTextField
 
 from .utils import get_current_domain
 
@@ -114,7 +115,7 @@ class Subscriber(TimeStampedModel):
 
 class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
-    message = MarkdownxField()
+    message = RichTextField()
     dispatch_date = models.DateTimeField(default=timezone.now)
 
     class Meta:

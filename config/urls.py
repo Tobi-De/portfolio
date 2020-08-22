@@ -3,12 +3,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
-from markdownx import urls as markdownx
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("markdownx/", include(markdownx)),
     path("", include("core.urls")),
     path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),

@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load crispy_forms_filters %}
-{% load markdown_extras %}
+
+{% block css %}
+  {{ block.super }}
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"
+          integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"></script>
+{% endblock %}
 
 {% block content %}
   <div class="container">
@@ -17,4 +22,8 @@
       </div>
     </main>
   </div>
+
+  <script>
+    $(".django-ckeditor-widget").removeAttr('style');
+  </script>
 {% endblock %}
