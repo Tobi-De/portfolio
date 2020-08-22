@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 
 from newsletter.forms import SubscriptionForm
-from .forms import BlogPostContentForm
+from .forms import BlogPostContentForm, PostForm
 from .models import Post, Series, Category
 from .viewmixins import PostPublishedRequiredMixin
 
@@ -79,17 +79,7 @@ class PostListView(ListView):
 class PostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
     model = Post
     template_name = "blog/post_create.html"
-    fields = [
-        "thumbnail",
-        "title",
-        "overview",
-        "status",
-        "reading_time",
-        "categories",
-        "author",
-        "series",
-        "scheduled_publish_date",
-    ]
+    form_class = PostForm
     form_valid_message = "Blog post created"
 
     def get_success_url(self) -> str:
@@ -137,16 +127,7 @@ class PostUpdateView(
 ):
     model = Post
     template_name = "blog/post_update.html"
-    fields = [
-        "thumbnail",
-        "title",
-        "overview",
-        "status",
-        "reading_time",
-        "categories",
-        "series",
-        "scheduled_publish_date",
-    ]
+    form_class = PostForm
     form_valid_message = "Blog post updated"
 
 

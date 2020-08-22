@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 
 from .models import Subscriber, News
@@ -45,3 +46,6 @@ class NewsForm(forms.ModelForm):
     class Meta:
         model = News
         fields = "__all__"
+        widgets = {
+            "dispatch_date": DateTimePickerInput()
+        }

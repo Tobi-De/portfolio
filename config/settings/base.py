@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
     "django_comments_xtd",
     "django_comments",
     "sorl.thumbnail",
+    "bootstrap_datepicker_plus"
 ]
 
 LOCAL_APPS = [
