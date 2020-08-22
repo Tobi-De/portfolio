@@ -16,7 +16,8 @@
   {% block css %}
 
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+    {#    <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">#}
+    <script src="https://kit.fontawesome.com/3e0d7d8ec9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/fontastic.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.css' %}">
@@ -50,28 +51,27 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a href="{% url "projects:project_list" %}" class="nav-link active text-big">
-              <i class="fa fa-file-code-o" style="margin-right: 3px"></i>Projects</a>
+              Projects<i class="fas fa-code" style="margin-left: 3px"></i></a>
           </li>
           <li class="nav-item">
             <a href="{% url "blog:post_list" %}" class="nav-link text-big">
-              <i class="fa fa-newspaper-o"></i>
-              Blog</a>
+              Blog<i class="fab fa-blogger-b" style="margin-left: 3px"></i></a>
           </li>
-          <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-big"><i
-                  class="fa fa-hand-spock-o" style="margin-right: 3px"></i>Hire Me</a>
+          <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-big">Hire Me
+            <i class="fas fa-hands-helping" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}
             <li class="nav-item">
               <a href="{% url "blog:new_post" %}" class="nav-link text-big">
-                <i class="fa fa-plus-square" style="margin-right: 3px"></i>New</a>
+                New<i class="fa fa-plus-square" style="margin-left: 3px"></i></a>
             </li>
             <li class="nav-item">
               <a href="{% url "newsletter:send_news" %}" class="nav-link text-big">
-                <i class="fa fa-paper-plane" style="margin-right: 3px"></i>Send News</a>
+                Send News<i class="fa fa-paper-plane" style="margin-left: 3px"></i></a>
             </li>
             <li class="nav-item">
               <a href="{% url "admin:index" %}" class="nav-link text-big">
-                <i class="fa fa-lock" style="margin-right: 3px"></i>Admin</a>
+                Admin<i class="fa fa-lock" style="margin-left: 3px"></i></a>
             </li>
           {% endif %}
         </ul>
