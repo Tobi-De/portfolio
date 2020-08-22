@@ -1,13 +1,13 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .serializers import NewsSerializer, SubmissionSerializer
-from ..models import News, Submission
+from .serializers import NewsSerializer, SubscriberSerializer
+from ..models import News, Subscriber
 
 
-class SubmissionViewSet(ReadOnlyModelViewSet):
-    queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
+class SubscriberViewSet(ReadOnlyModelViewSet):
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 

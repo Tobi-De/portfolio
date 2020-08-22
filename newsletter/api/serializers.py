@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import News, Submission
+from ..models import News, Subscriber
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class NewsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SubmissionSerializer(serializers.ModelSerializer):
+class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Submission
+        model = Subscriber
         fields = "__all__"

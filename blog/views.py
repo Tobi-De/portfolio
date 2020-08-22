@@ -42,7 +42,7 @@ class PublishPostView(SuperuserRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, slug=kwargs.get("slug"))
-        post.publish()
+        post.publish(request=self.request)
         messages.success(request, "Post published")
         return redirect("blog:post_list")
 
@@ -142,6 +142,7 @@ class PostUpdateView(
         "title",
         "overview",
         "status",
+        "reading_time",
         "categories",
         "series",
         "scheduled_publish_date",

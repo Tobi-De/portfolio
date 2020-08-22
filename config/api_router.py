@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 
 from blog.api.viewsets import PostViewSet, SeriesViewSet, CategoryViewSet
 from newsletter.api.viewsets import (
-    SubmissionViewSet,
+    SubscriberViewSet,
     NewsViewSet
 )
 from projects.api.viewsets import ProjectViewSet
@@ -18,7 +18,7 @@ router.register("posts", PostViewSet)
 router.register("series", SeriesViewSet)
 router.register("categories", CategoryViewSet)
 router.register("news", NewsViewSet)
-router.register("submissions", SubmissionViewSet)
+router.register("subscribers", SubscriberViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

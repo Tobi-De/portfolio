@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Submission, News
+from .models import Subscriber, News
 
 
 # For testing purpose
@@ -15,7 +15,7 @@ class EmailForm(forms.Form):
 
 class SubscriptionForm(forms.ModelForm):
     class Meta:
-        model = Submission
+        model = Subscriber
         fields = ["email"]
 
     def __init__(self, *args, **kwargs):

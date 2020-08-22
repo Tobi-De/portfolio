@@ -85,7 +85,7 @@
   <!-- Widget [Newsletter Widget]-->
   <div class="widget">
     <p>Subscribe to our Mailing list to get notified about new posts.</p>
-    <form method="post" action="{% url "newsletter:submission" %}">
+    <form method="post" action="{% url "newsletter:subscribe" %}">
       {% csrf_token %}
       {{ form | crispy }}
       <button type="submit" class="btn btn-primary">Submit</button>

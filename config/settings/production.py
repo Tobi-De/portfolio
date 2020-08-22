@@ -121,6 +121,7 @@ EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[portfolio]")
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
 ADMIN_URL = env("DJANGO_ADMIN_URL")
+LOGIN_URL = ADMIN_URL
 
 # Anymail
 # ------------------------------------------------------------------------------

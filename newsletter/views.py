@@ -1,67 +1,70 @@
+from braces.views import SuperuserRequiredMixin
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View, FormView, TemplateView
 from django_q.tasks import async_task
 
 from .forms import SubscriptionForm, NewsForm, UnsubscriptionForm, EmailForm
-from .models import Submission
+from .models import Subscriber
 
 
-class SubmissionView(View):
+class SubscriptionView(View):
     def get(self, request, *args, **kwargs):  # noqa
         form = SubscriptionForm()
         context = {"form": form, "is_valid": False}
-        return render(request, "newsletter/submission.html", context=context)
+        return render(request, "newsletter/subscribe.html", context=context)
 
     def post(self, request, *args, **kwargs):  # noqa
         form = SubscriptionForm(request.POST)
         context = {"is_valid": False}
         if form.is_valid():
             print("here")
-            Submission.add_subscriber(email=form.cleaned_data["email"], request=request)
+            Subscriber.add_subscriber(email=form.cleaned_data["email"], request=request)
             context["is_valid"] = True
         form = SubscriptionForm()
         context["form"] = form
-        return render(request, "newsletter/submission.html", context=context)
+        return render(request, "newsletter/subscribe.html", context=context)
 
 
-class SubscriptionConfirmView(View):
+class SubscribeConfirmView(View):
+    """View called when user click on the confirmation link he received by mail"""
+
     def get(self, request, *args, **kwargs):  # noqa
-        submission = get_object_or_404(Submission, uuid=kwargs["uuid"])
+        submission = get_object_or_404(Subscriber, uuid=kwargs["uuid"])
         submission.confirm()
-        return render(request, "newsletter/subscription_confirm.html")
+        return render(request, "newsletter/subscribe_confirm.html")
 
 
 class UnsubscribeView(FormView):
+    """View called when a user clik on his unsubscribe link"""
+
     template_name = "newsletter/unsubscribe.html"
     form_class = UnsubscriptionForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["obj"] = get_object_or_404(Submission, uuid=self.kwargs.get("uuid"))
+        context["obj"] = get_object_or_404(Subscriber, uuid=self.kwargs.get("uuid"))
         return context
 
     def form_valid(self, form):
         async_task(
-            Submission.remove_subscriber,
+            Subscriber.remove_subscriber,
             sub_obj=self.get_context_data().get("obj"),
             **form.cleaned_data,
         )
         return redirect("newsletter:unsubscribe_confirmation")
 
 
-class UnsubscribeConfirmationView(TemplateView):
-    template_name = "newsletter/unsubscribe_confirmation.html"
+class UnsubscribeConfirmView(TemplateView):
+    template_name = "newsletter/unsubscribe_confirm.html"
 
 
-class SendUnsubscribeLinkView(View):
+class SendUnsubscribeLinkView(SuperuserRequiredMixin, View):
     """THis views is only for testing purpose, test if the unbubscribe link
         is really sent
     """
 
     def get(self, request, *args, **kwargs):  # noqa
-        if not self.request.user.is_superuser:
-            return redirect("home")
         return render(
             request, "newsletter/unsubscribe_test.html", context={"form": EmailForm()}
         )
@@ -69,7 +72,7 @@ class SendUnsubscribeLinkView(View):
     def post(self, request, *args, **kwargs):  # noqa
         form = EmailForm(request.POST)
         if form.is_valid():
-            sub = Submission.objects.create(
+            sub = Subscriber.objects.create(
                 email=form.cleaned_data["email"], confirmed=True
             )
             sub.send_unsubscription_link(request=request)
@@ -79,14 +82,13 @@ class SendUnsubscribeLinkView(View):
         )
 
 
-class SendNews(FormView):
+class SendNews(SuperuserRequiredMixin, FormView):
     template_name = "newsletter/send_news.html"
     form_class = NewsForm
 
     def form_valid(self, form):
-        news = form.save()
-        async_task(news.send)
-        messages.success(self.request, "Pending")
+        form.save().send(request=self.request)
+        messages.success(self.request, "Sending...")
         return render(
             self.request, "newsletter/send_news.html", context={"form": NewsForm()}
         )

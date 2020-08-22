@@ -21,7 +21,7 @@
             <p>
               Seems your email address is invalid (Or already subscribed), try again please.
               If the issue persist please <a href="mailto:contact@tobidegnon.com">contact us</a>.</p>
-            <form method="post" action="{% url "newsletter:submission" %}">
+            <form method="post" action="{% url "newsletter:subscribe" %}">
             {% csrf_token %}
             {{ form | crispy }}
             <button type="submit" class="btn btn-primary">Submit</button>

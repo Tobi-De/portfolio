@@ -1,1 +1,0 @@
-confirm your email address with this link {{ link }}

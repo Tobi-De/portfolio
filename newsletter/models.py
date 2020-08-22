@@ -1,25 +1,27 @@
 import re
 
-import environ
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db import models
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django_extensions.db.fields import ShortUUIDField
+from django_q.tasks import Chain
 from django_q.tasks import async_task
 from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
 
-env = environ.Env()
+from .utils import get_current_domain
 
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="contact@tobidegnon.com")
+DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 
 User = get_user_model()
 
 
-class Submission(TimeStampedModel):
+class Subscriber(TimeStampedModel):
     email = models.EmailField(unique=True)
     uuid = ShortUUIDField()
     confirmed = models.BooleanField(default=False)
@@ -35,11 +37,12 @@ class Submission(TimeStampedModel):
         if not self.confirmed:
             self.confirmed = True
             self.save()
-            self.send_welcome_mail()
+            # TODO write a decent welcome message
+            # self.send_welcome_mail()
 
     @classmethod
     def add_subscriber(cls, email, request):
-        sub = Submission(email=email)
+        sub = Subscriber(email=email)
         sub.save()
         sub.send_confirmation_mail(request=request)
 
@@ -57,21 +60,27 @@ class Submission(TimeStampedModel):
 
     def get_confirmation_link(self, request):
         return request.build_absolute_uri(
-            reverse("newsletter:subscription_confirm", kwargs={"uuid": self.uuid})
+            reverse("newsletter:subscribe_confirm", kwargs={"uuid": self.uuid})
         )
 
-    def get_unsubscribe_link(self, request):
-        return request.build_absolute_uri(
-            reverse("newsletter:unsubscribe", kwargs={"uuid": self.uuid})
-        )
+    def get_unsubscribe_link(self, request=None):
+        # I could have used build_absolute_url, but this is method
+        # is called too much and it is not easy to get 'request' each time
+        # i'm going with this approach for now
+        if request:
+            return request.build_absolute_uri(
+                reverse("newsletter:unsubscribe", kwargs={"uuid": self.uuid})
+            )
+        else:
+            return f"https://www.{get_current_domain()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/messages/welcome_email.txt", ).format(
+        message = render_to_string("newsletter/email/welcome_message.txt", ).format(
             "utf-8"
         )
         async_task(
             send_mail,
-            subject="Welcome to my Newsletter",
+            subject="Welcome!",
             message=message,
             from_email=DEFAULT_FROM_EMAIL,
             recipient_list=[self.email],
@@ -79,7 +88,7 @@ class Submission(TimeStampedModel):
 
     def send_confirmation_mail(self, request):
         message = render_to_string(
-            "newsletter/messages/confirmation_email.txt",
+            "newsletter/email/confirmation_message.txt",
             {"link": self.get_confirmation_link(request=request)},
         ).format("utf-8")
         async_task(
@@ -105,7 +114,7 @@ class Submission(TimeStampedModel):
 
 class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
-    body = MarkdownxField()
+    message = MarkdownxField()
     dispatch_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -114,5 +123,23 @@ class News(TimeStampedModel):
     def __str(self):
         return self.subject
 
-    def send(self):
-        print("here")
+    def get_mail_content(self, subscriber, **kwargs):
+        message = (
+            f"f{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
+            f" via this link {subscriber.get_unsubscribe_link(request=kwargs['request'])}"
+        )
+        return {
+            "subject": self.subject,
+            "message": message,
+            "from_email": DEFAULT_FROM_EMAIL,
+            "recipient_list": [subscriber.email],
+        }
+
+    def send(self, request=None):
+        # TODO update how this work creating chunks of Subscribers list
+        chain = Chain(cached=True)
+        for sub in Subscriber.objects.filter(confirmed=True):
+            chain.append(
+                send_mail, **self.get_mail_content(subscriber=sub, request=request)
+            )
+        chain.run()

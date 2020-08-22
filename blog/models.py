@@ -1,14 +1,18 @@
 from django.contrib.auth import get_user_model
-from django.db import models
+from django.contrib.sites.models import Site
+from django.db import models, IntegrityError, ProgrammingError, OperationalError
 from django.db.models import Q, Sum
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
+from django_q.tasks import Schedule, schedule
 from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
+from newsletter.models import News
 from .utils import queryset_index_of
 
 User = get_user_model()
@@ -19,7 +23,7 @@ User = get_user_model()
 
 
 class Postable(models.Model):
-    thumbnail = models.ImageField(upload_to='blog', blank=True)
+    thumbnail = models.ImageField(upload_to="blog", blank=True)
     title = models.CharField(max_length=150)
     overview = models.TextField(max_length=200)
     body = MarkdownxField(blank=True)
@@ -49,7 +53,9 @@ class Category(TimeStampedModel):
 
     @property
     def posts_count(self):
-        return Post.objects.filter(categories__name=self.name, status=Post.STATUS.published).count()
+        return Post.objects.filter(
+            categories__name=self.name, status=Post.STATUS.published
+        ).count()
 
 
 class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
@@ -92,10 +98,42 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def belongs_to_series(self, series):
         return self.series == series
 
-    def publish(self):
+    def publish(self, *args, **kwargs):
         self.status = Post.STATUS.published
         self.publish_date = timezone.now()
         self.save()
+        self.send_publish_email(request=kwargs.get("request", None))
+
+    def send_publish_email(self, **kwargs):
+        # TODO write a decent email for publish post
+        # send email to subscribers to inform of new post
+        subject = "New Blog Post"
+        message = render_to_string(
+            "blog/email/new_post_message.txt", context={"title": self.title}
+        ).format("utf-8")
+        News.objects.create(subject=subject, message=message).send(
+            request=kwargs.get("request", None)
+        )
+
+    def create_scheduled_task(self):
+        # create scheduled tast if scheduled_publish_date is set
+        if self.status == Post.STATUS.published or not self.scheduled_publish_date:
+            return
+        try:
+            schedule(
+                Post.publish,
+                self,
+                name=f"publish_{self.slug}",
+                schedule_type="O",
+                repeats=1,
+                next_run=self.scheduled_publish_date,
+            )
+        except (IntegrityError, ProgrammingError, OperationalError):
+            pass
+
+    def save(self, *args, **kwargs):
+        self.create_scheduled_task()
+        super().save(*args, **kwargs)
 
     @classmethod
     def popular_posts(cls):
