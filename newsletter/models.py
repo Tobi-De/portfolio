@@ -1,22 +1,21 @@
 import re
 
-from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, ProgrammingError, IntegrityError, OperationalError
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.utils.html import strip_tags
+from django_extensions.db.fields import RandomCharField
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import Chain
-from django_q.tasks import async_task
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_q.tasks import async_task, Schedule
 from model_utils.models import TimeStampedModel
 
-from .utils import get_current_domain
+from .utils import get_current_domain_url
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 
@@ -74,7 +73,7 @@ class Subscriber(TimeStampedModel):
                 reverse("newsletter:unsubscribe", kwargs={"uuid": self.uuid})
             )
         else:
-            return f"https://www.{get_current_domain()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
+            return f"{get_current_domain_url()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
         message = render_to_string("newsletter/email/welcome_message.txt",).format(
@@ -113,11 +112,16 @@ class Subscriber(TimeStampedModel):
             recipient_list=[self.email],
         )
 
+    @classmethod
+    def emailable_subscribers(cls):
+        return Subscriber.objects.filter(confirmed=True)
+
 
 class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
     message = RichTextUploadingField()
-    dispatch_date = models.DateTimeField(default=timezone.now)
+    key_identifier = RandomCharField(length=32)
+    dispatch_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "news"
@@ -126,13 +130,14 @@ class News(TimeStampedModel):
         return self.subject
 
     def get_mail_content(self, subscriber, **kwargs):
+        request = kwargs.get("request", None)
         message = strip_tags(
             f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link {subscriber.get_unsubscribe_link(request=kwargs['request'])}"
+            f" via this link {subscriber.get_unsubscribe_link(request=request)}"
         )
         html_message = (
             f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link <a href='{subscriber.get_unsubscribe_link(request=kwargs['request'])}'>Unsubscribe</a>"
+            f" via this link <a href='{subscriber.get_unsubscribe_link(request=request)}'>Unsubscribe</a>"
         )
         return {
             "subject": self.subject,
@@ -142,11 +147,35 @@ class News(TimeStampedModel):
             "html_message": html_message,
         }
 
-    def send(self, request=None):
-        # TODO update how this work creating chunks of Subscribers list
-        chain = Chain(cached=True)
-        for sub in Subscriber.objects.filter(confirmed=True):
-            chain.append(
-                send_mail, **self.get_mail_content(subscriber=sub, request=request)
+    def create_scheduled_task(self):
+        """schedule task does not work when they need argument, I get mulitple
+        erros when I try, so this is how I proceed :
+        when dispatch is set, a schedule task that does nothing is created
+        we know that the hook receive the entire task as argument, so I create a
+        task with a unique name that can identify(via the key_identifier attribute)
+        the exact news, then the hook is the one that trigger the execution of
+        the send_news method of that news
+        """
+        try:
+            Schedule.objects.create(
+                func="newsletter.tasks.placeholder_task",
+                name=f"{self.key_identifier}",
+                hook="newsletter.tasks.send_news_hook",
+                schedule_type=Schedule.ONCE,
+                next_run=self.dispatch_date,
             )
+        except (ProgrammingError, IntegrityError, OperationalError):
+            pass
+
+    def setup(self, **kwargs):
+        if self.dispatch_date:
+            self.create_scheduled_task()
+        else:
+            self.send(**kwargs)
+
+    def send(self, **kwargs):
+        # TODO update how this work creating chunks of recipient_list list
+        chain = Chain(cached=True)
+        for sub in Subscriber.emailable_subscribers():
+            chain.append(send_mail, **self.get_mail_content(subscriber=sub, **kwargs))
         chain.run()

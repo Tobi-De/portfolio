@@ -87,7 +87,7 @@ class SendNews(SuperuserRequiredMixin, FormView):
     form_class = NewsForm
 
     def form_valid(self, form):
-        form.save().send(request=self.request)
+        form.save().setup(request=self.request)
         messages.success(self.request, "Sending...")
         return render(
             self.request, "newsletter/send_news.html", context={"form": NewsForm()}

@@ -4,8 +4,8 @@ from django.contrib.sites.models import Site
 DEGUB = getattr(settings, "DEBUG", True)
 
 
-def get_current_domain():
+def get_current_domain_url():
     if DEGUB:
-        return "localhost:0000"
+        return "localhost:8000"
     else:
-        return Site.objects.last().domain
+        return f"https://www.{Site.objects.last().domain}"

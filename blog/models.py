@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
-from django_q.tasks import Schedule, schedule
+from django_q.tasks import Schedule
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
@@ -112,24 +112,23 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         message = render_to_string(
             "blog/email/new_post_message.txt", context={"title": self.title}
         ).format("utf-8")
-        News.objects.create(subject=subject, message=message).send(
-            request=kwargs.get("request", None)
-        )
+        News.objects.create(subject=subject, message=message).setup(**kwargs)
 
     def create_scheduled_task(self):
         # create scheduled tast if scheduled_publish_date is set
+        # ths work like newsletter.News.create_scheduled task, a placeholder task is create
+        # and the hook is the one doign the real wok here using the slug of the post
         if self.status == Post.STATUS.published or not self.scheduled_publish_date:
             return
         try:
-            schedule(
-                Post.publish,
-                self,
-                name=f"publish_{self.slug}",
-                schedule_type="O",
-                repeats=1,
+            Schedule.objects.create(
+                func="blog.tasks.placeholder_task",
+                name=f"{self.slug}",
+                hook="blog.tasks.publish_post_hook",
+                schedule_type=Schedule.ONCE,
                 next_run=self.scheduled_publish_date,
             )
-        except (IntegrityError, ProgrammingError, OperationalError):
+        except (ProgrammingError, IntegrityError, OperationalError):
             pass
 
     def save(self, *args, **kwargs):

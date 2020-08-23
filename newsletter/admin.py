@@ -5,7 +5,7 @@ from .models import News, Subscriber
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ["subject", "message", "dispatch_date", "modified", "created"]
+    list_display = ["subject", "key_identifier", "dispatch_date", "modified", "created"]
     search_fields = ["subject", "message"]
 
 
