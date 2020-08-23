@@ -70,10 +70,11 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "django_q",
     "ckeditor",
+    "ckeditor_uploader",
     "django_comments_xtd",
     "django_comments",
     "sorl.thumbnail",
-    "bootstrap_datepicker_plus"
+    "bootstrap_datepicker_plus",
 ]
 
 LOCAL_APPS = [
@@ -250,39 +251,45 @@ Q_CLUSTER = {
 
 # COMMENTS
 # -------------------------------------------------------------------------------
-COMMENTS_APP = 'django_comments_xtd'
+COMMENTS_APP = "django_comments_xtd"
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
-COMMENTS_XTD_SALT = (b"Timendi causa est nescire. "
-                     b"Aequam memento rebus in arduis servare mentem.")
+COMMENTS_XTD_SALT = (
+    b"Timendi causa est nescire. " b"Aequam memento rebus in arduis servare mentem."
+)
 
 # CKEDITOR
 # -------------------------------------------------------------------------------
 CKEDITOR_CONFIGS = {
     # django-ckeditor defaults
-    'default': {
+    "default": {
         # Editor Width Adaptation
-        'width': 'auto',
-        'height': '250px',
+        "width": "auto",
+        "height": "250px",
         # tab key conversion space number
-        'tabSpaces': 4,
+        "tabSpaces": 4,
         # Toolbar Style
-        'toolbar': 'Custom',
+        "toolbar": "Custom",
         # Toolbar buttons
-        'toolbar_Custom': [
+        "toolbar_Custom": [
             # Emotional Code Block
-            ['Smiley', 'CodeSnippet'],
+            ["Smiley", "CodeSnippet"],
             # Font Style
-            ['Bold', 'Italic', 'Underline', 'RemoveFormat', 'Blockquote'],
+            ["Bold", "Italic", "Underline", "RemoveFormat", "Blockquote"],
             # Font color
-            ['TextColor', 'BGColor'],
+            ["TextColor", "BGColor"],
             # Link link
-            ['Link', 'Unlink'],
+            ["Link", "Unlink", "ImageButton", "Anchor"],
             # List of items
-            ['NumberedList', 'BulletedList'],
-            # Maximization
-            ['Maximize']
+            ["NumberedList", "BulletedList"],
+            # actions
+            ["Maximize", "Image", "Undo", "Redo"],
         ],
         # Add Code Block Plug-ins
-        'extraPlugins': ','.join(['codesnippet']),
+        "extraPlugins": ",".join(["codesnippet", "uploadimage"]),
     }
 }
+
+# CKEDITOR Uploader
+# -------------------------------------------------------------------------------
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"

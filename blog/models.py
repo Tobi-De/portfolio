@@ -1,4 +1,5 @@
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models, IntegrityError, ProgrammingError, OperationalError
@@ -26,7 +27,7 @@ class Postable(models.Model):
     thumbnail = models.ImageField(upload_to="blog", blank=True)
     title = models.CharField(max_length=150)
     overview = RichTextField()
-    body = RichTextField()
+    body = RichTextUploadingField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 

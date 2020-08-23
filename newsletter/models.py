@@ -1,5 +1,6 @@
 import re
 
+from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
@@ -8,12 +9,12 @@ from django.db import models
 from django.shortcuts import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import Chain
 from django_q.tasks import async_task
-from markdownx.models import MarkdownxField
+from ckeditor_uploader.fields import RichTextUploadingField
 from model_utils.models import TimeStampedModel
-from ckeditor.fields import RichTextField
 
 from .utils import get_current_domain
 
@@ -76,7 +77,7 @@ class Subscriber(TimeStampedModel):
             return f"https://www.{get_current_domain()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/email/welcome_message.txt", ).format(
+        message = render_to_string("newsletter/email/welcome_message.txt",).format(
             "utf-8"
         )
         async_task(
@@ -115,7 +116,7 @@ class Subscriber(TimeStampedModel):
 
 class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
-    message = RichTextField()
+    message = RichTextUploadingField()
     dispatch_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -125,15 +126,20 @@ class News(TimeStampedModel):
         return self.subject
 
     def get_mail_content(self, subscriber, **kwargs):
-        message = (
-            f"f{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
+        message = strip_tags(
+            f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
             f" via this link {subscriber.get_unsubscribe_link(request=kwargs['request'])}"
+        )
+        html_message = (
+            f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
+            f" via this link <a href='{subscriber.get_unsubscribe_link(request=kwargs['request'])}'>Unsubscribe</a>"
         )
         return {
             "subject": self.subject,
-            "message": message,
+            "message": strip_tags(message),
             "from_email": DEFAULT_FROM_EMAIL,
             "recipient_list": [subscriber.email],
+            "html_message": html_message,
         }
 
     def send(self, request=None):

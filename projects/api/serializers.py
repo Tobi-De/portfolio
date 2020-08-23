@@ -10,6 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             fields = [
                 "title",
                 "description",
+                "status",
                 "what_ive_learned",
                 "tech_stack",
                 "github_link",
