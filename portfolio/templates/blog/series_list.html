@@ -24,7 +24,7 @@
                   </div>
                   <a href="{{ series.get_absolute_url }}">
                     <h3 class="h4">{{ series.title }}</h3></a>
-                  <p class="text-muted">{{ series.overview }}</p>
+                  <p>{{ series.overview|safe }}</p>
                   <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                            class="author d-flex align-items-center flex-wrap">
                     <div class="avatar"><img src="{{ series.author.profile.picture.url }}" alt="..." class="img-fluid">
