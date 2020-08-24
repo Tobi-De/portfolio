@@ -12,7 +12,7 @@ urlpatterns = [
     path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),
     path("newsletter/", include("newsletter.urls", namespace="newsletter")),
-    # path("comments/", include("django_comments_xtd.urls")),
+    path("comments/", include("django_comments_xtd.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

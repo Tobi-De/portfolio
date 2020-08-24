@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% load comments %}
 
+
+{% get_comment_count for object as comment_count %}
 {% block content %}
   <div class="container">
     <div class="row">
@@ -35,7 +38,7 @@
                     </a>
                       <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
                       <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
-                      <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comments.count }}</div>
+                      <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>
                     </footer>
                   </div>
                 </div>
