@@ -3,7 +3,7 @@
 {% load comments %}
 
 
-{% get_comment_count for object as comment_count %}
+
 {% block content %}
   <div class="container">
     <div class="row">
@@ -13,6 +13,7 @@
           <div class="container">
             <div class="row">
               {% for post in page_obj %}
+                {% get_comment_count for post as comment_count %}
                 <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px;">
                   {% if post.thumbnail %}
                     <div><a href="{{ post.get_absolute_url }}"><img

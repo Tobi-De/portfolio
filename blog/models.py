@@ -7,6 +7,7 @@ from django.db.models import Q, Sum
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django_comments_xtd.models import XtdComment
 from django_extensions.db.fields import AutoSlugField
 from django_q.tasks import Schedule
 from model_utils import Choices
@@ -139,20 +140,18 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @classmethod
     def popular_posts(cls):
-        # posts_with_comment = Post.objects.filter(status=Post.STATUS.published).annotate(comment_nums=Count("comment"))
-        # try:
-        #     first = second = third = posts_with_comment[0]
-        # except IndexError:
-        #     return []
-        # for post in posts_with_comment:
-        #     if post.comment_nums > first.comment_nums:
-        #         first, second, third = post, first, second
-        #     elif post.comment_nums > second.comment_nums:
-        #         second, third = post, second
-        #     elif post.comment_nums > third.comment_nums:
-        #         third = post
-        # return {first, second, third}
-        return Post.objects.all()
+        # TODO cache the result of this
+        # get published posts
+        # create a list of tuple with the fist element be the number of comment
+        # and the second the id post the post [(nbr_of_comment, id_post)]
+        # reverse sort the list and get the first three elements
+        # get the corresponding post in a list
+        published_posts = Post.objects.filter(status=Post.STATUS.published)
+        tmp = [(XtdComment.objects.filter(object_pk=post.id).count(), post.id) for post in published_posts]
+        popular_post_tuple = sorted(tmp, reverse=True)[:3]
+        # return [Post.objects.get(id=x[1]) for x in popular_post_tuple]
+        id_list = [x[1] for x in popular_post_tuple]
+        return Post.objects.filter(id__in=id_list)
 
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):

@@ -76,7 +76,7 @@ class Subscriber(TimeStampedModel):
             return f"{get_current_domain_url()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/email/welcome_message.txt",).format(
+        message = render_to_string("newsletter/email/welcome_message.txt", ).format(
             "utf-8"
         )
         async_task(
@@ -175,6 +175,8 @@ class News(TimeStampedModel):
 
     def send(self, **kwargs):
         # TODO update how this work creating chunks of recipient_list list
+        if Subscriber.emailable_subscribers().count() == 0:
+            return
         chain = Chain(cached=True)
         for sub in Subscriber.emailable_subscribers():
             chain.append(send_mail, **self.get_mail_content(subscriber=sub, **kwargs))

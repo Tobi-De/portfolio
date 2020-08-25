@@ -21,6 +21,7 @@ class Thumbnail(TimeStampedModel):
         return self.image.url
 
 
+# TODO add twitter profile
 class Profile(TimeStampedModel):
     picture = models.OneToOneField(
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
