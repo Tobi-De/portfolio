@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block content %}
   <div class="container">
@@ -7,7 +8,9 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
-              <img src="{{ project.thumbnail.url }}" class="img-fluid" alt="{{ project.title }}">
+              {% thumbnail project.thumbnail.image "550x350" crop="center" as img %}
+                <img src="{{ img.url }}" class="img-fluid" alt="{{ project.thumbnail.alt }}">
+              {% endthumbnail %}
               {% if user.is_superuser %}
                 <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
                 <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
@@ -21,13 +24,15 @@
           <div>
             <div class="mb-4 mt-4">
               <h6>Technology</h6>
-              {% for tech in project.get_stack %}
-                {{ tech }}<br>
-              {% endfor %}
+              <ul class="ml-4">
+                {% for tech in project.get_stack %}
+                  <li> {{ tech }}</li>
+                {% endfor %}
+              </ul>
             </div>
             <div class="mb-4">
               <h6>Status</h6>
-              <p>{{ project.status }}</p>
+              <p>{{ project.get_status }}</p>
             </div>
             <div class="mb-4">
               <h6>What I've Learned</h6>

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 {% load crispy_forms_tags %}
 
 
@@ -12,11 +13,15 @@
 
   <div class="container">
     <main class="post blog-post">
-      <div class="post-single" style="background-color: white; padding: 20px; border-radius: 5px">
+      <div class="post-single" style="padding: 15px; border-radius: 5px">
         {% if series.thumbnail %}
-          <div><img src="{{ series.thumbnail.url }}" alt="..."
-                    class="img-fluid">
-          </div>
+          {% thumbnail series.thumbnail.image "1000x600" crop="center" as img %}
+            <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ series.thumbnail.alt }}"
+                 class="card-img img-fluid">
+          {% endthumbnail %}
+        {% endif %}
+        {% if series.thumbnail.source %}
+          <p class="text-muted mt-2">(Picture from {{ series.thumbnail.source }} )</p>
         {% endif %}
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
@@ -35,7 +40,11 @@
           <h1>{{ series.title }}</h1>
           <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
                                                                                         class="author d-flex align-items-center flex-wrap">
-            <div class="avatar"><img src="{{ series.author.profile.picture.url }}" alt="..." class="img-fluid"></div>
+            {% thumbnail series.author.profile.picture.image "40x40" crop="center" as img %}
+              <div class="avatar"><img src="{{ img.url }}" alt="{{ series.author.profile.picture.alt }}"
+                                       class="img-fluid">
+              </div>
+            {% endthumbnail %}
             <div class="title"><span>{{ series.author }}</span></div>
           </a>
             <div class="d-flex align-items-center flex-wrap">

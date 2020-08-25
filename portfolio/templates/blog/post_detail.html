@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 {% load  comments comments_xtd %}
 {% load crispy_forms_tags %}
 
@@ -10,14 +11,18 @@
     }
   </style>
 
-  {% get_comment_count for object as comment_count %}
+  {% get_comment_count for post as comment_count %}
   <div class="container">
     <main class="post blog-post">
-      <div class="post-single" style="padding: 10px; border-radius: 5px;">
+      <div class="post-single" style="padding: 15px;border-radius: 5px;">
         {% if post.thumbnail %}
-          <div><img src="{{ post.thumbnail.url }}" alt="..."
-                    class="img-fluid">
-          </div>
+          {% thumbnail post.thumbnail.image "1000x600" crop="center" as img %}
+            <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ post.thumbnail.alt }}"
+                 class="card-img img-fluid">
+          {% endthumbnail %}
+        {% endif %}
+        {% if post.thumbnail.source %}
+          <p class="text-muted mt-2">(Picture from {{ post.thumbnail.source }} )</p>
         {% endif %}
         <div class="post-details">
           <div class="post-meta d-flex justify-content-between">
@@ -37,7 +42,11 @@
           <h1>{{ post.title }}</h1>
           <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
                                                                                         class="author d-flex align-items-center flex-wrap">
-            <div class="avatar"><img src="{{ post.author.profile.picture.url }}" alt="..." class="img-fluid"></div>
+            {% thumbnail post.author.profile.picture.image "40x40" crop="center" as img %}
+              <div class="avatar"><img src="{{ img.url }}" alt="{{ post.author.profile.picture.alt }}"
+                                       class="img-fluid">
+              </div>
+            {% endthumbnail %}
             <div class="title"><span>{{ post.author }}</span></div>
           </a>
             <div class="d-flex align-items-center flex-wrap">

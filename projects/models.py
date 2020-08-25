@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.utils.html import strip_tags
 from django_extensions.db.fields import AutoSlugField
 from model_utils import Choices
 from model_utils.fields import MonitorField
@@ -39,3 +40,11 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     @property
     def get_stack(self):
         return self.tech_stack.split("_")
+
+    @property
+    def get_status(self):
+        return self.status.replace("_", " ").capitalize()
+
+    @property
+    def overview(self):
+        return strip_tags(self.description[:50]) + "..."

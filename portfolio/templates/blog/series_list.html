@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 
 {% block content %}
   <div class="container">
@@ -10,9 +11,10 @@
             {% for series in page_obj %}
               <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
                 {% if series.thumbnail %}
-                  <div><a href="{{ series.get_absolute_url }}"><img
-                          src="{{ series.thumbnail.url }}" width="100%" alt="..."
-                          class="img-fluid"></a></div>
+                  {% thumbnail series.thumbnail.image "740x495" crop="center" as img %}
+                    <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
+                         alt="{{ series.thumbnail.alt }}" class="img-fluid">
+                  {% endthumbnail %}
                 {% endif %}
                 <div class="post-details">
                   <div class="post-meta d-flex justify-content-between">
@@ -27,8 +29,11 @@
                   <p>{{ series.overview|safe }}</p>
                   <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                            class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src="{{ series.author.profile.picture.url }}" alt="..." class="img-fluid">
-                    </div>
+                    {% thumbnail series.author.profile.picture.image "40x40" crop="center" as img %}
+                      <div class="avatar"><img src="{{ img.url }}" alt="{{ series.author.profile.picture.alt }}"
+                                               class="img-fluid">
+                      </div>
+                    {% endthumbnail %}
                     <div class="title"><span>{{ series.author }}</span></div>
                   </a>
                     <div class="date"><i class="icon-clock"></i>{{ series.created|timesince }} ago</div>

@@ -53,17 +53,17 @@ urlpatterns = [
         name="series_create",
     ),
     path(
-        "series-detail/<str:slug>",
+        "series-detail/<str:slug>/",
         SeriesDetailView.as_view(),
         name="series_detail",
     ),
     path(
-        "series-update/<str:slug>",
+        "series-update/<str:slug>/",
         SeriesUpdateView.as_view(),
         name="series_update",
     ),
     path(
-        "series-delete/<str:slug>",
+        "series-delete/<str:slug>/",
         SeriesDeleteView.as_view(),
         name="series_delete",
     ),
