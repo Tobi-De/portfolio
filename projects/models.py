@@ -11,13 +11,19 @@ User = get_user_model()
 
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
-    STACK_CHOICES = Choices("django_vuejs", "django", "vuejs", "wagtail", "wagtail_vuejs")
+    STACK_CHOICES = Choices(
+        "django_vuejs", "django", "vuejs", "wagtail", "wagtail_vuejs"
+    )
     STATUS = Choices("in_development", "deployed")
-    thumbnail = models.ImageField(blank=True)
+    thumbnail = models.OneToOneField(
+        "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
+    )
     title = models.CharField(max_length=60)
     description = RichTextField()
     slug = AutoSlugField(populate_from=["title"])
-    tech_stack = models.CharField(max_length=20, choices=STACK_CHOICES, default=STACK_CHOICES.django)
+    tech_stack = models.CharField(
+        max_length=20, choices=STACK_CHOICES, default=STACK_CHOICES.django
+    )
     featured = models.BooleanField(default=False)
     what_ive_learned = RichTextField()
     github_link = models.URLField("Github repository link", blank=True)

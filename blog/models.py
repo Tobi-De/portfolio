@@ -24,7 +24,9 @@ User = get_user_model()
 
 
 class Postable(models.Model):
-    thumbnail = models.ImageField(upload_to="blog", blank=True)
+    thumbnail = models.OneToOneField(
+        "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
+    )
     title = models.CharField(max_length=150)
     overview = RichTextField()
     body = RichTextUploadingField(blank=True)
