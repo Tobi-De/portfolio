@@ -50,15 +50,15 @@
       <div id="navbarcollapse" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a href="{% url "projects:project_list" %}" class="nav-link active text-big">
-              Projects<i class="fas fa-code" style="margin-left: 3px"></i></a>
+            <a href="{% url "projects:project_list" %}" class="nav-link  text-big">
+              Projects<i class="fa fa-code" style="margin-left: 3px"></i></a>
           </li>
-          <li class="nav-item">
-            <a href="{% url "blog:post_list" %}" class="nav-link text-big">
-              Blog<i class="fab fa-blogger-b" style="margin-left: 3px"></i></a>
-          </li>
+{#          <li class="nav-item">#}
+{#            <a href="{% url "blog:post_list" %}" class="nav-link text-big">#}
+{#              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>#}
+{#          </li>#}
           <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-big">Hire Me
-            <i class="fas fa-hands-helping" style="margin-left: 3px"></i></a>
+            <i class="fa fa-hand-o-up" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}
             <li class="nav-item">

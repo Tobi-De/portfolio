@@ -5,24 +5,22 @@
   <div class="container">
     <div class="container">
       <div class="card mb-4 mt-4 bg-gray">
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Intro</h2>
-          <p class="text-big text-bold bg-white" style="padding: 10px">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque, fugit impedit nostrum officiis tenetur
-            unde voluptas! Animi dolorem dolorum enim facilis in laboriosam modi molestiae nihil officiis quidem, rem
-            veniam voluptatem voluptatum! Accusantium autem, corporis cumque dolores eum incidunt nulla obcaecati
-            tempora vitae voluptatibus! Ad aut beatae, consequatur ea obcaecati qui quis veniam? Blanditiis corporis
-            dolores ea facilis impedit necessitatibus repellendus velit! Ab adipisci cum debitis delectus doloribus esse
-          </p>
-        </div>
+        {#        <div class="card-body">#}
+        {#          <h2 class="h3 text-center card-header mb-3">Intro</h2>#}
+        {#          <p class="text-big text-bold bg-white" style="padding: 10px">#}
+        {#            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque, fugit impedit nostrum officiis tenetur#}
+        {#            unde voluptas! Animi dolorem dolorum enim facilis in laboriosam modi molestiae nihil officiis quidem, rem#}
+        {#            veniam voluptatem voluptatum! Accusantium autem, corporis cumque dolores eum incidunt nulla obcaecati#}
+        {#            tempora vitae voluptatibus! Ad aut beatae, consequatur ea obcaecati qui quis veniam? Blanditiis corporis#}
+        {#            dolores ea facilis impedit necessitatibus repellendus velit! Ab adipisci cum debitis delectus doloribus esse#}
+        {#          </p>#}
+        {#        </div>#}
         <div class="card-body">
           <h2 class="h3 text-center card-header mb-3">Education</h2>
           <ul class="list-group-flush">
-            <li class="list-group-item">LICA school complex / 2015 - 2016 Bachelor science degree</li>
-            <li class="list-group-item">
-              Green Leaf International School / 2011 - 2012 First cycle
-              certification
-            </li>
+            <li class="list-group-item">UAC - IFRI / 2019 - current third year of IT cycle</li>
+            <li class="list-group-item">UAC - IFRI / 2018 - 2019 second year of IT cycle</li>
+            <li class="list-group-item">UAC - IFRI / 2016 - 2018 1st year of IT cycle</li>
             <li class="list-group-item">LICA school complex / 2015 - 2016 Bachelor science degree</li>
             <li class="list-group-item">
               Green Leaf International School / 2011 - 2012 First cycle
@@ -40,19 +38,20 @@
             <li class="list-group-item">
               Internship in an computer science solutions development company
               E-DEV Design and implementation of a web solution for online bill
-              payment as part of an internship : https://www.facture-express.com
+              payment <a href=" https://www.facture-express.com">facture-express</a> as part of an internship.
             </li>
             <li class="list-group-item">
               Design and implementation of a complaint management application as
-              part of an academic workshop: https://cjvrmanager.herokuapp.com
+              part of an academic workshop, <a href="https://cjvrmanager.herokuapp.com">link here</a>.
             </li>
             <li class="list-group-item">
-              Design and implementation of an e-commerce platform as part of a
-              personal project: https://tobi-ecommerce.herokuapp.com
+              Design and implementation of an <a href="https://tobi-ecommerce.herokuapp.com">e-commerce platform</a> as
+              part of a
+              personal project.
             </li>
             <li class="list-group-item">
-              Design and production of a blog as part of a personal project:
-              https://tobiblog.herokuapp.com
+              Design and production of a <a href="https://tobiblog.herokuapp.com">blog app</a> as part of a personal
+              project.
             </li>
           </ul>
         </div>
@@ -255,15 +254,21 @@
           </div>
         </div>
         <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Contact</h2>
+          <h2 class="h3 text-center card-header mb-3">Contacts</h2>
           <div class="row">
-            <div class="col-md-4 text-center">
-              <a href="{{ profile.github }}" class="list-group-item"><span><i class="fa fa-3x fa-github"></i></span></a>
+            <div class="col-md-3 text-center">
+              <a href="{{ profile.github }}" class="list-group-item" style="color: black"><span><i
+                      class="fa fa-2x fa-github"></i></span></a>
             </div>
-            <div class="col-md-4 text-center"><a href="{{ profile.twitter }}" class="list-group-item"><span><i
-                    class="fa fa-3x fa-twitter"></i></span></a></div>
-            <div class="col-md-4 text-center"><a href="mailto:{{ profile.email }}" class="list-group-item"><span><i
-                    class="fa fa-3x fa-envelope"></i></span></a></div>
+            <div class="col-md-3 text-center"><a href="{{ profile.twitter }}" class="list-group-item"
+                                                 style="color: black"><span><i
+                    class="fa fa-2x fa-twitter"></i></span></a></div>
+            <div class="col-md-3 text-center"><a href="mailto:{{ profile.email }}" class="list-group-item"
+                                                 style="color: black"><span><i
+                    class="fa fa-2x fa-envelope"></i></span></a></div>
+            <div class="col-md-3 text-center"><a href="{{ profile.telegram }}" class="list-group-item"
+                                                 style="color: black"><span><i
+                    class="fa fa-2x fa-telegram"></i></span></a></div>
           </div>
         </div>
       </div>

@@ -29,6 +29,7 @@ class Profile(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=12, blank=True)
     github_profile = models.URLField()
+    telegram_link = models.URLField(blank=True, null=True)
     twitter_profile = models.URLField(blank=True, null=True)
     linkedIn_profile = models.URLField(blank=True, null=True)
 
@@ -46,6 +47,10 @@ class Profile(TimeStampedModel):
     @property
     def twitter(self):
         return self.twitter_profile
+
+    @property
+    def telegram(self):
+        return self.telegram_link
 
     @property
     def email(self):
