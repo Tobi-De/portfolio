@@ -29,7 +29,24 @@ class Profile(TimeStampedModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=12, blank=True)
     github_profile = models.URLField()
-    linkedIn_profile = models.URLField(blank=True)
+    twitter_profile = models.URLField(blank=True, null=True)
+    linkedIn_profile = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username
+
+    @property
+    def github(self):
+        return self.github_profile
+
+    @property
+    def linkedin(self):
+        return self.linkedIn_profile
+
+    @property
+    def twitter(self):
+        return self.twitter_profile
+
+    @property
+    def email(self):
+        return self.user.email

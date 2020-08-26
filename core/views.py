@@ -7,12 +7,15 @@ from django_q.tasks import async_task
 
 from projects.models import Project
 from .forms import HireMeForm
+from .models import Profile
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 
 
 def home(request):
-    context = {"projects": Project.objects.filter(featured=True).order_by("-created")}
+    featured = Project.objects.filter(featured=True).order_by("-created")[:3]
+    profile = Profile.objects.last()
+    context = {"featured": featured, "profile": profile}
     return render(request, "core/home.html", context)
 
 
