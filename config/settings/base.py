@@ -292,3 +292,8 @@ CKEDITOR_CONFIGS = {
 # -------------------------------------------------------------------------------
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
+
+# Maintencance mode
+MAINTENANCE_MODE_STATE_BACKEND = 'portfolio.utils.backends.CacheBackend'
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
