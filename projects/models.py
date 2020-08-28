@@ -13,7 +13,14 @@ User = get_user_model()
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     STACK_CHOICES = Choices(
-        "django_vuejs", "django", "vuejs", "wagtail", "wagtail_vuejs"
+        "django_vuejs_html_css_bootstrap4",
+        "django_vuejs_html_css_bulma",
+        "django_html_css_bootstrap4",
+        "django_html_css_bulma",
+        "vuejs_html_css_bootstrap4",
+        "vuejs_html_css_bulma",
+        "wagtail_html_css_bootstrap4",
+        "wagtail_html_css_vuejs",
     )
     STATUS = Choices("in_development", "deployed")
     thumbnail = models.OneToOneField(
@@ -23,7 +30,9 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     description = RichTextField()
     slug = AutoSlugField(populate_from=["title"])
     tech_stack = models.CharField(
-        max_length=20, choices=STACK_CHOICES, default=STACK_CHOICES.django
+        max_length=100,
+        choices=STACK_CHOICES,
+        default=STACK_CHOICES.django_vuejs_html_css_bootstrap4,
     )
     featured = models.BooleanField(default=False)
     what_ive_learned = RichTextField()

@@ -38,14 +38,18 @@
               <h6>What I've Learned</h6>
               <div class="ml-4">{{ project.what_ive_learned|safe }}</div>
             </div>
-            <div class="mb-4">
-              <h6>Github Link</h6>
-              <p>{{ project.github_link }}</p>
-            </div>
-            <div class="mb-4">
-              <h6>Deployed version link</h6>
-              <p>{{ project.web_link }}</p>
-            </div>
+            {% if  project.github_link %}
+              <div class="mb-4">
+                <h6>Github Link</h6>
+                <p>{{ project.github_link }}</p>
+              </div>
+            {% endif %}
+            {% if  project.web_link %}
+              <div class="mb-4">
+                <h6>Deployed version link</h6>
+                <p>{{ project.web_link }}</p>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>
