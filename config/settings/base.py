@@ -105,6 +105,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "maintenance_mode.middleware.MaintenanceModeMiddleware"
 ]
 
 # STATIC
@@ -155,6 +156,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "portfolio.utils.context_processors.settings_context",
+                "maintenance_mode.context_processors.maintenance_mode"
             ],
         },
     }
@@ -292,3 +294,8 @@ CKEDITOR_CONFIGS = {
 # -------------------------------------------------------------------------------
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
+
+# Maintencance mode
+MAINTENANCE_MODE_STATE_BACKEND = 'portfolio.utils.backends.CacheBackend'
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
