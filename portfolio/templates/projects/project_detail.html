@@ -38,18 +38,15 @@
               <h6>What I've Learned</h6>
               <div class="ml-4">{{ project.what_ive_learned|safe }}</div>
             </div>
-            {% if  project.github_link %}
-              <div class="mb-4">
-                <h6>Github Link</h6>
-                <p>{{ project.github_link }}</p>
-              </div>
-            {% endif %}
-            {% if  project.web_link %}
-              <div class="mb-4">
-                <h6>Deployed version link</h6>
-                <p>{{ project.web_link }}</p>
-              </div>
-            {% endif %}
+            <div class="btn-group btn-block" role="group">
+              {% if  project.github_link %}
+                <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i class="fa fa-3x fa-github"></i></span></a>
+              {% endif %}
+              {% if  project.web_link %}
+                <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
+                        class="fa fa-3x fa-globe"></i></span></a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
