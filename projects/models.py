@@ -23,9 +23,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
         "wagtail_html_css_vuejs",
     )
     STATUS = Choices("in_development", "deployed")
-    thumbnail = models.OneToOneField(
-        "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
-    )
+    carousel = models.ManyToManyField("core.Thumbnail", blank=True)
     title = models.CharField(max_length=60)
     description = RichTextField()
     slug = AutoSlugField(populate_from=["title"])

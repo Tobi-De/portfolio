@@ -11,8 +11,8 @@
       {% for project in page_obj %}
         <div class="col mb-4">
           <div class="card h-100">
-            {% thumbnail project.thumbnail.image "256x206" crop="center" as img %}
-              <img src="{{ img.url }}" class="card-img-top" alt="{{ project.thumbnail.alt }}">
+            {% thumbnail project.carousel.first.image "256x206" crop="center" as img %}
+              <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
             {% endthumbnail %}
             <div class="card-body">
               <h5 class="card-title">{{ project.title }}</h5>

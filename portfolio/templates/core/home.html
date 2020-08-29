@@ -37,8 +37,8 @@
               <div class="card-group">
                 {% for project in featured %}
                   <div class="card">
-                    {% thumbnail project.thumbnail.image "325x260" crop="center" as img %}
-                      <img src="{{ img.url }}" class="card-img-top" alt="{{ project.thumbnail.alt }}">
+                    {% thumbnail project.carousel.first.image "325x260" crop="center" as img %}
+                      <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
                     {% endthumbnail %}
                     <div class="card-body">
                       <h5 class="card-title">{{ project.title }}</h5>
