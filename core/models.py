@@ -61,7 +61,7 @@ class Maintenance(models.Model):
     value = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.value
+        return str(self.value)
 
     @classmethod
     def get_value(cls):
