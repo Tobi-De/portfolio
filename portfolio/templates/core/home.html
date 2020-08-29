@@ -4,210 +4,184 @@
 {% block content %}
   <div class="container">
     <div class="container">
-      <div class="card mb-4 mt-4 bg-gray">
-        {#        <div class="card-body">#}
-        {#          <h2 class="h3 text-center card-header mb-3">Intro</h2>#}
-        {#          <p class="text-big text-bold bg-white" style="padding: 10px">#}
-        {#            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque, fugit impedit nostrum officiis tenetur#}
-        {#            unde voluptas! Animi dolorem dolorum enim facilis in laboriosam modi molestiae nihil officiis quidem, rem#}
-        {#            veniam voluptatem voluptatum! Accusantium autem, corporis cumque dolores eum incidunt nulla obcaecati#}
-        {#            tempora vitae voluptatibus! Ad aut beatae, consequatur ea obcaecati qui quis veniam? Blanditiis corporis#}
-        {#            dolores ea facilis impedit necessitatibus repellendus velit! Ab adipisci cum debitis delectus doloribus esse#}
-        {#          </p>#}
-        {#        </div>#}
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Education</h2>
-          <ul class="list-group-flush">
-            <li class="list-group-item">UAC - IFRI / 2019 - current third year of IT cycle</li>
-            <li class="list-group-item">UAC - IFRI / 2018 - 2019 second year of IT cycle</li>
-            <li class="list-group-item">UAC - IFRI / 2016 - 2018 1st year of IT cycle</li>
-            <li class="list-group-item">LICA school complex / 2015 - 2016 Bachelor science degree</li>
-            <li class="list-group-item">
-              Green Leaf International School / 2011 - 2012 First cycle
-              certification
-            </li>
-            <li class="list-group-item">
-              Complexe scolaire Rosa mystica / 2008 - 2009 Primary school
-              certificate
-            </li>
-          </ul>
-        </div>
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Work Experiences</h2>
-          <ul class="list-group-flush">
-            <li class="list-group-item">
-              Internship in an computer science solutions development company
-              E-DEV Design and implementation of a web solution for online bill
-              payment <a href=" https://www.facture-express.com">facture-express</a> as part of an internship.
-            </li>
-            <li class="list-group-item">
-              Design and implementation of a complaint management application as
-              part of an academic workshop, <a href="https://cjvrmanager.herokuapp.com">link here</a>.
-            </li>
-            <li class="list-group-item">
-              Design and implementation of an <a href="https://tobi-ecommerce.herokuapp.com">e-commerce platform</a> as
-              part of a
-              personal project.
-            </li>
-            <li class="list-group-item">
-              Design and production of a <a href="https://tobiblog.herokuapp.com">blog app</a> as part of a personal
-              project.
-            </li>
-          </ul>
-        </div>
+      <div class="">
+        <div class="row">
+          <div class="col-lg-8 card mb-4 mt-4 bg-gray">
+            <div class="card-body">
+              <h2 class="h4 text-center card-header mb-3">Work Experiences</h2>
+              <ul class="list-group-flush">
+                <li class="list-group-item">
+                  Internship in an computer science solutions development company
+                  E-DEV Design and implementation of a web solution for online bill
+                  payment <a href=" https://www.facture-express.com">facture-express</a> as part of an internship.
+                </li>
+                <li class="list-group-item">
+                  Design and implementation of a complaint management application as
+                  part of an academic workshop, <a href="https://cjvrmanager.herokuapp.com">link here</a>.
+                </li>
+                <li class="list-group-item">
+                  Design and implementation of an <a href="https://tobi-ecommerce.herokuapp.com">e-commerce platform</a>
+                  as
+                  part of a
+                  personal project.
+                </li>
+                <li class="list-group-item">
+                  Design and production of a <a href="https://tobiblog.herokuapp.com">blog app</a> as part of a personal
+                  project.
+                </li>
+              </ul>
+            </div>
 
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Recent Projects</h2>
-          <div class="card-deck">
-            {% for project in featured %}
-              <div class="card">
-                {% thumbnail project.thumbnail.image "325x260" crop="center" as img %}
-                  <img src="{{ img.url }}" class="card-img-top" alt="{{ project.thumbnail.alt }}">
-                {% endthumbnail %}
-                <div class="card-body">
-                  <h5 class="card-title">{{ project.title }}</h5>
-                  <p class="card-text">{{ project.overview|safe }}
-                  </p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
+            <div class="card-body">
+              <h2 class="h4 text-center card-header mb-3">Recent Projects</h2>
+              <div class="card-group">
+                {% for project in featured %}
+                  <div class="card">
+                    {% thumbnail project.thumbnail.image "325x260" crop="center" as img %}
+                      <img src="{{ img.url }}" class="card-img-top" alt="{{ project.thumbnail.alt }}">
+                    {% endthumbnail %}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ project.title }}</h5>
+                      <p class="card-text">{{ project.overview|safe }}
+                      </p>
+                    </div>
+                    <div class="card-footer">
                       <a href="{{ project.get_absolute_url }}" type="button"
                          class="btn btn-sm btn-outline-primary">Details</a>
                     </div>
                   </div>
-                </div>
+                {% endfor %}
               </div>
-            {% endfor %}
-          </div>
-          <div class="text-center">
-            <a class="btn btn-primary btn-sm"
-               href="{% url 'projects:project_list' %}" style="margin: 10px">See
-              More</a>
-          </div>
-        </div>
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Technical Skills</h2>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="list-group">
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Javascript<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="JavaScript"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  HTML<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="HTML5"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  CSS<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="CSS3"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Bootstrap4<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="Bootsrap"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/bootstrap/bootstrap.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Docker<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="docker"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/docker/docker.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Postgres<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="postgres"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/postgresql/postgresql.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Vuejs<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="vuejs"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/vue/vue.png"
-                /></span>
-                </li>
+              <div class="text-center">
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'projects:project_list' %}" style="margin: 10px">See
+                  More</a>
               </div>
             </div>
-            <div class="col-md-6">
-              <ul class="list-group">
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Python<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="python"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  DJango<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="django"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/django/django.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Wagtail<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="wagtail"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/wagtail/wagtail.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Git
-                  <span class="badge badge-pill">
+            <div class="card-body">
+              <h2 class="h4 text-center card-header mb-3">Technical Skills</h2>
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group">
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Javascript<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="JavaScript"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      HTML<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="HTML5"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/html/html.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      CSS<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="CSS3"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Bootstrap4<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="Bootsrap"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/bootstrap/bootstrap.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Docker<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="docker"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/docker/docker.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Postgres<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="postgres"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/postgresql/postgresql.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Vuejs<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="vuejs"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/vue/vue.png"
+                    /></span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul class="list-group">
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Python<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="python"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      DJango<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="django"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/django/django.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Wagtail<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="wagtail"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/wagtail/wagtail.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Git
+                      <span class="badge badge-pill">
                     <img
                             align="left"
                             alt="Git"
@@ -215,60 +189,106 @@
                             src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/git/git.png"
                     />
                   </span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Github<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="GitHub"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/78df643247d429f6cc873026c0622819ad797942/topics/github/github.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Sql<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="SQL"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/sql/sql.png"
-                /></span>
-                </li>
-                <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  Linux<span class="badge badge-pill"
-                ><img
-                        align="left"
-                        alt="linux"
-                        width="26px"
-                        src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/linux/linux.png"
-                /></span>
-                </li>
-              </ul>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Github<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="GitHub"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/78df643247d429f6cc873026c0622819ad797942/topics/github/github.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Sql<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="SQL"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/sql/sql.png"
+                    /></span>
+                    </li>
+                    <li
+                            class="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      Linux<span class="badge badge-pill"
+                    ><img
+                            align="left"
+                            alt="linux"
+                            width="26px"
+                            src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/linux/linux.png"
+                    /></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card-body">
-          <h2 class="h3 text-center card-header mb-3">Contacts</h2>
-          <div class="row">
-            <div class="col-md-3 text-center">
-              <a href="{{ profile.github }}" class="list-group-item" style="color: black"><span><i
-                      class="fa fa-2x fa-github"></i></span></a>
+          <div class="col-lg-4 card mt-4 mb-4 bg-dark">
+            <div class="card mb-2">
+              <h2 class="h4 text-center card-header bg-gray">About Me</h2>
+              <div class="card-body"><p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque, fugit impedit nostrum officiis
+                tenetur
+                unde voluptas! Animi dolorem dolorum enim facilis in laboriosam modi molestiae nihil officiis quidem,
+                rem
+                veniam voluptatem voluptatum! Accusantium autem, corporis cumque dolores eum incidunt nulla obcaecati
+              </p></div>
             </div>
-            <div class="col-md-3 text-center"><a href="{{ profile.twitter }}" class="list-group-item"
-                                                 style="color: black"><span><i
-                    class="fa fa-2x fa-twitter"></i></span></a></div>
-            <div class="col-md-3 text-center"><a href="mailto:{{ profile.email }}" class="list-group-item"
-                                                 style="color: black"><span><i
-                    class="fa fa-2x fa-envelope"></i></span></a></div>
-            <div class="col-md-3 text-center"><a href="{{ profile.telegram }}" class="list-group-item"
-                                                 style="color: black"><span><i
-                    class="fa fa-2x fa-telegram"></i></span></a></div>
+            <div class="card mb-2">
+              <h2 class="h4 text-center card-header bg-gray">Contacts</h2>
+              <div class="card-body">
+                <div class="btn-group btn-block">
+                  <a href="{{ profile.github }}" class="btn"
+                  ><img
+                          alt="tobi-de | Github"
+                          width="22px"
+                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/github.svg"
+                  /></a>
+                  <a href="mailto:{{ profile.email }}" class="btn"
+                  ><img
+                          alt="tobi-de | Gmail"
+                          width="22px"
+                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/gmail.svg"
+                  /></a>
+                  <a href="{{ profile.telegram }}" class="btn"
+                  ><img
+                          alt="tobi-de | Telegram"
+                          width="22px"
+                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/telegram.svg"
+                  /></a>
+                  <a href="{{ profile.twitter }}" class="btn"
+                  ><img
+                          alt="tobi-de | Twitter"
+                          width="22px"
+                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg"
+                  /></a>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h2 class="h4 text-center card-header bg-gray">Education</h2>
+              <div class="card-body">
+                <ul class="list-group-flush">
+                  <li class="list-group-item">UAC - IFRI / 2019 - current third year of IT cycle</li>
+                  <li class="list-group-item">UAC - IFRI / 2018 - 2019 second year of IT cycle</li>
+                  <li class="list-group-item">UAC - IFRI / 2016 - 2018 1st year of IT cycle</li>
+                  <li class="list-group-item">LICA school complex / 2015 - 2016 Bachelor science degree</li>
+                  <li class="list-group-item">
+                    Green Leaf International School / 2011 - 2012 First cycle
+                    certification
+                  </li>
+                  <li class="list-group-item">
+                    Complexe scolaire Rosa mystica / 2008 - 2009 Primary school
+                    certificate
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

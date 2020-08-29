@@ -5,48 +5,54 @@
   <div class="container">
     <main>
       <div class="card">
+        <div>
+          {% thumbnail project.thumbnail.image "1111x572" crop="center" as img %}
+            <img src="{{ img.url }}" class="card-img-top" alt="{{ project.thumbnail.alt }}">
+          {% endthumbnail %}
+          {% if user.is_superuser %}
+            <div class="ml-2 mt-2">
+              <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
+              <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
+            </div>
+          {% endif %}
+        </div>
         <div class="card-body">
+          <h2 class="h3 text-center card-header mb-4">{{ project.title }}</h2>
           <div class="row">
             <div class="col-md-6">
-              {% thumbnail project.thumbnail.image "550x350" crop="center" as img %}
-                <img src="{{ img.url }}" class="img-fluid" alt="{{ project.thumbnail.alt }}">
-              {% endthumbnail %}
-              {% if user.is_superuser %}
-                <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
-                <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
-              {% endif %}
+              <div class="mb-4">
+                <h6>Description</h6>
+                <p class="text-justify">{{ project.description|safe }}</p>
+              </div>
+              <div class="mb-4 mt-4">
+                <h6>Technology</h6>
+                <ul class="ml-4">
+                  {% for tech in project.get_stack %}
+                    <li> {{ tech }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
             </div>
             <div class="col-md-6">
-              <h2 class="text-center">{{ project.title }}</h2>
-              <p>{{ project.description|safe }}</p>
+              <div class="mb-4">
+                <h6>Status</h6>
+                <p>{{ project.get_status }}</p>
+              </div>
+              <div class="mb-4">
+                <h6>What I've Learned</h6>
+                <div class="ml-4">{{ project.what_ive_learned|safe }}</div>
+              </div>
             </div>
           </div>
-          <div>
-            <div class="mb-4 mt-4">
-              <h6>Technology</h6>
-              <ul class="ml-4">
-                {% for tech in project.get_stack %}
-                  <li> {{ tech }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="mb-4">
-              <h6>Status</h6>
-              <p>{{ project.get_status }}</p>
-            </div>
-            <div class="mb-4">
-              <h6>What I've Learned</h6>
-              <div class="ml-4">{{ project.what_ive_learned|safe }}</div>
-            </div>
-            <div class="btn-group btn-block" role="group">
-              {% if  project.github_link %}
-                <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i class="fa fa-3x fa-github"></i></span></a>
-              {% endif %}
-              {% if  project.web_link %}
-                <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
-                        class="fa fa-3x fa-globe"></i></span></a>
-              {% endif %}
-            </div>
+          <div class="btn-group btn-block" role="group">
+            {% if  project.github_link %}
+              <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i
+                      class="fa fa-3x fa-github"></i></span></a>
+            {% endif %}
+            {% if  project.web_link %}
+              <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
+                      class="fa fa-3x fa-globe"></i></span></a>
+            {% endif %}
           </div>
         </div>
       </div>
