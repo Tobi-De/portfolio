@@ -65,14 +65,18 @@ class Maintenance(models.Model):
 
     @classmethod
     def get_value(cls):
-        m = Maintenance.objects.last()
-        return m.value if m else False
+        try:
+            val = Maintenance.objects.get(id=1).value
+        except Maintenance.DoesNotExist:
+            val = False
+        return val
 
     @classmethod
     def set_value(cls, value):
-        m = Maintenance.objects.last()
-        if m:
-            m.value = value
-            m.save()
-        else:
+        try:
+            obj = Maintenance.objects.get(id=1)
+        except Maintenance.DoesNotExist:
             Maintenance.objects.create(value=value)
+        else:
+            obj.value = value
+            obj.save()
