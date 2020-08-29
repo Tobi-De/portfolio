@@ -16,8 +16,8 @@
   {% block css %}
 
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
-{#    <script src="https://kit.fontawesome.com/3e0d7d8ec9.js" crossorigin="anonymous"></script>#}
+    <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+    {#    <script src="https://kit.fontawesome.com/3e0d7d8ec9.js" crossorigin="anonymous"></script>#}
     <link rel="stylesheet" href="{% static 'css/fontastic.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.css' %}">
@@ -53,10 +53,10 @@
             <a href="{% url "projects:project_list" %}" class="nav-link  text-big">
               Projects<i class="fa fa-code" style="margin-left: 3px"></i></a>
           </li>
-{#          <li class="nav-item">#}
-{#            <a href="{% url "blog:post_list" %}" class="nav-link text-big">#}
-{#              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>#}
-{#          </li>#}
+          {#          <li class="nav-item">#}
+          {#            <a href="{% url "blog:post_list" %}" class="nav-link text-big">#}
+          {#              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>#}
+          {#          </li>#}
           <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-big">Hire Me
             <i class="fa fa-hand-o-up" style="margin-left: 3px"></i></a>
           </li>
@@ -73,6 +73,17 @@
               <a href="{% url "admin:index" %}" class="nav-link text-big">
                 Admin<i class="fa fa-lock" style="margin-left: 3px"></i></a>
             </li>
+            {% if maintenance_mode %}
+              <li class="nav-item">
+                <a href="{% url "maintenance_mode_off" %}" class="nav-link text-big">
+                  Maintenance<i class="fa fa-toggle-on" style="margin-left: 3px"></i></a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a href="{% url "maintenance_mode_on" %}" class="nav-link text-big">
+                  Maintenance<i class="fa fa-toggle-off" style="margin-left: 3px"></i></a>
+              </li>
+            {% endif %}
           {% endif %}
         </ul>
       </div>

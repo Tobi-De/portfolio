@@ -3,7 +3,9 @@ from django.shortcuts import reverse
 from django.utils.safestring import mark_safe
 from sorl.thumbnail.admin import AdminImageMixin
 
-from .models import Profile, Thumbnail
+from .models import Profile, Thumbnail, Maintenance
+
+admin.site.register(Maintenance)
 
 
 class ThumbnailLinkMixin:
