@@ -39,7 +39,7 @@
                                                              alt="DEGNON tobi profile"
                                                              class="img-fluid rounded-circle"
                                                              style="width: 150px; height: 150px">
-          <span class="text-big"><b>Tobi-De(Full Stack Web Dev)</b></span>
+          <span class="text-big"><b>Tobi-De(Web Dev)</b></span>
         </a>
         <!-- Toggle Button-->
         <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse"
@@ -50,15 +50,15 @@
       <div id="navbarcollapse" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a href="{% url "projects:project_list" %}" class="nav-link  text-big">
-              Projects<i class="fa fa-code" style="margin-left: 3px"></i></a>
+            <a href="{% url "projects:project_list" %}" class="nav-link text-big">
+              Projects<i class="fa fa-folder-open" style="margin-left: 3px"></i></a>
           </li>
-          {#          <li class="nav-item">#}
-          {#            <a href="{% url "blog:post_list" %}" class="nav-link text-big">#}
-          {#              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>#}
-          {#          </li>#}
-          <li class="nav-item"><a href="{% url "hire_me" %}" class="nav-link text-big">Hire Me
-            <i class="fa fa-hand-o-up" style="margin-left: 3px"></i></a>
+          <li class="nav-item">
+            <a href="{% url "blog:post_list" %}" class="nav-link text-big">
+              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
+          </li>
+          <li class="nav-item"><a href="{% url "contact_me" %}" class="nav-link text-big">Contact Me
+            <i class="fa fa-address-book" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}
             <li class="nav-item">

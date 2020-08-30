@@ -6,7 +6,7 @@ from django.views.generic import FormView
 from django_q.tasks import async_task
 
 from projects.models import Project
-from .forms import HireMeForm
+from .forms import ContactMeForm
 from .models import Profile
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
@@ -20,9 +20,14 @@ def home(request):
 
 
 # TODO write a telegram bot that send message whenever a message is sent
-class HireMeView(FormView):
-    form_class = HireMeForm
-    template_name = "core/hire_me.html"
+class ContactMeView(FormView):
+    form_class = ContactMeForm
+    template_name = "core/contact_me.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile"] = Profile.objects.last()
+        return context
 
     def form_valid(self, form):
         message = (
@@ -44,4 +49,5 @@ class HireMeView(FormView):
         messages.success(
             self.request, "Thanks for your message, I will be reaching to you soon !"
         )
-        return render(self.request, "core/hire_me.html", {"form": HireMeForm()})
+
+        return render(self.request, "core/contact_me.html", {"form": ContactMeForm()})
