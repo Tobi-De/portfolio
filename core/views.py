@@ -35,8 +35,18 @@ class ContactMeView(FormView):
             f"Email: {form.cleaned_data['email']}\n\n"
             f"{form.cleaned_data['message']}"
         )
-        async_task(
-            send_mail,
+        # async_task(
+        #     send_mail,
+        #     subject=form.cleaned_data["subject"],
+        #     message=message,
+        #     from_email=DEFAULT_FROM_EMAIL,
+        #     recipient_list=[
+        #         "contact@tobidegnon.com",
+        #         "tobidegnon@protonmail.com",
+        #         "degnonfrancis@gmail.com",
+        #     ],
+        # )
+        send_mail(
             subject=form.cleaned_data["subject"],
             message=message,
             from_email=DEFAULT_FROM_EMAIL,
