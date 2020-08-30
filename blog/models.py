@@ -14,14 +14,11 @@ from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
+from core.utils import get_current_domain_url
 from newsletter.models import News
 from .utils import queryset_index_of
 
 User = get_user_model()
-
-
-# TODO schedule a date to publish the post
-# TODO default thumbnail for blog and projects
 
 
 class Postable(models.Model):
@@ -113,7 +110,15 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         # send email to subscribers to inform of new post
         subject = "New Blog Post"
         message = render_to_string(
-            "blog/email/new_post_message.txt", context={"title": self.title}
+            "blog/email/new_post_message.html",
+            context={
+                "title": self.title,
+                "link": f"{get_current_domain_url()}{self.get_absolute_url()}",
+                "email": self.author.email,
+                "twitter": self.author.profile.twitter,
+                "github": self.author.profile.github,
+                "telegram": self.author.profile.telegram,
+            },
         ).format("utf-8")
         News.objects.create(subject=subject, message=message).setup(**kwargs)
 
@@ -147,7 +152,10 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         # reverse sort the list and get the first three elements
         # get the corresponding post in a list
         published_posts = Post.objects.filter(status=Post.STATUS.published)
-        tmp = [(XtdComment.objects.filter(object_pk=post.id).count(), post.id) for post in published_posts]
+        tmp = [
+            (XtdComment.objects.filter(object_pk=post.id).count(), post.id)
+            for post in published_posts
+        ]
         popular_post_tuple = sorted(tmp, reverse=True)[:3]
         # return [Post.objects.get(id=x[1]) for x in popular_post_tuple]
         id_list = [x[1] for x in popular_post_tuple]

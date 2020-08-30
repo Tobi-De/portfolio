@@ -15,7 +15,7 @@ from django_q.tasks import Chain
 from django_q.tasks import async_task, Schedule
 from model_utils.models import TimeStampedModel
 
-from .utils import get_current_domain_url
+from core.utils import get_current_domain_url
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 

@@ -20,8 +20,6 @@ from .models import Post, Series, Category
 from .viewmixins import PostPublishedRequiredMixin
 
 
-# TODO template for date widget
-
 class NewPostView(SuperuserRequiredMixin, TemplateView):
     template_name = "blog/new_post.html"
 
