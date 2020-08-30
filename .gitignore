@@ -339,6 +339,6 @@ portfolio/media/
 .pytest_cache/
 
 
-.env
 .envs/*
 prodconfig
+prodconfig2

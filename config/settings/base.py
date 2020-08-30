@@ -240,7 +240,7 @@ REST_FRAMEWORK = {
 # Django Q
 # -------------------------------------------------------------------------------
 Q_CLUSTER = {
-    "name": "facturexpress",
+    "name": "tobi_de",
     "workers": 8,
     "recycle": 500,
     "timeout": 120,
