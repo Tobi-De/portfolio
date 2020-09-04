@@ -55,10 +55,12 @@
               <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>
             </div>
           </div>
-          <div class="post-body jumbotron">
-            <p>{{ post.overview|safe }}</p>
-            <hr>
-            {{ post.body|safe }}
+          <div class="post-body card">
+            <div class="card-body">
+              <p class="justify-content-around">{{ post.overview|safe }}</p>
+              <hr>
+              <p class="text-justify">{{ post.body|safe }}</p>
+            </div>
           </div>
           {% if user.is_superuser and not post.is_published %}
             <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-primary">Publish</a>

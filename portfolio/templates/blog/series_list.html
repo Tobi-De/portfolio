@@ -9,14 +9,14 @@
         <div class="container">
           <div class="row">
             {% for series in page_obj %}
-              <div class="post col-xl-12" style="background-color: white; padding: 10px; border-radius: 5px">
+              <div class="post card" style="background-color: white; padding: 10px; border-radius: 5px">
                 {% if series.thumbnail %}
                   {% thumbnail series.thumbnail.image "740x495" crop="center" as img %}
                     <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
                          alt="{{ series.thumbnail.alt }}" class="img-fluid">
                   {% endthumbnail %}
                 {% endif %}
-                <div class="post-details">
+                <div class="post-details card-body">
                   <div class="post-meta d-flex justify-content-between">
                     <div class="category">
                       {% for category in series.categories %}
