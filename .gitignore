@@ -340,5 +340,4 @@ portfolio/media/
 
 
 .envs/*
-prodconfig
-prodconfig2
+*.prodconfig
