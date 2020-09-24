@@ -1,9 +1,9 @@
-from ckeditor.fields import RichTextField
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django_extensions.db.fields import AutoSlugField
+from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
@@ -25,7 +25,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     STATUS = Choices("in_development", "deployed")
     carousel = models.ManyToManyField("core.Thumbnail", blank=True)
     title = models.CharField(max_length=60)
-    description = RichTextField()
+    description = MarkdownxField()
     slug = AutoSlugField(populate_from=["title"])
     tech_stack = models.CharField(
         max_length=100,
@@ -33,7 +33,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
         default=STACK_CHOICES.django_vuejs_html_css_bootstrap4,
     )
     featured = models.BooleanField(default=False)
-    what_ive_learned = RichTextField()
+    what_ive_learned = MarkdownxField()
     github_link = models.URLField("Github repository link", blank=True)
     status_changed = MonitorField(monitor="status")
     web_link = models.URLField(blank=True)

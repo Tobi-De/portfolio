@@ -7,7 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("markdownx/", include("markdownx.urls")),
     path("", include("core.urls")),
     path("projects/", include("projects.urls", namespace="projects")),
     path("blog/", include("blog.urls", namespace="blog")),

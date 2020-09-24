@@ -1,10 +1,11 @@
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
 
 from core.admin import ThumbnailLinkMixin
 from .models import Category, Post, Series
 
 
-class PostableAdmin(ThumbnailLinkMixin):
+class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
     list_display = [
         "title",
         "thumbnail_link",

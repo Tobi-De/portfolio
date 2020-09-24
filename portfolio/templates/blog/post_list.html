@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load markdownify %}
 {% load comments %}
 
 
@@ -31,7 +32,7 @@
                     </div>
                     <a href="{{ post.get_absolute_url }}">
                       <h3 class="h4">{{ post.title }}</h3></a>
-                    <p>{{ post.overview|safe }}</p>
+                    <p>{{ post.overview|markdownify }}</p>
                     <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                              class="author d-flex align-items-center flex-wrap">
                       {% thumbnail post.author.profile.picture.image "40x40" crop="center" as img %}

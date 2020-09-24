@@ -70,8 +70,8 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "maintenance_mode",
     "django_q",
-    "ckeditor",
-    "ckeditor_uploader",
+    "markdownx",
+    "markdownify",
     "django_comments_xtd",
     "django_comments",
     "sorl.thumbnail",
@@ -213,7 +213,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -252,48 +252,36 @@ Q_CLUSTER = {
     "redis": env("REDIS_URL", default="redis://localhost:6379"),
 }
 
-# COMMENTS
+# Comments_xtd
 # -------------------------------------------------------------------------------
 COMMENTS_APP = "django_comments_xtd"
 COMMENTS_XTD_CONFIRM_EMAIL = False
 COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 
-# CKEDITOR
+# Markdownify
 # -------------------------------------------------------------------------------
-CKEDITOR_CONFIGS = {
-    # django-ckeditor defaults
-    "default": {
-        # Editor Width Adaptation
-        "width": "auto",
-        "height": "250px",
-        # tab key conversion space number
-        "tabSpaces": 4,
-        # Toolbar Style
-        "toolbar": "Custom",
-        # Toolbar buttons
-        "toolbar_Custom": [
-            # Emotional Code Block
-            ["Smiley", "CodeSnippet"],
-            # Font Style
-            ["Bold", "Italic", "Underline", "RemoveFormat", "Blockquote"],
-            # Font color
-            ["TextColor", "BGColor"],
-            # Link link
-            ["Link", "Unlink", "ImageButton", "Anchor"],
-            # List of items
-            ["NumberedList", "BulletedList"],
-            # actions
-            ["Maximize", "Image", "Undo", "Redo"],
-        ],
-        # Add Code Block Plug-ins
-        "extraPlugins": ",".join(["codesnippet", "uploadimage"]),
-    }
-}
-
-# CKEDITOR Uploader
-# -------------------------------------------------------------------------------
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
+MARKDOWNIFY_STRIP = False
+MARKDOWNIFY_WHITELIST_TAGS = [
+    "a",
+    "p",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "h7",
+    "ul",
+    "li",
+    "span",
+    "strong",
+    "script",
+]
+MARKDOWNIFY_WHITELIST_ATTRS = [
+    'href',
+    'src',
+    'alt',
+]
 
 # Maintencance mode
 MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.DatabaseBackend"

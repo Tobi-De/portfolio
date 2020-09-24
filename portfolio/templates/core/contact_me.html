@@ -3,58 +3,46 @@
 
 {% block content %}
   <div class="container">
-    <main class="mx-auto">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-5">
-              <div class="p-4">
-                <h5 class="h5 mb-4">Contacts</h5>
-                <ul class="list-group list-group-flush mb-4">
-                  <li class="list-group-item d-flex justify-content-between align-items-center">My Github profile<a
-                          href="{{ profile.github }}"><span class="badge badge-pill"><img
-                          alt="tobi-de | Github"
-                          width="22px"
-                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/github.svg"
-                  /></span></a>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Send me a private
-                    message on
-                    Twitter<a href="{{ profile.twitter }}"> <span class="badge badge-pill"><img
-                            alt="tobi-de | Twitter"
-                            width="22px"
-                            src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg"
-                    /></span></a></li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">Send me a private
-                    message on
-                    Telegram<a href="{{ profile.telegram }}"><span class="badge badge-pill"><img
-                            alt="tobi-de | Telegram"
-                            width="22px"
-                            src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/telegram.svg"
-                    /></span></a></li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">My Email address<a
-                          href="mailto:{{ profile.email }}"><span class="badge badge-pill"><img
-                          alt="tobi-de | Gmail"
-                          width="22px"
-                          src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/gmail.svg"
-                  /></span></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-7 card">
-              <div class="card-body">
-                <h5 class="h5 mb-4">Send me a Mail</h5>
-                <form method="post">
-                  {% csrf_token %}
-                  {{ form | crispy }}
-                  <p><b>Note: All the fields are required</b></p>
-                  <button type="submit" class="btn btn-primary btn-block">Send</button>
-                </form>
-              </div>
-            </div>
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="card p-4 mb-4 mt-4">
+          <h5 class="h4 text-center heading">Get In Touch</h5>
+          <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+              {{ form | crispy }}
+              <p><b>Note: All the fields are required</b></p>
+              <button type="submit" class="btn btn-primary btn-block">Send</button>
+            </form>
+          </div>
+          <div class="row justify-content-center">
+            <a href="{{ profile.github }}" class="btn"
+            ><img
+                    alt="tobi-de | Github"
+                    width="22px"
+                    src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/github.svg"
+            /></a>
+            <a href="mailto:{{ profile.email }}" class="btn"
+            ><img
+                    alt="tobi-de | Gmail"
+                    width="22px"
+                    src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/gmail.svg"
+            /></a>
+            <a href="{{ profile.telegram }}" class="btn"
+            ><img
+                    alt="tobi-de | Telegram"
+                    width="22px"
+                    src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/telegram.svg"
+            /></a>
+            <a href="{{ profile.twitter }}" class="btn"
+            ><img
+                    alt="tobi-de | Twitter"
+                    width="22px"
+                    src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/twitter.svg"
+            /></a>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 {% endblock %}

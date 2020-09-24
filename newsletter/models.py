@@ -1,6 +1,5 @@
 import re
 
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
@@ -13,6 +12,8 @@ from django_extensions.db.fields import RandomCharField
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import Chain
 from django_q.tasks import async_task, Schedule
+from markdownify.templatetags.markdownify import markdownify
+from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
 
 from core.utils import get_current_domain_url
@@ -76,9 +77,9 @@ class Subscriber(TimeStampedModel):
             return f"{get_current_domain_url()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
-        message = render_to_string("newsletter/email/welcome_message.txt", ).format(
-            "utf-8"
-        )
+        message = render_to_string(
+            "newsletter/email/welcome_message.txt",
+        ).format("utf-8")
         async_task(
             send_mail,
             subject="Welcome!",
@@ -119,7 +120,7 @@ class Subscriber(TimeStampedModel):
 
 class News(TimeStampedModel):
     subject = models.CharField(max_length=60)
-    message = RichTextUploadingField()
+    message = MarkdownxField()
     key_identifier = RandomCharField(length=32)
     dispatch_date = models.DateTimeField(blank=True, null=True)
 
@@ -132,11 +133,11 @@ class News(TimeStampedModel):
     def get_mail_content(self, subscriber, **kwargs):
         request = kwargs.get("request", None)
         message = strip_tags(
-            f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
+            f"{markdownify(self.message)}\n\nYou can unsubscribe to this newsletter at anytime"
             f" via this link {subscriber.get_unsubscribe_link(request=request)}"
         )
         html_message = (
-            f"{self.message}\n\nYou can unsubscribe to this newsletter at anytime"
+            f"{markdownify(self.message)}\n\nYou can unsubscribe to this newsletter at anytime"
             f" via this link <a href='{subscriber.get_unsubscribe_link(request=request)}'>Unsubscribe</a>"
         )
         return {

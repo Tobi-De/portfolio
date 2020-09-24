@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load markdownify %}
 {% load  comments comments_xtd %}
 {% load crispy_forms_tags %}
 
@@ -57,9 +58,9 @@
           </div>
           <div class="post-body card">
             <div class="card-body">
-              <p class="justify-content-around">{{ post.overview|safe }}</p>
+              <p class="justify-content-around">{{ post.overview|markdownify }}</p>
               <hr>
-              <p class="text-justify">{{ post.body|safe }}</p>
+              <p class="text-justify">{{ post.body|markdownify }}</p>
             </div>
           </div>
           {% if user.is_superuser and not post.is_published %}

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load markdownify %}
 
 {% block content %}
   <div class="container">
@@ -31,41 +32,36 @@
             <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
           </div>
         {% endif %}
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-4">
-                <h6>Description</h6>
-                <p class="text-justify">{{ project.description|safe }}</p>
-              </div>
-              <div class="mb-4 mt-4">
-                <h6>Technology</h6>
-                <ul class="ml-4">
-                  {% for tech in project.get_stack %}
-                    <li> {{ tech }}</li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-4">
-                <h6>Status</h6>
-                <p>{{ project.get_status }}</p>
-              </div>
-              <div class="mb-4">
-                <h6>What I've Learned</h6>
-                <div class="ml-4">{{ project.what_ive_learned|safe }}</div>
-              </div>
+        <div class="card-body justify-content-center">
+          <div class="mb-4">
+            <h6>Description</h6>
+            <p class="text-justify">{{ project.description|markdownify }}</p>
+          </div>
+          <div class="mb-4 mt-4">
+            <h6>Technologies</h6>
+            <div class="btn-group mt-2" role="group">
+              {% for tech in project.get_stack %}
+                <a type="button" class="btn btn-info text-white">{{ tech }}</a>
+              {% endfor %}
             </div>
           </div>
-          <div class="btn-group btn-block" role="group">
-            {% if  project.github_link %}
-              <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i
-                      class="fa fa-3x fa-github"></i></span></a>
-            {% endif %}
-            {% if  project.web_link %}
-              <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
-                      class="fa fa-3x fa-globe"></i></span></a>
+          <div class="mb-4">
+            <h6>What I've Learned</h6>
+            <div class="ml-4">{{ project.what_ive_learned|markdownify }}</div>
+          </div>
+          <div class="mb-4">
+            {% if project.github_link or project.web_link %}
+              <h6>External Links</h6>
+              <div class="btn-group" role="group">
+                {% if  project.github_link %}
+                  <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i
+                          class="fa fa-2x fa-github"></i></span></a>
+                {% endif %}
+                {% if  project.web_link %}
+                  <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
+                          class="fa fa-2x fa-globe"></i></span></a>
+                {% endif %}
+              </div>
             {% endif %}
           </div>
         </div>

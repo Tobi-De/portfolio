@@ -1,5 +1,3 @@
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models, IntegrityError, ProgrammingError, OperationalError
@@ -10,6 +8,7 @@ from django.utils import timezone
 from django_comments_xtd.models import XtdComment
 from django_extensions.db.fields import AutoSlugField
 from django_q.tasks import Schedule
+from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
@@ -26,8 +25,8 @@ class Postable(models.Model):
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
     )
     title = models.CharField(max_length=150)
-    overview = RichTextField()
-    body = RichTextUploadingField(blank=True)
+    overview = MarkdownxField()
+    body = MarkdownxField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 

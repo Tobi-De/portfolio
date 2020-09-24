@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load markdownify %}
 
 {% block content %}
   <div class="container">
@@ -26,7 +27,7 @@
                   </div>
                   <a href="{{ series.get_absolute_url }}">
                     <h3 class="h4">{{ series.title }}</h3></a>
-                  <p>{{ series.overview|safe }}</p>
+                  <p>{{ series.overview|markdownify }}</p>
                   <footer class="post-footer d-flex align-items-center"><a href="#"
                                                                            class="author d-flex align-items-center flex-wrap">
                     {% thumbnail series.author.profile.picture.image "40x40" crop="center" as img %}
