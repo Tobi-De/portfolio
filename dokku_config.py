@@ -3,9 +3,6 @@ import os
 import click
 
 
-# TODO refactor this code, maybe with an oop approach
-
-
 def run_commands(command, appname, env_dict):
     #  app_name=app_name, env_name=env_name, env_value=env_value
     for env_name, env_value in env_dict.items():

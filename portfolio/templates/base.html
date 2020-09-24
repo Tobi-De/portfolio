@@ -66,14 +66,15 @@
             <a href="{% url "projects:project_list" %}" class="nav-link text-big">
               Projects<i class="fa fa-folder-open" style="margin-left: 3px"></i></a>
           </li>
-          <li class="nav-item">
-            <a href="{% url "blog:post_list" %}" class="nav-link text-big">
-              Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
-          </li>
           <li class="nav-item"><a href="{% url "contact_me" %}" class="nav-link text-big">Contact Me
             <i class="fa fa-address-book" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}
+            <!-- TODO get blog link out of admin section-->
+            <li class="nav-item">
+              <a href="{% url "blog:post_list" %}" class="nav-link text-big">
+                Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
+            </li>
             <li class="nav-item">
               <a href="{% url "blog:new_post" %}" class="nav-link text-big">
                 New<i class="fa fa-plus-square" style="margin-left: 3px"></i></a>
