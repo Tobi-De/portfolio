@@ -3,9 +3,6 @@ import os
 import click
 
 
-# TODO use click package
-# TODO instead of dokku, the dt command could be use
-# TODO the app name is not needed with the dokku-toolbet
 # TODO refactor this code, maybe with an oop approach
 
 

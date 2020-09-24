@@ -47,7 +47,7 @@ class ContactMeView(FormView):
             ],
         )
         messages.success(
-            self.request, "Thanks for your message, I will be reaching to you soon !"
+            self.request, "Thanks for your message, I will be reaching you soon !"
         )
 
         return render(self.request, "core/contact_me.html", {"form": ContactMeForm()})
