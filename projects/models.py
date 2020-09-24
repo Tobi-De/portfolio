@@ -54,4 +54,4 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
 
     @property
     def overview(self):
-        return strip_tags(self.description[:50]) + "..."
+        return strip_tags(self.description[:85]) + "..."

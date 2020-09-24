@@ -2684,20 +2684,20 @@ a.text-dark:hover {
   color: #1d2124 !important;
 }
 
-.gallery-block{
-	padding-bottom: 60px;
-	padding-top: 60px;
+.gallery-block {
+  padding-bottom: 60px;
+  padding-top: 60px;
 }
 
-.gallery-block .heading{
-    margin-bottom: 50px;
-    text-align: center;
+.gallery-block .heading {
+  margin-bottom: 50px;
+  text-align: center;
 }
 
-.gallery-block .heading h2{
-    font-weight: bold;
-    font-size: 1.4rem;
-    text-transform: uppercase;
+.gallery-block .heading h2 {
+  font-weight: bold;
+  font-size: 1.4rem;
+  text-transform: uppercase;
 }
 
 .gallery-block.cards-gallery h6 {
@@ -2705,7 +2705,7 @@ a.text-dark:hover {
   font-weight: bold;
 }
 
-.gallery-block.cards-gallery .card{
+.gallery-block.cards-gallery .card {
   transition: 0.4s ease;
 }
 
@@ -2736,8 +2736,27 @@ a.text-dark:hover {
 
 @media (min-width: 576px) {
 
-	.gallery-block .transform-on-hover:hover {
-	    transform: translateY(-10px) scale(1.02);
-	    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
-	}
+  .gallery-block .transform-on-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
+  }
 }
+
+
+.a-title {
+  color: #212529;
+  text-align: center;
+}
+
+.a-title:hover {
+  text-decoration: none;
+}
+
+/*.card-group.card-title a {*/
+/*  color: #212529;*/
+/*}*/
+
+/*.card-group.card-title  a:hover {*/
+/*  text-decoration: none;*/
+/*}*/
+
