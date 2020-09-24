@@ -3,52 +3,48 @@
 {% load humanize %}
 
 {% block content %}
-  <div class="container mt-4 mb-4">
-    {% if user.is_superuser %}
-      <a href="{% url "projects:project_create" %}" class="btn btn-primary mb-4">New</a>
-    {% endif %}
-    <div class="card-columns">
-      {% for project in page_obj %}
-        <div class="col mb-4">
-          <div class="card h-100">
-            {% thumbnail project.carousel.first.image "256x206" crop="center" as img %}
-              <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
-            {% endthumbnail %}
-            <div class="card-body">
-              <h5 class="card-title">{{ project.title }}</h5>
-              <p class="card-text">{{ project.overview|safe }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a href="{{ project.get_absolute_url }}" type="button"
-                     class="btn btn-sm btn-outline-primary">Details</a>
-                </div>
+  <section class="gallery-block cards-gallery">
+    <div class="container">
+      {% if user.is_superuser %}
+        <div class="row justify-content-center">
+          <a href="{% url "projects:project_create" %}" class="btn btn-primary mb-4 text-white">New</a>
+        </div>
+      {% endif %}
+      <div class="row">
+        {% for project in page_obj %}
+          <div class="col-md-6 col-lg-4">
+            <div class="card border-0 transform-on-hover">
+              {% thumbnail project.carousel.first.image "256x206" crop="center" as img %}
+                <a class="lightbox" href="{{ project.get_absolute_url }}">
+                  <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
+                </a>
+              {% endthumbnail %}
+              <div class="card-body">
+                <h5 class="card-title"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h5>
+                <p class="card-text">{{ project.overview|safe }}</p>
               </div>
             </div>
-            <div class="card-footer">
-              <small class="text-muted">Updated {{ project.created|naturalday }}</small>
-              <p>{% for stack in project.get_stack %}{{ stack }} {% endfor %}</p>
-            </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-template d-flex justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
+                    class="fa fa-angle-left"></i></a></li>
+            <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
+                                     class="page-link">{{ page_obj.number|add:-1 }}</a></li>
+          {% endif %}
+          <li class="page-item"><a href="?page={{ page_obj.number }}"
+                                   class="page-link active">{{ page_obj.number }}</a></li>
+          {% if page_obj.has_next %}
+            <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
+                                     class="page-link">{{ page_obj.number|add:1 }}</a></li>
+            <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
+                    class="fa fa-angle-right"></i></a></li>
+          {% endif %}
+        </ul>
+      </nav>
     </div>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination pagination-template d-flex justify-content-center">
-        {% if page_obj.has_previous %}
-          <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
-                  class="fa fa-angle-left"></i></a></li>
-          <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
-                                   class="page-link">{{ page_obj.number|add:-1 }}</a></li>
-        {% endif %}
-        <li class="page-item"><a href="?page={{ page_obj.number }}"
-                                 class="page-link active">{{ page_obj.number }}</a></li>
-        {% if page_obj.has_next %}
-          <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
-                                   class="page-link">{{ page_obj.number|add:1 }}</a></li>
-          <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
-                  class="fa fa-angle-right"></i></a></li>
-        {% endif %}
-      </ul>
-    </nav>
-  </div>
+  </section>
 {% endblock %}
