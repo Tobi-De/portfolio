@@ -128,20 +128,16 @@ LOGIN_URL = ADMIN_URL
 INSTALLED_APPS += ["anymail"]  # noqa F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
-# https://anymail.readthedocs.io/en/stable/esps/mailgun/
-# EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
-# ANYMAIL = {
-#     "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-#     "MAILGUN_SENDER_DOMAIN": env("MAILGUN_DOMAIN"),
-#     "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
-# }
+# https://anymail.readthedocs.io/en/stable/esps/amazon_ses/
+EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
+ANYMAIL = {}
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env("SMTP_HOST")
-EMAIL_PORT = env("SMTP_PORT", default=587)
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('SMTP_USER')
-EMAIL_HOST_PASSWORD = env('SMTP_PASSWORD')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = env("SMTP_HOST")
+# EMAIL_PORT = env("SMTP_PORT", default=587)
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = env('SMTP_USER')
+# EMAIL_HOST_PASSWORD = env('SMTP_PASSWORD')
 
 # Collectfast
 # ------------------------------------------------------------------------------
@@ -160,7 +156,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
+            "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -196,7 +192,10 @@ sentry_logging = LoggingIntegration(
     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
     event_level=logging.ERROR,  # Send errors as events
 )
-sentry_sdk.init(dsn=SENTRY_DSN, integrations=[sentry_logging, DjangoIntegration(), RedisIntegration()])
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[sentry_logging, DjangoIntegration(), RedisIntegration()],
+)
 
 # Sorl thumbnail
 # -------------------------------------------------------------------------------

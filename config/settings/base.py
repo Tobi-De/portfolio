@@ -213,7 +213,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
+            "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -278,9 +278,9 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     "script",
 ]
 MARKDOWNIFY_WHITELIST_ATTRS = [
-    'href',
-    'src',
-    'alt',
+    "href",
+    "src",
+    "alt",
 ]
 
 # Maintencance mode
