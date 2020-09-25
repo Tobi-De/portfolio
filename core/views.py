@@ -41,7 +41,6 @@ class GetInTouchView(FormView):
             message=message,
             from_email=DEFAULT_FROM_EMAIL,
             recipient_list=[
-                "contact@tobidegnon.com",
                 "tobidegnon@protonmail.com",
                 "degnonfrancis@gmail.com",
             ],
