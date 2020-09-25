@@ -40,7 +40,7 @@
           <div class="mb-4 mt-4">
             <h6>Technologies</h6>
             <div class="btn-group mt-2" role="group">
-              {% for tech in project.get_stack %}
+              {% for tech in project.tech_stack.all %}
                 <a type="button" class="btn btn-info text-white">{{ tech }}</a>
               {% endfor %}
             </div>

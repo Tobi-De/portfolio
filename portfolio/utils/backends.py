@@ -1,8 +1,6 @@
 from django.core.cache import cache
 from maintenance_mode.backends import AbstractStateBackend
 
-from core.models import Maintenance
-
 
 class CacheBackend(AbstractStateBackend):
     def get_value(self):
@@ -17,11 +15,3 @@ class CacheBackend(AbstractStateBackend):
         if value not in ["0", "1"]:
             raise ValueError("state file content value is not 0|1")
         cache.set("MAINTENANCE_MODE", value)
-
-
-class DatabaseBackend(AbstractStateBackend):
-    def get_value(self):
-        return Maintenance.get_value()
-
-    def set_value(self, value):
-        Maintenance.set_value(value=value)

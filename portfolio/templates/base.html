@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{% static 'css/fontastic.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <link rel="stylesheet" href="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css"/>
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
   {% endblock %}
 
@@ -49,11 +49,12 @@
     <div class="container">
       <!-- Navbar Brand -->
       <div class="navbar-header d-flex align-items-center justify-content-between">
-        <a href="{% url "home" %}" class="navbar-brand"><img src="{% static "images/dt150.png" %}"
-                                                             alt="DEGNON tobi profile"
-                                                             class="img-fluid rounded-circle"
-                                                             style="width: 150px; height: 150px">
-          <span class="text-big"><b>Tobi-De(Web Dev)</b></span>
+        <a href="{% url "home" %}" class="navbar-brand">
+          <img src="{% static "images/dt150.png" %}"
+               alt="DEGNON tobi profile"
+               class="img-fluid rounded-circle"
+               style="width: 70px; height: 70px">
+          <span class="text-big"><b>Tobi-De(Web Developer)</b></span>
         </a>
         <!-- Toggle Button-->
         <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse"
@@ -67,7 +68,7 @@
             <a href="{% url "projects:project_list" %}" class="nav-link text-big">
               Projects<i class="fa fa-folder-open" style="margin-left: 3px"></i></a>
           </li>
-          <li class="nav-item"><a href="{% url "contact_me" %}" class="nav-link text-big">Contact Me
+          <li class="nav-item"><a href="{% url "contact_me" %}" class="nav-link text-big">Get in touch
             <i class="fa fa-address-book" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}

@@ -54,24 +54,3 @@ class Profile(TimeStampedModel):
     @property
     def email(self):
         return self.user.email
-
-
-class Maintenance(models.Model):
-    value = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.value)
-
-    @classmethod
-    def get_value(cls):
-        m = Maintenance.objects.last()
-        return m.value if m else False
-
-    @classmethod
-    def set_value(cls, value):
-        m = Maintenance.objects.last()
-        if m:
-            m.value = value
-            m.save()
-        else:
-            Maintenance.objects.create(value=value)

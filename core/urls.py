@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import home, ContactMeView
+from .views import home, GetInTouchView
 
 urlpatterns = [
     path("", home, name="home"),
-    path("contact-me/", ContactMeView.as_view(), name="contact_me"),
+    path("get-in-touch/", GetInTouchView.as_view(), name="contact_me"),
 ]

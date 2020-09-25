@@ -10,28 +10,38 @@ from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
 User = get_user_model()
 
+# TODO Add these as base in a migration
+STACK_CHOICES = Choices(
+    "django_vuejs_html_css_bootstrap4",
+    "django_vuejs_html_css_bulma",
+    "django_html_css_bootstrap4",
+    "django_html_css_bulma",
+    "vuejs_html_css_bootstrap4",
+    "vuejs_html_css_bulma",
+    "wagtail_html_css_bootstrap4",
+    "wagtail_html_css_vuejs",
+)
+
+
+class Technology(TimeStampedModel):
+    name = models.CharField(unique=True, db_index=True, max_length=100)
+    link = models.URLField(blank=True)
+    description = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Technologies"
+
+    def __str__(self):
+        return self.name
+
 
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
-    STACK_CHOICES = Choices(
-        "django_vuejs_html_css_bootstrap4",
-        "django_vuejs_html_css_bulma",
-        "django_html_css_bootstrap4",
-        "django_html_css_bulma",
-        "vuejs_html_css_bootstrap4",
-        "vuejs_html_css_bulma",
-        "wagtail_html_css_bootstrap4",
-        "wagtail_html_css_vuejs",
-    )
     STATUS = Choices("in_development", "deployed")
     carousel = models.ManyToManyField("core.Thumbnail", blank=True)
     title = models.CharField(max_length=60)
     description = MarkdownxField()
     slug = AutoSlugField(populate_from=["title"])
-    tech_stack = models.CharField(
-        max_length=100,
-        choices=STACK_CHOICES,
-        default=STACK_CHOICES.django_vuejs_html_css_bootstrap4,
-    )
+    tech_stack = models.ManyToManyField(Technology)
     featured = models.BooleanField(default=False)
     what_ive_learned = MarkdownxField()
     github_link = models.URLField("Github repository link", blank=True)
@@ -43,10 +53,6 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
 
     def get_absolute_url(self):
         return reverse("projects:project_detail", kwargs={"slug": self.slug})
-
-    @property
-    def get_stack(self):
-        return self.tech_stack.split("_")
 
     @property
     def get_status(self):
