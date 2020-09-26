@@ -5,73 +5,62 @@
 
 
 {% block content %}
-  <style>
-    .post-body img {
-      width: 100%;
-    }
-  </style>
-
-
   <div class="container">
-    <main class="post blog-post">
-      <div class="post-single" style="padding: 15px; border-radius: 5px">
-        {% if series.thumbnail %}
-          {% thumbnail series.thumbnail.image "1000x600" crop="center" as img %}
-            <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ series.thumbnail.alt }}"
-                 class="card-img img-fluid">
-          {% endthumbnail %}
-        {% endif %}
-        {% if series.thumbnail.source %}
-          <p class="text-muted mt-2">(Picture from {{ series.thumbnail.source }} )</p>
-        {% endif %}
-        <div class="post-details">
-          <div class="post-meta d-flex justify-content-between">
-            <div class="category">
-              {% for cat in series.categories %}
-                <a href="{% url "blog:post_list" %}?category={{ cat.name }}">{{ cat }}</a>
-              {% endfor %}
-            </div>
-            {% if user.is_superuser %}
-              <div>
-                <a href="{% url 'blog:series_update' series.slug %}">Update</a>|
-                <a href="{% url 'blog:series_delete' series.slug %}">Delete</a>
-              </div>
-            {% endif %}
-          </div>
-          <h1>{{ series.title }}</h1>
-          <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
-                                                                                        class="author d-flex align-items-center flex-wrap">
-            {% thumbnail series.author.profile.picture.image "40x40" crop="center" as img %}
-              <div class="avatar"><img src="{{ img.url }}" alt="{{ series.author.profile.picture.alt }}"
-                                       class="img-fluid">
-              </div>
+    <div class="row justify-content-center">
+      <main class="col-md-10 post blog-post">
+        <div class="card border-0 rounded mb-4">
+          {% if series.thumbnail %}
+            {% thumbnail series.thumbnail.image "1000x350" crop="center" as img %}
+              <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
+                   alt="{{ series.thumbnail.alt }}"
+                   class="card-img-top">
             {% endthumbnail %}
-            <div class="title"><span>{{ series.author }}</span></div>
-          </a>
-            <div class="d-flex align-items-center flex-wrap">
-              <div class="date"><i class="icon-clock"></i> {{ series.created|timesince }} ago</div>
-              <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>
-            </div>
-          </div>
-          <div class="post-body card">
-            <div class="card-body">
-              <p class="text-justify">{{ series.overview|markdownify }}</p>
-              <hr>
-              <p class="text-justify">{{ series.body|markdownify }}</p>
-            </div>
-          </div>
-          <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
-            <a href="{{ series.all_blogpost.first.get_absolute_url }}"
-               class="next-post text-right d-flex align-items-center justify-content-end">
-              <div class="text"><strong class="text-primary">Start Reading</strong>
-                <h6>{{ series.all_blogpost.first.title }}</h6>
+          {% endif %}
+          {% if series.thumbnail.source %}
+            <p class="text-muted mt-2">(Picture from {{ series.thumbnail.source }} )</p>
+          {% endif %}
+          <div class="card-body">
+            <div class="post-meta d-flex justify-content-between">
+              <div class="category">
+                {% for category in series.categories %}
+                  <a href="{{ category.get_list_url }}">{{ category }}</a>
+                {% endfor %}
               </div>
-              <div class="icon next"><i class="fa fa-angle-right"> </i></div>
-            </a>
+              {% if user.is_superuser %}
+                <div>
+                  <a href="{% url 'blog:series_update' series.slug %}">Update</a>|
+                  <a href="{% url 'blog:series_delete' series.slug %}">Delete</a>
+                </div>
+              {% endif %}
+            </div>
+            <h1 class="text-center">{{ series.title }}</h1>
+            <div class="post-footer row justify-content-center">
+              <div class="d-flex align-items-center flex-wrap">
+                <div class="date"><i class="icon-clock"></i> {{ series.created|timesince }} ago</div>
+                <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>
+                {#                <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>#}
+              </div>
+            </div>
+            <div class="post-body card">
+              <div class="card-body">
+                <p class="justify-content-around">{{ series.overview|markdownify }}</p>
+                <hr>
+                <p class="text-justify">{{ series.body|markdownify }}</p>
+              </div>
+            </div>
+            <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
+              <a href="{{ series.all_blogpost.first.get_absolute_url }}"
+                 class="next-post text-right d-flex align-items-center justify-content-end">
+                <div class="text"><strong class="text-primary">Start Reading</strong>
+                  <h6>{{ series.all_blogpost.first.title }}</h6>
+                </div>
+                <div class="icon next"><i class="fa fa-angle-right"> </i></div>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      {% include "newsletter.html" with n_form=newsletter_form %}
-    </main>
+        {% include "newsletter.html" with n_form=newsletter_form %}
+      </main>
+    </div>
   </div>
 {% endblock %}

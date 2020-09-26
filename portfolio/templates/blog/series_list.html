@@ -5,67 +5,60 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <!-- Latest Posts -->
-      <main class="posts-listing col-lg-8">
-        <div class="container">
-          <div class="row">
+      <main class="posts-listing col-md-9">
+        <div class="row">
+          {% include "sidebar_left.html" %}
+          <div class="col-md-9">
             {% for series in page_obj %}
-              <div class="post card" style="background-color: white; padding: 10px; border-radius: 5px">
+              <div class="post card border-0">
                 {% if series.thumbnail %}
-                  {% thumbnail series.thumbnail.image "740x495" crop="center" as img %}
+                  {% thumbnail series.thumbnail.image "700x275" crop="center" as img %}
                     <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
-                         alt="{{ series.thumbnail.alt }}" class="img-fluid">
+                         alt="{{ series.thumbnail.alt }}" class="card-img-top">
                   {% endthumbnail %}
                 {% endif %}
-                <div class="post-details card-body">
-                  <div class="post-meta d-flex justify-content-between">
-                    <div class="category">
-                      {% for category in series.categories %}
-                        <a href="{% url "blog:post_list" %}?category={{ category.name }}">{{ category }}</a>
-                      {% endfor %}
-                    </div>
+                <div class="post-meta ml-3 d-flex justify-content-between">
+                  <div class="category">
+                    {% for category in series.categories %}
+                      <a href="{{ category.get_list_url }}">{{ category }}</a>
+                    {% endfor %}
                   </div>
-                  <a href="{{ series.get_absolute_url }}">
-                    <h3 class="h4">{{ series.title }}</h3></a>
+                </div>
+                <a href="{{ series.get_absolute_url }}">
+                  <h3 class="text-center">{{ series.title }}</h3>
+                </a>
+                <div class="card-body">
                   <p>{{ series.overview|markdownify }}</p>
-                  <footer class="post-footer d-flex align-items-center"><a href="#"
-                                                                           class="author d-flex align-items-center flex-wrap">
-                    {% thumbnail series.author.profile.picture.image "40x40" crop="center" as img %}
-                      <div class="avatar"><img src="{{ img.url }}" alt="{{ series.author.profile.picture.alt }}"
-                                               class="img-fluid">
-                      </div>
-                    {% endthumbnail %}
-                    <div class="title"><span>{{ series.author }}</span></div>
-                  </a>
-                    <div class="date"><i class="icon-clock"></i>{{ series.created|timesince }} ago</div>
+                  <footer class="post-footer row justify-content-center">
+                    <div class="date"><i class="icon-clock"></i> {{ series.created|timesince }} ago</div>
                     <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>
                   </footer>
                 </div>
               </div>
             {% endfor %}
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-template d-flex justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
+                          class="fa fa-angle-left"></i></a></li>
+                  <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
+                                           class="page-link">{{ page_obj.number|add:-1 }}</a></li>
+                {% endif %}
+                <li class="page-item"><a href="?page={{ page_obj.number }}"
+                                         class="page-link active">{{ page_obj.number }}</a></li>
+                {% if page_obj.has_next %}
+                  <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
+                                           class="page-link">{{ page_obj.number|add:1 }}</a></li>
+                  <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
+                          class="fa fa-angle-right"></i></a></li>
+                {% endif %}
+              </ul>
+            </nav>
           </div>
-          <!-- Pagination -->
-          <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-template d-flex justify-content-center">
-              {% if page_obj.has_previous %}
-                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link"> <i
-                        class="fa fa-angle-left"></i></a></li>
-                <li class="page-item"><a href="?page={{ page_obj.number|add:-1 }}"
-                                         class="page-link">{{ page_obj.number|add:-1 }}</a></li>
-              {% endif %}
-              <li class="page-item"><a href="?page={{ page_obj.number }}"
-                                       class="page-link active">{{ page_obj.number }}</a></li>
-              {% if page_obj.has_next %}
-                <li class="page-item"><a href="?page={{ page_obj.number|add:1 }}"
-                                         class="page-link">{{ page_obj.number|add:1 }}</a></li>
-                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link"> <i
-                        class="fa fa-angle-right"></i></a></li>
-              {% endif %}
-            </ul>
-          </nav>
         </div>
       </main>
-      {% include "sidebar.html" with form=newsletter_form %}
+      {% include "sidebar_right.html" with form=newsletter_form %}
     </div>
   </div>
 {% endblock %}

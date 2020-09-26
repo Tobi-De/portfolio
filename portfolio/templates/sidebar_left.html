@@ -1,0 +1,13 @@
+<div class="col-md-3">
+  <header>
+    <h3 class="h6 text-center p-2 bg-light">Categories</h3>
+  </header>
+  <div class="btn-group-vertical btn-block">
+    {% for category in categories %}
+      <a href="{{ category.get_list_url }}"
+         class="btn d-flex justify-content-between align-items-center btn-light">
+        {{ category }}<span class="badge  badge-pill">{{ category.posts_count }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</div>

@@ -143,6 +143,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         super().save(*args, **kwargs)
 
 
+# TODO Find a way to manipulate post order
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)

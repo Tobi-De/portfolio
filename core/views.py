@@ -49,4 +49,6 @@ class GetInTouchView(FormView):
             self.request, "Thanks for your message, I will be reaching you soon !"
         )
 
-        return render(self.request, "core/get_in_touch.html", {"form": GetInTouchForm()})
+        return render(
+            self.request, "core/get_in_touch.html", {"form": GetInTouchForm()}
+        )
