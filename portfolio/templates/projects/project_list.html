@@ -15,7 +15,7 @@
         {% for project in page_obj %}
           <div class="col-md-6 col-lg-4">
             <div class="card border-0 transform-on-hover">
-              {% thumbnail project.carousel.first.image "256x206" crop="center" as img %}
+              {% thumbnail project.primary_image.image "256x206" crop="center" as img %}
                 <a class="lightbox" href="{{ project.get_absolute_url }}">
                   <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
                 </a>

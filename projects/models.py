@@ -62,3 +62,8 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     @property
     def overview(self):
         return strip_tags(self.description[:85]) + "..."
+
+    @property
+    def primary_image(self):
+        image = self.carousel.filter(primary=True).first()
+        return image if image else self.carousel.all().first()

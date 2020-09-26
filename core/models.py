@@ -12,6 +12,7 @@ class Thumbnail(TimeStampedModel):
     source = models.URLField(blank=True, null=True)
     alt = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from=["alt"])
+    primary = models.BooleanField(default=False)
 
     def __str__(self):
         return self.alt
