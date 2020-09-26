@@ -2,7 +2,6 @@
 {% load static %}
 {% load thumbnail %}
 {% load markdownify %}
-{% load comments %}
 
 
 {% block content %}
@@ -14,7 +13,6 @@
           {% if page_obj %}
             <div class="col-md-9">
               {% for post in page_obj %}
-                {% get_comment_count for post as comment_count %}
                 <div class="post card border-0">
                   {% if post.thumbnail %}
                     {% thumbnail post.thumbnail.image "700x275" crop="center" as img %}
@@ -37,7 +35,7 @@
                     <footer class="post-footer row justify-content-center">
                       <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
                       <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
-                      <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>
+                      {#                      <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>#}
                     </footer>
                   </div>
                 </div>
