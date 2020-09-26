@@ -24,6 +24,7 @@ class ThumbnailLinkMixin:
 @admin.register(Thumbnail)
 class ThumbnailAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ["slug", "image", "source", "alt", "created", "modified"]
+    list_filter = ["primary"]
 
 
 @admin.register(Profile)
