@@ -142,24 +142,6 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         self.create_scheduled_task()
         super().save(*args, **kwargs)
 
-    @classmethod
-    def popular_posts(cls):
-        # TODO cache the result of this
-        # get published posts
-        # create a list of tuple with the fist element be the number of comment
-        # and the second the id post the post [(nbr_of_comment, id_post)]
-        # reverse sort the list and get the first three elements
-        # get the corresponding post in a list
-        published_posts = Post.objects.filter(status=Post.STATUS.published)
-        tmp = [
-            (XtdComment.objects.filter(object_pk=post.id).count(), post.id)
-            for post in published_posts
-        ]
-        popular_post_tuple = sorted(tmp, reverse=True)[:3]
-        # return [Post.objects.get(id=x[1]) for x in popular_post_tuple]
-        id_list = [x[1] for x in popular_post_tuple]
-        return Post.objects.filter(id__in=id_list)
-
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")

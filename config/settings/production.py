@@ -132,19 +132,12 @@ INSTALLED_APPS += ["anymail"]  # noqa F405
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
-        # example: override normal Boto credentials specifically for Anymail
+        # without this email are not send, I don't know why
         "aws_access_key_id": AWS_ACCESS_KEY_ID,
         "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
         "region_name": AWS_S3_REGION_NAME,
     }
 }
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = env("SMTP_HOST")
-# EMAIL_PORT = env("SMTP_PORT", default=587)
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = env('SMTP_USER')
-# EMAIL_HOST_PASSWORD = env('SMTP_PASSWORD')
 
 # Collectfast
 # ------------------------------------------------------------------------------
@@ -163,7 +156,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {

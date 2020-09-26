@@ -213,7 +213,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -284,6 +284,6 @@ MARKDOWNIFY_WHITELIST_ATTRS = [
 ]
 
 # Maintencance mode
-MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.CacheBackend"
+MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.DatabaseBackend"
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True

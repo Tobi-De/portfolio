@@ -6,101 +6,91 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <style>
-    .post-body img {
-      width: 100%;
-    }
-  </style>
 
   {% get_comment_count for post as comment_count %}
   <div class="container">
-    <main class="post blog-post">
-      <div class="post-single" style="padding: 15px;border-radius: 5px;">
-        {% if post.thumbnail %}
-          {% thumbnail post.thumbnail.image "1000x600" crop="center" as img %}
-            <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ post.thumbnail.alt }}"
-                 class="card-img img-fluid">
-          {% endthumbnail %}
-        {% endif %}
-        {% if post.thumbnail.source %}
-          <p class="text-muted mt-2">(Picture from {{ post.thumbnail.source }} )</p>
-        {% endif %}
-        <div class="post-details">
-          <div class="post-meta d-flex justify-content-between">
-            <div class="category">
-              {% for category in post.categories.all %}
-                <a href="{{ category.get_list_url }}">{{ category }}</a>
-              {% endfor %}
-            </div>
-            {% if user.is_superuser %}
-              <div>
-                <a href="{% url 'blog:post_update' post.slug %}">Update</a>|
-                <a href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>|
-                <a href="{% url 'blog:post_delete' post.slug %}">Delete</a>
-              </div>
-            {% endif %}
-          </div>
-          <h1>{{ post.title }}</h1>
-          <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#"
-                                                                                        class="author d-flex align-items-center flex-wrap">
-            {% thumbnail post.author.profile.picture.image "40x40" crop="center" as img %}
-              <div class="avatar"><img src="{{ img.url }}" alt="{{ post.author.profile.picture.alt }}"
-                                       class="img-fluid">
-              </div>
+    <div class="row justify-content-center">
+      <main class="col-md-10 post blog-post">
+        <div class="card border-0 rounded mb-4">
+          {% if post.thumbnail %}
+            {% thumbnail post.thumbnail.image "1000x350" crop="center" as img %}
+              <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
+                   alt="{{ post.thumbnail.alt }}"
+                   class="card-img-top">
             {% endthumbnail %}
-            <div class="title"><span>{{ post.author }}</span></div>
-          </a>
-            <div class="d-flex align-items-center flex-wrap">
-              <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
-              <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
-              <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>
-            </div>
-          </div>
-          <div class="post-body card">
-            <div class="card-body">
-              <p class="justify-content-around">{{ post.overview|markdownify }}</p>
-              <hr>
-              <p class="text-justify">{{ post.body|markdownify }}</p>
-            </div>
-          </div>
-          {% if user.is_superuser and not post.is_published %}
-            <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-primary">Publish</a>
           {% endif %}
-          <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
-            {% if post.previous_post %}
-              <a href="{{ post.previous_post.get_absolute_url }}"
-                 class="prev-post text-left d-flex align-items-center">
-                <div class="icon prev"><i class="fa fa-angle-left"></i></div>
-                <div class="text"><strong class="text-primary">Previous Post </strong>
-                  <h6>{{ post.previous_post.title }}</h6>
+          {% if post.thumbnail.source %}
+            <p class="text-muted mt-2">(Picture from {{ post.thumbnail.source }} )</p>
+          {% endif %}
+          <div class="card-body">
+            <div class="post-meta d-flex justify-content-between">
+              <div class="category">
+                {% for category in post.categories.all %}
+                  <a href="{{ category.get_list_url }}">{{ category }}</a>
+                {% endfor %}
+              </div>
+              {% if user.is_superuser %}
+                <div>
+                  <a href="{% url 'blog:post_update' post.slug %}">Update</a>|
+                  <a href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>|
+                  <a href="{% url 'blog:post_delete' post.slug %}">Delete</a>
                 </div>
-              </a>
+              {% endif %}
+            </div>
+            <h1 class="text-center">{{ post.title }}</h1>
+            <div class="post-footer row justify-content-center">
+              <div class="d-flex align-items-center flex-wrap">
+                <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
+                <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
+                <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>
+              </div>
+            </div>
+            <div class="post-body card">
+              <div class="card-body">
+                <p class="justify-content-around">{{ post.overview|markdownify }}</p>
+                <hr>
+                <p class="text-justify">{{ post.body|markdownify }}</p>
+              </div>
+            </div>
+            {% if user.is_superuser and not post.is_published %}
+              <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-primary">Publish</a>
             {% endif %}
-            {% if post.next_post %}
-              <a href="{{ post.next_post.get_absolute_url }}"
-                 class="next-post text-right d-flex align-items-center justify-content-end">
-                <div class="text"><strong class="text-primary">Next Post </strong>
-                  <h6>{{ post.next_post.title }}</h6>
-                </div>
-                <div class="icon next"><i class="fa fa-angle-right"> </i></div>
-              </a>
-            {% endif %}
+            <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
+              {% if post.previous_post %}
+                <a href="{{ post.previous_post.get_absolute_url }}"
+                   class="prev-post text-left d-flex align-items-center">
+                  <div class="icon prev"><i class="fa fa-angle-left"></i></div>
+                  <div class="text"><strong class="text-primary">Previous Post </strong>
+                    <h6>{{ post.previous_post.title }}</h6>
+                  </div>
+                </a>
+              {% endif %}
+              {% if post.next_post %}
+                <a href="{{ post.next_post.get_absolute_url }}"
+                   class="next-post text-right d-flex align-items-center justify-content-end">
+                  <div class="text"><strong class="text-primary">Next Post </strong>
+                    <h6>{{ post.next_post.title }}</h6>
+                  </div>
+                  <div class="icon next"><i class="fa fa-angle-right"> </i></div>
+                </a>
+              {% endif %}
+            </div>
           </div>
         </div>
-      </div>
-      {#      {% if comment_count %}#}
-      {#        <hr/>#}
-      {#        <div class="comment bg-white">#}
-      {#          {% render_xtdcomment_tree for post %}#}
-      {#        </div>#}
-      {#      {% endif %}#}
-      {#      <div class="card card-block mb-5">#}
-      {#        <div class="card-body">#}
-      {#          <h4 class="card-title text-center pb-3">Post your comment</h4>#}
-      {#          {% render_comment_form for post %}#}
-      {#        </div>#}
-      {#      </div>#}
-      {% include "newsletter.html" with n_form=newsletter_form %}
-    </main>
+        {#      {% if comment_count %}#}
+        {#        <hr/>#}
+        {#        <div class="comment bg-white">#}
+        {#          {% render_xtdcomment_tree for post %}#}
+        {#        </div>#}
+        {#      {% endif %}#}
+        {#      <div class="card card-block mb-5">#}
+        {#        <div class="card-body">#}
+        {#          <h4 class="card-title text-center pb-3">Post your comment</h4>#}
+        {#          {% render_comment_form for post %}#}
+        {#        </div>#}
+        {#      </div>#}
+        {% include "newsletter.html" with n_form=newsletter_form %}
+      </main>
+    </div>
   </div>
 {% endblock %}

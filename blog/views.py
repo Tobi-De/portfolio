@@ -70,7 +70,6 @@ class PostListView(ListView):
         ).order_by("-publish_date")[:3]
         context["categories"] = Category.objects.all()
         context["newsletter_form"] = SubscriptionForm()
-        context["popular"] = Post.popular_posts()
         return context
 
 
@@ -154,7 +153,6 @@ class SeriesListView(ListView):
         context["latests"] = self.get_queryset()[:3]
         context["categories"] = Category.objects.all()
         context["newsletter_form"] = SubscriptionForm()
-        context["popular"] = Post.popular_posts()
         return context
 
 

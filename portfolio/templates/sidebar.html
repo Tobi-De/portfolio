@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load crispy_forms_tags %}
 
-<aside class="col-lg-4">
+<aside class="col-md-3">
   <!-- Widget [Search Bar Widget]-->
   <div class="widget search">
     <header>
@@ -24,34 +24,11 @@
       {% for latest in latests %}
         <a href="{{ latest.get_absolute_url }}">
           <div class="item d-flex align-items-center">
-            {% if latest.thumbnail %}
-              <div class="image"><img src="{{ latest.thumbnail.url }}" alt="..." class="img-fluid"></div>
-            {% endif %}
             <div class="title"><strong>{{ latest.title }}</strong>
               <div class="d-flex align-items-center">
-                <div class="views"><i class="icon-eye"></i> {{ latest.reading_time }} minutes read</div>
-              </div>
-            </div>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-  </div>
-  <!-- Widget [Popular Posts Widget]        -->
-  <div class="widget latest-posts">
-    <header>
-      <h3 class="h6">Popular Posts</h3>
-    </header>
-    <div class="blog-posts">
-      {% for post in popular %}
-        <a href="{{ post.get_absolute_url }}">
-          <div class="item d-flex align-items-center">
-            {% if post.thumbnail %}
-              <div class="image"><img src="{{ post.thumbnail.url }}" alt="..." class="img-fluid"></div>
-            {% endif %}
-            <div class="title"><strong>{{ post.title }}</strong>
-              <div class="d-flex align-items-center">
-                <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
+                <div class="text-small mt-2 text-muted">
+                  <i class="icon-clock"></i> {{ latest.created|naturalday }}
+                </div>
               </div>
             </div>
           </div>
@@ -69,19 +46,11 @@
     <div class="item d-flex justify-content-between"><a href="{% url "blog:series_list" %}">Series</a>
     </div>
   </div>
-  <!-- Widget [Categories Widget]-->
-  <div class="widget categories">
-    <header>
-      <h3 class="h6">Categories</h3>
-    </header>
-    {% for category in categories %}
-      <div class="item d-flex justify-content-between"><a
-              href="{{ category.get_list_url }}">{{ category.name }}</a><span>{{ category.posts_count }}</span>
-      </div>
-    {% endfor %}
-  </div>
   <!-- Widget [Newsletter Widget]-->
   <div class="widget">
+    <header>
+      <h3 class="h6">Newsletter</h3>
+    </header>
     <p>Subscribe to our Mailing list to get notified about new posts.</p>
     <form method="post" action="{% url "newsletter:subscribe" %}">
       {% csrf_token %}
