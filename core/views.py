@@ -13,7 +13,9 @@ DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon
 
 
 def home(request):
-    featured = Project.objects.filter(featured=True).order_by("-created")[:3]
+    featured = Project.objects.filter(featured=True).order_by("-priority", "-created")[
+        :3
+    ]
     profile = Profile.objects.last()
     context = {"featured": featured, "profile": profile}
     return render(request, "core/home.html", context)

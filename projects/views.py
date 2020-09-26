@@ -14,7 +14,7 @@ from .models import Project
 
 class ProjectListView(ListView):
     model = Project
-    ordering = ["-created"]
+    ordering = ["-priority", "-created"]
     paginate_by = 6
     context_object_name = "projects"
 

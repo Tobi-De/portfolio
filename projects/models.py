@@ -48,6 +48,7 @@ class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     github_link = models.URLField("Github repository link", blank=True)
     status_changed = MonitorField(monitor="status")
     web_link = models.URLField(blank=True)
+    priority = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

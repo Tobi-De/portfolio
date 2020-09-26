@@ -14,6 +14,7 @@ class ProjectForm(forms.ModelForm):
             "what_ive_learned",
             "tech_stack",
             "featured",
+            "priority",
             "github_link",
             "web_link",
         ]
