@@ -35,6 +35,7 @@ class Technology(TimeStampedModel):
         return self.name
 
 
+# TODO add way to showcase code snippets
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     STATUS = Choices("in_development", "deployed")
     carousel = models.ManyToManyField("core.Thumbnail", blank=True)

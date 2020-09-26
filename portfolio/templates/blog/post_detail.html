@@ -2,12 +2,12 @@
 {% load static %}
 {% load thumbnail %}
 {% load markdownify %}
-{% load  comments comments_xtd %}
 {% load crispy_forms_tags %}
+
+{% block title %}{{ post.slug }}{% endblock %}
 
 {% block content %}
 
-  {% get_comment_count for post as comment_count %}
   <div class="container">
     <div class="row justify-content-center">
       <main class="col-md-10 post blog-post">
@@ -53,7 +53,8 @@
               </div>
             </div>
             {% if user.is_superuser and not post.is_published %}
-              <a href="{% url "blog:post_publish" post.slug %}" class="btn btn-outline-primary btn-block mt-2">Publish</a>
+              <a href="{% url "blog:post_publish" post.slug %}"
+                 class="btn btn-outline-primary btn-block mt-2">Publish</a>
             {% endif %}
             <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
               {% if post.previous_post %}
@@ -77,18 +78,20 @@
             </div>
           </div>
         </div>
-        {#      {% if comment_count %}#}
-        {#        <hr/>#}
-        {#        <div class="comment bg-white">#}
-        {#          {% render_xtdcomment_tree for post %}#}
-        {#        </div>#}
-        {#      {% endif %}#}
-        {#      <div class="card card-block mb-5">#}
-        {#        <div class="card-body">#}
-        {#          <h4 class="card-title text-center pb-3">Post your comment</h4>#}
-        {#          {% render_comment_form for post %}#}
-        {#        </div>#}
-        {#      </div>#}
+        <div class="card card-body mb-4">
+          <!-- TODO try to use the github api to fetch comment counts -->
+          <details>
+            <summary class="mb-4">Show comments</summary>
+            <script src="https://utteranc.es/client.js"
+                    repo="Tobi-De/Tobi-De"
+                    issue-term="title"
+                    label="Blog"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+          </details>
+        </div>
         {% include "newsletter.html" with n_form=newsletter_form %}
       </main>
     </div>

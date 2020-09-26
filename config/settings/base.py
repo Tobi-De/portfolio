@@ -72,8 +72,6 @@ THIRD_PARTY_APPS = [
     "django_q",
     "markdownx",
     "markdownify",
-    "django_comments_xtd",
-    "django_comments",
     "sorl.thumbnail",
     "bootstrap_datepicker_plus",
 ]
@@ -251,12 +249,6 @@ Q_CLUSTER = {
     "label": "Django Q",
     "redis": env("REDIS_URL", default="redis://localhost:6379"),
 }
-
-# Comments_xtd
-# -------------------------------------------------------------------------------
-COMMENTS_APP = "django_comments_xtd"
-COMMENTS_XTD_CONFIRM_EMAIL = False
-COMMENTS_XTD_MAX_THREAD_LEVEL = 2
 
 # Markdownify
 # -------------------------------------------------------------------------------

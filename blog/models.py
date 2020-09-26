@@ -5,7 +5,6 @@ from django.db.models import Q, Sum
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django_comments_xtd.models import XtdComment
 from django_extensions.db.fields import AutoSlugField
 from django_q.tasks import Schedule
 from markdownx.models import MarkdownxField
