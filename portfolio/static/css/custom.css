@@ -2752,7 +2752,7 @@ a.text-dark:hover {
   text-decoration: none;
 }
 
-/*.utterances {*/
-/*  width: 100%;*/
-/*}*/
+.utterances {
+max-width: none;
+}
 
