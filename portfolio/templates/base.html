@@ -85,11 +85,11 @@
             {% endif %}
             <!-- TODO get blog link out of admin section-->
             <div class="dropdown">
-              <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+              <button class="btn btn-outline-dark btn-sm dropdown-toggle mt-2" type="button" id="AdminMenuButton"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin
               </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div class="dropdown-menu" aria-labelledby="AdminMenuButton">
                 <a href="{% url "admin:index" %}" class="dropdown-item">
                   Home<i class="fa fa-lock" style="margin-left: 3px"></i></a>
                 <a href="{% url "blog:post_list" %}" class="dropdown-item">

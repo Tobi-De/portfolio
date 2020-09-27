@@ -36,6 +36,7 @@ class Technology(TimeStampedModel):
 
 
 # TODO add way to showcase code snippets
+# TODO try so seee if those snippets can be used directy in the blog post(tempplate tags)
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     STATUS = Choices("in_development", "deployed")
     carousel = models.ManyToManyField("core.Thumbnail", blank=True)
