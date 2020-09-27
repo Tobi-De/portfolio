@@ -68,6 +68,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     series = models.ForeignKey(
         "blog.Series", null=True, blank=True, on_delete=models.SET_NULL
     )
+    order = models.IntegerField(default=0)
 
     def get_absolute_url(self):
         return reverse("blog:post_detail", kwargs={"slug": self.slug})
@@ -80,7 +81,11 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def next_post(self):
         if not self.series:
             return None
-        posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
+        posts = (
+            self.series.all_blogpost()
+                .filter(status=Post.STATUS.published)
+                .order_by("order")
+        )
         if self == posts.last() or self not in posts:
             return None
         return posts[queryset_index_of(posts, self) + 1]
@@ -89,13 +94,14 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def previous_post(self):
         if not self.series:
             return None
-        posts = self.series.all_blogpost().filter(status=Post.STATUS.published)
+        posts = (
+            self.series.all_blogpost()
+                .filter(status=Post.STATUS.published)
+                .order_by("order")
+        )
         if self == posts.first() or self not in posts:
             return None
         return posts[queryset_index_of(posts, self) - 1]
-
-    def belongs_to_series(self, series):
-        return self.series == series
 
     def publish(self, *args, **kwargs):
         self.status = Post.STATUS.published
@@ -142,7 +148,6 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         super().save(*args, **kwargs)
 
 
-# TODO Find a way to manipulate post order
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)

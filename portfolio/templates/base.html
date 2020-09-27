@@ -72,23 +72,6 @@
             <i class="fa fa-address-book" style="margin-left: 3px"></i></a>
           </li>
           {% if user.is_superuser %}
-            <!-- TODO get blog link out of admin section-->
-            <li class="nav-item">
-              <a href="{% url "blog:post_list" %}" class="nav-link text-big">
-                Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url "blog:new_post" %}" class="nav-link text-big">
-                New<i class="fa fa-plus-square" style="margin-left: 3px"></i></a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url "newsletter:send_news" %}" class="nav-link text-big">
-                Send News<i class="fa fa-paper-plane" style="margin-left: 3px"></i></a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url "admin:index" %}" class="nav-link text-big">
-                Admin<i class="fa fa-lock" style="margin-left: 3px"></i></a>
-            </li>
             {% if maintenance_mode %}
               <li class="nav-item">
                 <a href="{% url "maintenance_mode_off" %}" class="nav-link text-big">
@@ -100,6 +83,27 @@
                   Maintenance<i class="fa fa-toggle-off" style="margin-left: 3px"></i></a>
               </li>
             {% endif %}
+            <!-- TODO get blog link out of admin section-->
+            <div class="dropdown">
+              <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a href="{% url "admin:index" %}" class="dropdown-item">
+                  Home<i class="fa fa-lock" style="margin-left: 3px"></i></a>
+                <a href="{% url "blog:post_list" %}" class="dropdown-item">
+                  Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
+                <a href="{% url "post_feed" %}" class="dropdown-item">
+                  RSS
+                  <span class="fa fa-rss" style="margin-right: 3px"></span>
+                </a>
+                <a href="{% url "blog:new_post" %}" class="dropdown-item">
+                  New<i class="fa fa-plus-square" style="margin-left: 3px"></i></a>
+                <a href="{% url "newsletter:send_news" %}" class="dropdown-item">
+                  Send News<i class="fa fa-paper-plane" style="margin-left: 3px"></i></a>
+              </div>
+            </div>
           {% endif %}
         </ul>
       </div>
