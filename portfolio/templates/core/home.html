@@ -5,9 +5,9 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 card mb-4 mt-4 bg-gray">
+      <div class="col-lg-8 card mb-4 mt-4">
         <div class="card-body">
-          <h2 class="h4 text-center card-header mb-3">Work Experiences</h2>
+          <h2 class="h4 text-center mb-3">Work Experiences</h2>
           <ul class="list-group-flush">
             <li class="list-group-item text-justify">
               Internship in a Tech solution development company <a href="https://www.edevtic.com">E-DEV</a>.
@@ -21,7 +21,7 @@
           </ul>
         </div>
         <div class="card-body">
-          <h2 class="h4 text-center card-header mb-3">Recent Projects</h2>
+          <h2 class="h4 text-center mb-3">Recent Projects</h2>
           <div class="card-group">
             {% for project in featured %}
               <div class="card">
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="card-body">
-          <h2 class="h4 text-center card-header mb-3">Technical Skills</h2>
+          <h2 class="h4 text-center mb-3">Technical Skills</h2>
           <div class="row">
             <div class="col-md-6">
               <ul class="list-group">
@@ -217,22 +217,23 @@
       </div>
       <div class="col-lg-4 card mt-4 mb-4 bg-dark">
         <div class="card mb-2">
-          <h2 class="h4 text-center card-header bg-gray">About Me</h2>
-          <div class="card-body"><p class="text-justify">
-            Hey there, I'm Tobi, a 20 years old student in computer science. I build web applications. <b>I'm a full
-            stack web developer</b>. My job is to turn your ideas into application that can be deployed and then
-            used by
-            a multitude of people around the world on different platforms (web, mobile, etc...). I love discussing
-            all subjects revolving around IT and video games.
-            {#            I am also the author of a weekly <a#}
-            {#                  href="{% url "blog:post_list" %}">blog</a> whose primary#}
-            {#            purpose is to be used as a reminder (to help me remember all the concepts and tools I am learning and#}
-            {#            using), then to share my knowledge.#}
-          </p></div>
+          <div class="card-body">
+            <h2 class="h4 text-center mb-3">About Me</h2>
+            <p class="text-justify">
+              Hey there, I'm Tobi, a 20 years old student in computer science. I build web applications. <b>I'm a full
+              stack web developer</b>. My job is to turn your ideas into application that can be deployed and then
+              used by
+              a multitude of people around the world on different platforms (web, mobile, etc...). I love discussing
+              all subjects revolving around IT and video games.
+              {#            I am also the author of a weekly <a#}
+              {#                  href="{% url "blog:post_list" %}">blog</a> whose primary#}
+              {#            purpose is to be used as a reminder (to help me remember all the concepts and tools I am learning and#}
+              {#            using), then to share my knowledge.#}
+            </p></div>
         </div>
         <div class="card mb-2">
-          <h2 class="h4 text-center card-header bg-gray">Contacts</h2>
           <div class="card-body">
+            <h2 class="h4 text-center mb-3">Contacts</h2>
             <div class="btn-group btn-block">
               <a href="{{ profile.github }}" class="btn"
               ><img
@@ -262,8 +263,8 @@
           </div>
         </div>
         <div class="card">
-          <h2 class="h4 text-center card-header bg-gray">Education</h2>
           <div class="card-body">
+            <h2 class="h4 text-center mb-3">Education</h2>
             <ul class="list-group-flush">
               <li class="list-group-item">UAC - IFRI / 2019 - current third year of IT cycle</li>
               <li class="list-group-item">UAC - IFRI / 2018 - 2019 second year of IT cycle</li>

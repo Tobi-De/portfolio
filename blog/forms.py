@@ -21,6 +21,7 @@ class PostForm(forms.ModelForm):
             "categories",
             "author",
             "series",
+            "featured",
             "scheduled_publish_date",
         ]
         widgets = {

@@ -1,7 +1,6 @@
 from braces.views import SuperuserRequiredMixin, FormValidMessageMixin
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import (
@@ -16,7 +15,8 @@ from django.views.generic import (
 
 from newsletter.forms import SubscriptionForm
 from .forms import BlogPostContentForm, PostForm
-from .models import Post, Series, Category
+from .helpers import postable_add_extra_context, post_filter
+from .models import Post, Series
 from .viewmixins import PostPublishedRequiredMixin
 
 
@@ -25,9 +25,7 @@ class NewPostView(SuperuserRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        drafts = Post.objects.filter(status=Post.STATUS.draft).order_by(
-            "-created"
-        )
+        drafts = Post.objects.filter(status=Post.STATUS.draft).order_by("-created")
         paginator = Paginator(drafts, 6)
         page_number = self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)
@@ -53,23 +51,12 @@ class PostListView(ListView):
         queryset = Post.objects.filter(status=Post.STATUS.published).order_by(
             "-publish_date"
         )
-        category = self.request.GET.get("category")
-        q = self.request.GET.get("q")
-        if category:
-            queryset = queryset.filter(categories__name=category)
-        if q:
-            queryset = queryset.filter(
-                Q(title__icontains=q) | Q(body__icontains=q)
-            ).distinct()
-        return queryset
+        filtered_post = post_filter(self.request, queryset=queryset)
+        return filtered_post
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["latests"] = Post.objects.filter(
-            status=Post.STATUS.published
-        ).order_by("-publish_date")[:3]
-        context["categories"] = Category.objects.all()
-        context["newsletter_form"] = SubscriptionForm()
+        postable_add_extra_context(context=context)
         return context
 
 
@@ -85,7 +72,6 @@ class PostCreateView(FormValidMessageMixin, SuperuserRequiredMixin, CreateView):
 
 
 class PostContentEditorView(SuperuserRequiredMixin, View):
-
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, slug=kwargs.get("slug"))
         form = BlogPostContentForm(initial={"body": post.body})
@@ -150,9 +136,7 @@ class SeriesListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["latests"] = self.get_queryset()[:3]
-        context["categories"] = Category.objects.all()
-        context["newsletter_form"] = SubscriptionForm()
+        postable_add_extra_context(context=context)
         return context
 
 
@@ -165,18 +149,14 @@ class SeriesDetailView(DetailView):
         return context
 
 
-class SeriesUpdateView(
-    SuperuserRequiredMixin, FormValidMessageMixin, UpdateView
-):
+class SeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Series
     fields = ["thumbnail", "title", "overview", "body", "status"]
     template_name = "blog/series_update.html"
     form_valid_message = "Blog Series Updated"
 
 
-class SeriesDeleteView(
-    SuperuserRequiredMixin, FormValidMessageMixin, DeleteView
-):
+class SeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Series
     form_valid_message = "Blogpost Series Deleted"
 

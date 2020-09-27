@@ -25,9 +25,9 @@
             <span class="sr-only">Next</span>
           </a>
         </div>
-        <h2 class="h3 text-center card-header mb-4 bg-gray">{{ project.title.capitalize }}</h2>
+        <h2 class="h2 text-center mt-4 mb-4">{{ project.title.capitalize }}</h2>
         {% if user.is_superuser %}
-          <div class="ml-2">
+          <div class="ml-3">
             <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
             <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
           </div>

@@ -69,6 +69,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         "blog.Series", null=True, blank=True, on_delete=models.SET_NULL
     )
     order = models.IntegerField(default=0)
+    featured = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse("blog:post_detail", kwargs={"slug": self.slug})

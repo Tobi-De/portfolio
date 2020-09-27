@@ -111,7 +111,7 @@ h1:hover a {
 }
 
 .widget {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 20px;
   border: 1px solid #eee;
   border-radius: 5px;
@@ -1189,7 +1189,7 @@ main.posts-listing {
 }
 
 main.posts-listing .post {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 main.posts-listing .post-footer {

@@ -25,6 +25,7 @@
     <orderEntry type="library" name="respond" level="application" />
     <orderEntry type="library" name="html5shiv" level="application" />
     <orderEntry type="library" name="client" level="application" />
+    <orderEntry type="library" name="marked" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="requirementsPath" value="$MODULE_DIR$/requirements/local.txt" />

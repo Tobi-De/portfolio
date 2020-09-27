@@ -15,21 +15,19 @@
       </div>
     </form>
   </div>
-  <!-- Widget [Latest Posts Widget]        -->
-  <!-- # TODO This is useless, the list already display the latest post, changed this to pinned blog
-   post, to showcase specific blog post I want poeple to see -->
+  <!-- Widget [Latest Posts Widget]  -->
   <div class="widget latest-posts">
     <header>
-      <h3 class="h6">Latest</h3>
+      <h3 class="h6">Featured</h3>
     </header>
     <div class="blog-posts">
-      {% for latest in latests %}
-        <a href="{{ latest.get_absolute_url }}">
+      {% for post in featured %}
+        <a href="{{ post.get_absolute_url }}">
           <div class="item d-flex align-items-center">
-            <div class="title"><strong>{{ latest.title }}</strong>
+            <div class="title"><strong>{{ post.title }}</strong>
               <div class="d-flex align-items-center">
                 <div class="text-small mt-2 text-muted">
-                  <i class="icon-clock"></i> {{ latest.created|naturalday }}
+                  <i class="icon-clock"></i> {{ post.created|naturalday }}
                 </div>
               </div>
             </div>

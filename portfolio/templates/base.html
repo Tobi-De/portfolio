@@ -144,12 +144,6 @@
   <script src="{% static 'vendor/jquery.cookie/jquery.cookie.js' %}"></script>
   <script src="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.js' %}"></script>
   <script src="{% static 'js/front.js' %}"></script>
-  <script>
-    $(".navbar-nav .nav-link").on("click", function () {
-      $(".navbar-nav").find(".active").removeClass("active");
-      $(this).addClass("active");
-    });
-  </script>
 {% endblock javascript %}
 </body>
 </html>

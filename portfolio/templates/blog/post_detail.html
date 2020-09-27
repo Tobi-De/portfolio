@@ -11,7 +11,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <main class="col-md-10 post blog-post">
-        <div class="card border-0 rounded mb-4">
+        <div class="card border-0 rounded mb-2">
           {% if post.thumbnail %}
             {% thumbnail post.thumbnail.image "1000x350" crop="center" as img %}
               <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
@@ -78,10 +78,10 @@
             </div>
           </div>
         </div>
-        <div class="card card-body mb-4">
+        <div class="card card-body mb-2">
           <!-- TODO try to use the github api to fetch comment counts -->
           <details>
-            <summary class="mb-4">Show comments</summary>
+            <summary class="mb-3">Show comments</summary>
             <script src="https://utteranc.es/client.js"
                     repo="Tobi-De/Tobi-De"
                     issue-term="title"
