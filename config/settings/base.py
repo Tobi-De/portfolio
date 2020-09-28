@@ -71,7 +71,6 @@ THIRD_PARTY_APPS = [
     "maintenance_mode",
     "django_q",
     "markdownx",
-    "markdownify",
     "sorl.thumbnail",
     "bootstrap_datepicker_plus",
 ]
@@ -249,38 +248,6 @@ Q_CLUSTER = {
     "label": "Django Q",
     "redis": env("REDIS_URL", default="redis://localhost:6379"),
 }
-
-# Markdownify
-# -------------------------------------------------------------------------------
-MARKDOWNIFY_STRIP = False
-MARKDOWNIFY_WHITELIST_TAGS = [
-    "a",
-    "p",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "h7",
-    "ul",
-    "li",
-    "ol",
-    "span",
-    "strong",
-    "script",
-    "pre",
-    "code",
-    "blockquote",
-    "div",
-    "em"
-
-]
-MARKDOWNIFY_WHITELIST_ATTRS = [
-    "href",
-    "src",
-    "alt",
-]
 
 # Maintencance mode
 MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.DatabaseBackend"

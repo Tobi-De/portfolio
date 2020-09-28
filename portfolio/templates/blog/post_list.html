@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
-{% load markdownify %}
+{% load core_tags %}
 
 
 {% block content %}
@@ -31,7 +31,7 @@
                     <h3 class="text-center">{{ post.title }}</h3>
                   </a>
                   <div class="card-body">
-                    <p>{{ post.overview|markdownify }}</p>
+                    <p>{{ post.overview|markdown }}</p>
                     <footer class="post-footer row justify-content-center">
                       <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
                       <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>

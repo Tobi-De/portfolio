@@ -12,10 +12,10 @@ from django_extensions.db.fields import RandomCharField
 from django_extensions.db.fields import ShortUUIDField
 from django_q.tasks import Chain
 from django_q.tasks import async_task, Schedule
-from markdownify.templatetags.markdownify import markdownify
 from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
 
+from core.templatetags.core_tags import markdown
 from core.utils import get_current_domain_url
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
@@ -132,12 +132,13 @@ class News(TimeStampedModel):
 
     def get_mail_content(self, subscriber, **kwargs):
         request = kwargs.get("request", None)
+        marked_content = markdown(self.message)
         message = strip_tags(
-            f"{markdownify(self.message)}\n\nYou can unsubscribe to this newsletter at anytime"
+            f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
             f" via this link {subscriber.get_unsubscribe_link(request=request)}"
         )
         html_message = (
-            f"{markdownify(self.message)}\n\nYou can unsubscribe to this newsletter at anytime"
+            f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
             f" via this link <a href='{subscriber.get_unsubscribe_link(request=request)}'>Unsubscribe</a>"
         )
         return {

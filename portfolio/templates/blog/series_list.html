@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
-{% load markdownify %}
+{% load core_tags %}
 
 {% block content %}
   <div class="container">
@@ -28,7 +28,7 @@
                   <h3 class="text-center">{{ series.title }}</h3>
                 </a>
                 <div class="card-body">
-                  <p>{{ series.overview|markdownify }}</p>
+                  <p>{{ series.overview|markdown }}</p>
                   <footer class="post-footer row justify-content-center">
                     <div class="date"><i class="icon-clock"></i> {{ series.created|timesince }} ago</div>
                     <div class="views"><i class="icon-eye"></i> {{ series.reading_time }} minutes read</div>

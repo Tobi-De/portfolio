@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load humanize %}
-{% load markdownify %}
+{% load core_tags %}
 
 {% block content %}
   <section class="gallery-block cards-gallery">
@@ -22,7 +22,7 @@
               {% endthumbnail %}
               <div class="card-body">
                 <h5 class="card-title"><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h5>
-                <p class="card-text text-justify">{{ project.overview|markdownify }}</p>
+                <p class="card-text text-justify">{{ project.overview|markdown }}</p>
               </div>
             </div>
           </div>

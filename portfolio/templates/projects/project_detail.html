@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
-{% load markdownify %}
+{% load core_tags %}
 
 {% block content %}
   <div class="container">
@@ -35,7 +35,7 @@
         <div class="card-body justify-content-center">
           <div class="mb-4">
             <h6>Description</h6>
-            <p class="text-justify">{{ project.description|markdownify }}</p>
+            <p class="text-justify">{{ project.description|markdown }}</p>
           </div>
           <div class="mb-4 mt-4">
             <h6>Technologies</h6>
@@ -47,7 +47,7 @@
           </div>
           <div class="mb-4">
             <h6>What I've Learned</h6>
-            <div class="ml-4">{{ project.what_ive_learned|markdownify }}</div>
+            <div class="ml-4">{{ project.what_ive_learned|markdown }}</div>
           </div>
           <div class="mb-4">
             {% if project.github_link or project.web_link %}

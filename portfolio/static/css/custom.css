@@ -2753,6 +2753,5 @@ a.text-dark:hover {
 }
 
 .utterances {
-max-width: none;
+  max-width: none;
 }
-

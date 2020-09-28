@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
-{% load markdownify %}
+{% load core_tags %}
 {% load crispy_forms_tags %}
 
 
@@ -43,9 +43,9 @@
             </div>
             <div class="post-body card">
               <div class="card-body">
-                <p class="justify-content-around">{{ series.overview|markdownify }}</p>
+                <p class="justify-content-around">{{ series.overview|markdown }}</p>
                 <hr>
-                <p class="text-justify">{{ series.body|markdownify }}</p>
+                <p class="text-justify">{{ series.body|markdown }}</p>
               </div>
             </div>
             <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
