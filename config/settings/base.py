@@ -265,9 +265,16 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     "h7",
     "ul",
     "li",
+    "ol",
     "span",
     "strong",
     "script",
+    "pre",
+    "code",
+    "blockquote",
+    "div",
+    "em"
+
 ]
 MARKDOWNIFY_WHITELIST_ATTRS = [
     "href",
