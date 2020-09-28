@@ -3,18 +3,21 @@
 
 {% block content %}
   <div class="container">
-    <main>
-      <div class="card">
-        <div class="card-body">
-          <h4>Unsubscribe</h4>
-          <p>I'm sad to see you leave, can you please fill out this to form to explain why you decide to unsubscribe to
-            my
-            newsletter.</p>
-          <form method="post">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+    <main class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-body">
+            <h4>Unsubscribe</h4>
+            <p>I'm sad to see you leave, can you please fill out this to form to explain why you decide to unsubscribe
+              to
+              my
+              newsletter.</p>
+            <form method="post">
+              {% csrf_token %}
+              {{ form | crispy }}
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
         </div>
       </div>
     </main>

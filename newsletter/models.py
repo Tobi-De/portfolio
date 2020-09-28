@@ -23,6 +23,8 @@ DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon
 User = get_user_model()
 
 
+# TODO add possibity to resend email if not confirmed
+
 class Subscriber(TimeStampedModel):
     email = models.EmailField(unique=True)
     uuid = ShortUUIDField()

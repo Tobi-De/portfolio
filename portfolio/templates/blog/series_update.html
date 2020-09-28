@@ -3,19 +3,21 @@
 
 {% block content %}
   <div class="container">
-    <main>
-      <div class="card">
-        <div class="card-body">
-          <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <div class="form-group">
-              <a href="{% url "blog:series_detail" series.slug %}"
-                 class="btn btn-secondary">back</a>
-              <button type="submit" class="btn btn-primary">Update</button>
-            </div>
-          </form>
-          {{ form.media }}
+    <main class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card">
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form | crispy }}
+              <div class="form-group">
+                <a href="{% url "blog:series_detail" series.slug %}"
+                   class="btn btn-secondary">back</a>
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+            {{ form.media }}
+          </div>
         </div>
       </div>
     </main>

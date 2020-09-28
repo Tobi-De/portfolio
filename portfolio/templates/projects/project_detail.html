@@ -4,65 +4,67 @@
 
 {% block content %}
   <div class="container">
-    <main>
-      <div class="card">
-        <div id="carouselControls" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            {% for el in project.carousel.all %}
-              {% thumbnail el.image "1111x572" crop="center" as img %}
-                <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-                  <img src="{{ img.url }}" class="d-block w-100" alt="{{ el.alt }}">
-                </div>
-              {% endthumbnail %}
-            {% endfor %}
-          </div>
-          <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-        <h2 class="h2 text-center mt-4 mb-4">{{ project.title.capitalize }}</h2>
-        {% if user.is_superuser %}
-          <div class="ml-3">
-            <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
-            <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
-          </div>
-        {% endif %}
-        <div class="card-body justify-content-center">
-          <div class="mb-4">
-            <h6>Description</h6>
-            <p class="text-justify">{{ project.description|markdown }}</p>
-          </div>
-          <div class="mb-4 mt-4">
-            <h6>Technologies</h6>
-            <div class="btn-group mt-2" role="group">
-              {% for tech in project.tech_stack.all %}
-                <a type="button" class="btn btn-info text-white">{{ tech }}</a>
+    <main class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card border-0">
+          <div id="carouselControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              {% for el in project.carousel.all %}
+                {% thumbnail el.image "1000x450" crop="center" as img %}
+                  <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                    <img src="{{ img.url }}" class="d-block w-100" alt="{{ el.alt }}">
+                  </div>
+                {% endthumbnail %}
               {% endfor %}
             </div>
+            <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
-          <div class="mb-4">
-            <h6>What I've Learned</h6>
-            <div>{{ project.what_ive_learned|markdown }}</div>
-          </div>
-          <div class="mb-4">
-            {% if project.github_link or project.web_link %}
-              <h6>External Links</h6>
-              <div class="btn-group" role="group">
-                {% if  project.github_link %}
-                  <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i
-                          class="fa fa-2x fa-github"></i></span></a>
-                {% endif %}
-                {% if  project.web_link %}
-                  <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
-                          class="fa fa-2x fa-globe"></i></span></a>
-                {% endif %}
+          <h2 class="h2 text-center mt-4 mb-4">{{ project.title.capitalize }}</h2>
+          {% if user.is_superuser %}
+            <div class="ml-3">
+              <a href="{% url "projects:project_update" slug=project.slug %}">update</a>|
+              <a href="{% url "projects:project_delete" slug=project.slug %}">delete</a>
+            </div>
+          {% endif %}
+          <div class="card-body justify-content-center">
+            <div class="mb-4">
+              <h6>Description</h6>
+              <p class="text-justify">{{ project.description|markdown }}</p>
+            </div>
+            <div class="mb-4 mt-4">
+              <h6>Technologies</h6>
+              <div class="btn-group mt-2" role="group">
+                {% for tech in project.tech_stack.all %}
+                  <a type="button" class="btn btn-info text-white">{{ tech }}</a>
+                {% endfor %}
               </div>
-            {% endif %}
+            </div>
+            <div class="mb-4">
+              <h6>What I've Learned</h6>
+              <div>{{ project.what_ive_learned|markdown }}</div>
+            </div>
+            <div class="mb-4">
+              {% if project.github_link or project.web_link %}
+                <h6>External Links</h6>
+                <div class="btn-group" role="group">
+                  {% if  project.github_link %}
+                    <a class="btn" href="{{ project.github_link }}" target="_blank"><span><i
+                            class="fa fa-2x fa-github"></i></span></a>
+                  {% endif %}
+                  {% if  project.web_link %}
+                    <a class="btn" href="{{ project.web_link }}" target="_blank"><span><i
+                            class="fa fa-2x fa-globe"></i></span></a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>

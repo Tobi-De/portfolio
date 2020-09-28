@@ -18,7 +18,6 @@ class SubscriptionView(View):
         form = SubscriptionForm(request.POST)
         context = {"is_valid": False}
         if form.is_valid():
-            print("here")
             Subscriber.add_subscriber(email=form.cleaned_data["email"], request=request)
             context["is_valid"] = True
         form = SubscriptionForm()
