@@ -10,8 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django_extensions.db.fields import RandomCharField
 from django_extensions.db.fields import ShortUUIDField
-from django_q.tasks import Chain
-from django_q.tasks import async_task, Schedule
+from django_q.tasks import async_task, Schedule, schedule
 from markdownx.models import MarkdownxField
 from model_utils.models import TimeStampedModel
 
@@ -24,6 +23,8 @@ User = get_user_model()
 
 
 # TODO add possibity to resend email if not confirmed
+# TODO send a recap of blog posts every month end
+
 
 class Subscriber(TimeStampedModel):
     email = models.EmailField(unique=True)
@@ -45,10 +46,10 @@ class Subscriber(TimeStampedModel):
             # self.send_welcome_mail()
 
     @classmethod
-    def add_subscriber(cls, email, request):
+    def add_subscriber(cls, email):
         sub = Subscriber(email=email)
         sub.save()
-        sub.send_confirmation_mail(request=request)
+        sub.send_confirmation_mail()
 
     @classmethod
     def remove_subscriber(cls, sub_obj, title, message, **kwargs):
@@ -62,21 +63,11 @@ class Subscriber(TimeStampedModel):
         )
         sub_obj.delete()
 
-    def get_confirmation_link(self, request):
-        return request.build_absolute_uri(
-            reverse("newsletter:subscribe_confirm", kwargs={"uuid": self.uuid})
-        )
+    def get_confirmation_link(self):
+        return f"{get_current_domain_url()}{reverse('newsletter:subscribe_confirm', kwargs={'uuid': self.uuid})}"
 
-    def get_unsubscribe_link(self, request=None):
-        # I could have used build_absolute_url, but this is method
-        # is called too much and it is not easy to get 'request' each time
-        # i'm going with this approach for now
-        if request:
-            return request.build_absolute_uri(
-                reverse("newsletter:unsubscribe", kwargs={"uuid": self.uuid})
-            )
-        else:
-            return f"{get_current_domain_url()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
+    def get_unsubscribe_link(self):
+        return f"{get_current_domain_url()}{reverse('newsletter:unsubscribe', kwargs={'uuid': self.uuid})}"
 
     def send_welcome_mail(self):
         message = render_to_string(
@@ -88,12 +79,15 @@ class Subscriber(TimeStampedModel):
             message=message,
             from_email=DEFAULT_FROM_EMAIL,
             recipient_list=[self.email],
+            html_message=render_to_string(
+                "newsletter/email/welcome_message.html",
+            ),
         )
 
-    def send_confirmation_mail(self, request):
+    def send_confirmation_mail(self):
         message = render_to_string(
             "newsletter/email/confirmation_message.txt",
-            {"link": self.get_confirmation_link(request=request)},
+            context={"link": self.get_confirmation_link()},
         ).format("utf-8")
         async_task(
             send_mail,
@@ -101,12 +95,16 @@ class Subscriber(TimeStampedModel):
             message=message,
             from_email=DEFAULT_FROM_EMAIL,
             recipient_list=[self.email],
+            html_message=render_to_string(
+                "newsletter/email/confirmation_message.html",
+                {"link": self.get_confirmation_link()},
+            ),
         )
 
     # for testing purpose
-    def send_unsubscription_link(self, request):
+    def send_unsubscription_link(self):
         subject = "Unsubscribe"
-        message = f"Unsubscription link {self.get_unsubscribe_link(request=request)}"
+        message = f"Unsubscription link {self.get_unsubscribe_link()}"
         async_task(
             send_mail,
             subject=subject,
@@ -117,7 +115,7 @@ class Subscriber(TimeStampedModel):
 
     @classmethod
     def emailable_subscribers(cls):
-        return Subscriber.objects.filter(confirmed=True)
+        return Subscriber.objects.filter(confirmed=True).order_by("-created")
 
 
 class News(TimeStampedModel):
@@ -132,16 +130,15 @@ class News(TimeStampedModel):
     def __str(self):
         return self.subject
 
-    def get_mail_content(self, subscriber, **kwargs):
-        request = kwargs.get("request", None)
+    def get_mail_content(self, subscriber):
         marked_content = markdown(self.message)
         message = strip_tags(
             f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link {subscriber.get_unsubscribe_link(request=request)}"
+            f" via this link {subscriber.get_unsubscribe_link()}"
         )
         html_message = (
             f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link <a href='{subscriber.get_unsubscribe_link(request=request)}'>Unsubscribe</a>"
+            f" via this link <a href='{subscriber.get_unsubscribe_link()}'>Unsubscribe</a>"
         )
         return {
             "subject": self.subject,
@@ -152,36 +149,36 @@ class News(TimeStampedModel):
         }
 
     def create_scheduled_task(self):
-        """schedule task does not work when they need argument, I get mulitple
-        erros when I try, so this is how I proceed :
-        when dispatch is set, a schedule task that does nothing is created
-        we know that the hook receive the entire task as argument, so I create a
-        task with a unique name that can identify(via the key_identifier attribute)
-        the exact news, then the hook is the one that trigger the execution of
-        the send_news method of that news
-        """
         try:
-            Schedule.objects.create(
-                func="newsletter.tasks.placeholder_task",
-                name=f"{self.key_identifier}",
-                hook="newsletter.tasks.send_news_hook",
+            schedule(
+                func="newsletter.tasks.send_news_task",
+                key_identifier=self.key_identifier,
                 schedule_type=Schedule.ONCE,
                 next_run=self.dispatch_date,
             )
         except (ProgrammingError, IntegrityError, OperationalError):
             pass
 
-    def setup(self, **kwargs):
+    def setup(self):
         if self.dispatch_date:
             self.create_scheduled_task()
         else:
-            self.send(**kwargs)
+            self.send()
 
-    def send(self, **kwargs):
-        # TODO update how this work creating chunks of recipient_list list
+    def send(self):
         if Subscriber.emailable_subscribers().count() == 0:
             return
-        chain = Chain(cached=True)
-        for sub in Subscriber.emailable_subscribers():
-            chain.append(send_mail, **self.get_mail_content(subscriber=sub, **kwargs))
-        chain.run()
+        self.async_mass_mailing(news_object=self)
+
+    @classmethod
+    def async_mass_mailing(cls, news_object, offset=0, limit=100):
+        if Subscriber.emailable_subscribers()[offset:].count() <= 0:
+            return
+        for sub in Subscriber.emailable_subscribers()[offset : offset + limit]:
+            send_mail(**news_object.get_mail_content(subscriber=sub))
+        async_task(
+            News.async_mass_mailing,
+            news_object=news_object,
+            offset=offset + limit,
+            limit=limit,
+        )

@@ -38,7 +38,7 @@ class PublishPostView(SuperuserRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, slug=kwargs.get("slug"))
-        post.publish(request=self.request)
+        post.publish()
         messages.success(request, "Post published")
         return redirect("blog:post_list")
 

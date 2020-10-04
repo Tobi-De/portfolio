@@ -18,7 +18,7 @@ class SubscriptionView(View):
         form = SubscriptionForm(request.POST)
         context = {"is_valid": False}
         if form.is_valid():
-            Subscriber.add_subscriber(email=form.cleaned_data["email"], request=request)
+            Subscriber.add_subscriber(email=form.cleaned_data["email"])
             context["is_valid"] = True
         form = SubscriptionForm()
         context["form"] = form
@@ -51,7 +51,7 @@ class UnsubscribeView(FormView):
             sub_obj=self.get_context_data().get("obj"),
             **form.cleaned_data,
         )
-        return redirect("newsletter:unsubscribe_confirmation")
+        return redirect("newsletter:unsubscribe_confirm")
 
 
 class UnsubscribeConfirmView(TemplateView):
@@ -74,7 +74,7 @@ class SendUnsubscribeLinkView(SuperuserRequiredMixin, View):
             sub = Subscriber.objects.create(
                 email=form.cleaned_data["email"], confirmed=True
             )
-            sub.send_unsubscription_link(request=request)
+            sub.send_unsubscription_link()
             messages.success(request, "Link Sent")
         return render(
             request, "newsletter/unsubscribe_test.html", context={"form": form}
@@ -86,7 +86,7 @@ class SendNews(SuperuserRequiredMixin, FormView):
     form_class = NewsForm
 
     def form_valid(self, form):
-        form.save().setup(request=self.request)
+        form.save().setup()
         messages.success(self.request, "Sending...")
         return render(
             self.request, "newsletter/send_news.html", context={"form": NewsForm()}

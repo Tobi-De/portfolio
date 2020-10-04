@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
-from django_q.tasks import Schedule
+from django_q.tasks import Schedule, schedule
 from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
@@ -105,13 +105,13 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
             return None
         return posts[queryset_index_of(posts, self) - 1]
 
-    def publish(self, *args, **kwargs):
+    def publish(self):
         self.status = Post.STATUS.published
         self.publish_date = timezone.now()
         self.save()
-        self.send_publish_email(request=kwargs.get("request", None))
+        self.send_publish_email()
 
-    def send_publish_email(self, **kwargs):
+    def send_publish_email(self):
         # TODO write a decent email for publish post
         # send email to subscribers to inform of new post
         subject = "New Blog Post"
@@ -120,13 +120,14 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
             context={
                 "title": self.title,
                 "link": f"{get_current_domain_url()}{self.get_absolute_url()}",
-                "email": self.author.email,
-                "twitter": self.author.profile.twitter,
-                "github": self.author.profile.github,
-                "telegram": self.author.profile.telegram,
+                # TODO do something here
+                # "email": self.author.email,
+                # "twitter": self.author.profile.twitter,
+                # "github": self.author.profile.github,
+                # "telegram": self.author.profile.telegram,
             },
         ).format("utf-8")
-        News.objects.create(subject=subject, message=message).setup(**kwargs)
+        News.objects.create(subject=subject, message=message).setup()
 
     def create_scheduled_task(self):
         # create scheduled tast if scheduled_publish_date is set
@@ -135,10 +136,9 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         if self.status == Post.STATUS.published or not self.scheduled_publish_date:
             return
         try:
-            Schedule.objects.create(
-                func="blog.tasks.placeholder_task",
-                name=f"{self.slug}",
-                hook="blog.tasks.publish_post_hook",
+            schedule(
+                func="blog.tasks.publish_post_task",
+                slug=self.slug,
                 schedule_type=Schedule.ONCE,
                 next_run=self.scheduled_publish_date,
             )

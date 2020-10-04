@@ -8,4 +8,4 @@ def get_current_domain_url():
     if DEGUB:
         return "localhost:8000"
     else:
-        return f"https://www.{Site.objects.last().domain}"
+        return f"https://www.{Site.objects.get_current().domain}"
