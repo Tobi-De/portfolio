@@ -21,8 +21,14 @@ def markdown(value):
                 "pymdownx.critic",
                 "pymdownx.inlinehilite",
                 "pymdownx.keys",
-                "pymdownx.tasklist"
+                "pymdownx.tasklist",
             ],
-            options={"repo_url_shorthand": True, "social_url_shorthand": True},
+            options={
+                "repo_url_shorthand": True,
+                "social_url_shorthand": True,
+                "social_url_shortener": True,
+                "repo_url_shortener": True,
+                "provider": "github",
+            },
         )
     )
