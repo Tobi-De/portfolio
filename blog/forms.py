@@ -1,4 +1,3 @@
-from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 from markdownx.fields import MarkdownxFormField
 
@@ -24,6 +23,3 @@ class PostForm(forms.ModelForm):
             "featured",
             "scheduled_publish_date",
         ]
-        widgets = {
-            "scheduled_publish_date": DateTimePickerInput()
-        }

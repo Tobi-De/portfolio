@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags static %}
+
 
 {% block css %}
   {{ block.super }}
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"
-          integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" crossorigin="anonymous"
-          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"
-          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"></script>
-{% endblock %}
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+          integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock css %}
 
 
 {% block content %}
@@ -18,10 +18,9 @@
       <div class="card col-md-10">
         <div class="card-body">
           <h4>Send News</h4>
-          <hr>
-          <form method="post">
+          <form method="post" class="mt-4">
             {% csrf_token %}
-            {{ form | crispy }}
+            {{ form |crispy }}
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
           {{ form.media }}
@@ -29,4 +28,9 @@
       </div>
     </main>
   </div>
+  <script>
+    jQuery('#id_dispatch_date').datetimepicker({
+      format: 'd/m/Y H:i'
+    });
+  </script>
 {% endblock %}

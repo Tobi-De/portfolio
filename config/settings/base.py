@@ -72,7 +72,6 @@ THIRD_PARTY_APPS = [
     "django_q",
     "markdownx",
     "sorl.thumbnail",
-    "bootstrap_datepicker_plus",
 ]
 
 LOCAL_APPS = [

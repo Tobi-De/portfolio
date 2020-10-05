@@ -1,12 +1,9 @@
-from bootstrap_datepicker_plus import DateTimePickerInput
 from django import forms
 
 from .models import Subscriber, News
 
 
-# For testing purpose
-
-
+# TODO this form I beleive is used only fo testing purpose, remove it after writing test
 class EmailForm(forms.Form):
     email = forms.EmailField(
         widget=forms.TextInput(attrs={"placeholder": "Enter your email address"}),
@@ -46,6 +43,3 @@ class NewsForm(forms.ModelForm):
     class Meta:
         model = News
         fields = "__all__"
-        widgets = {
-            "dispatch_date": DateTimePickerInput()
-        }
