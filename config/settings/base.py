@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+from datetime import datetime
 from pathlib import Path
 
 import environ
@@ -252,3 +253,8 @@ Q_CLUSTER = {
 MAINTENANCE_MODE_STATE_BACKEND = "portfolio.utils.backends.DatabaseBackend"
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True
+
+# Markdownx settings
+# -------------------------------------------------------------------------------
+MARKDOWNX_MARKDOWNIFY_FUNCTION = "core.templatetags.core_tags.markdown"
+MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')

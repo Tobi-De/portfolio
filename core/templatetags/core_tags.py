@@ -9,5 +9,20 @@ register = template.Library()
 @stringfilter
 def markdown(value):
     return safe(
-        md.markdown(value, extensions=["pymdownx.extra", "pymdownx.highlight", "pymdownx.magiclink"])
+        md.markdown(
+            value,
+            extensions=[
+                "pymdownx.extra",
+                "pymdownx.highlight",
+                "pymdownx.magiclink",
+                "pymdownx.emoji",
+                "pymdownx.progressbar",
+                "pymdownx.details",
+                "pymdownx.critic",
+                "pymdownx.inlinehilite",
+                "pymdownx.keys",
+                "pymdownx.tasklist"
+            ],
+            options={"repo_url_shorthand": True, "social_url_shorthand": True},
+        )
     )
