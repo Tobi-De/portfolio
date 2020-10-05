@@ -18,7 +18,6 @@ class PostForm(forms.ModelForm):
             "status",
             "reading_time",
             "categories",
-            "author",
             "series",
             "featured",
             "scheduled_publish_date",

@@ -124,7 +124,7 @@ class PostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
 
 class SeriesCreateView(CreateView):
     model = Series
-    fields = ["thumbnail", "title", "overview", "body", "status", "author"]
+    fields = ["thumbnail", "title", "overview", "body", "status"]
     template_name = "blog/series_create.html"
 
 

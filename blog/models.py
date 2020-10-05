@@ -28,7 +28,6 @@ class Postable(models.Model):
     overview = MarkdownxField()
     body = MarkdownxField(blank=True)
     slug = AutoSlugField(populate_from=["title"])
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True

@@ -12,7 +12,6 @@ class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
         "status",
         "overview",
         "reading_time",
-        "author",
         "created",
     ]
 
