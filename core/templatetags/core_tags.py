@@ -23,12 +23,22 @@ def markdown(value):
                 "pymdownx.keys",
                 "pymdownx.tasklist",
             ],
-            options={
-                "repo_url_shorthand": True,
-                "social_url_shorthand": True,
-                "social_url_shortener": True,
-                "repo_url_shortener": True,
-                "provider": "github",
+            extension_configs={
+                "pymdownx.magiclink": {
+                    "repo_url_shortener": True,
+                    "repo_url_shorthand": True,
+                    "social_url_shorthand": True,
+                    "social_url_shortener": True,
+                    "provider": "github",
+                },
+                "pymdownx.emoji": {
+                    "options": {
+                        "attributes": {
+                            "height": "20px",
+                            "width": "20px"
+                        },
+                    }
+                }
             },
         )
     )
