@@ -154,6 +154,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "portfolio.utils.context_processors.settings_context",
                 "maintenance_mode.context_processors.maintenance_mode",
+                "core.context_processors.code_theme"
             ],
         },
     }

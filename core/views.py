@@ -7,7 +7,7 @@ from django_q.tasks import async_task
 
 from projects.models import Project
 from .forms import GetInTouchForm
-from .models import Profile
+from .models import ToolBox
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 
@@ -16,8 +16,7 @@ def home(request):
     featured = Project.objects.filter(featured=True).order_by("-priority", "-created")[
         :3
     ]
-    profile = Profile.objects.last()
-    context = {"featured": featured, "profile": profile}
+    context = {"featured": featured, **ToolBox.get_toolbox().user_links}
     return render(request, "core/home.html", context)
 
 
@@ -27,9 +26,10 @@ class GetInTouchView(FormView):
     template_name = "core/get_in_touch.html"
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["profile"] = Profile.objects.last()
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            **ToolBox.get_toolbox().user_links,
+        }
 
     def form_valid(self, form):
         message = (

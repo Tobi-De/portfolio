@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 from django_q.tasks import Schedule
+from model_utils import Choices
 from model_utils.models import TimeStampedModel
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 from sorl.thumbnail import ImageField
@@ -22,57 +24,47 @@ class Thumbnail(TimeStampedModel):
         return self.image.url
 
 
-class Profile(TimeStampedModel):
-    picture = models.OneToOneField(
-        "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
+class ToolBox(TimeStampedModel):
+    # no inspiration for the name
+    # a bunch of informations about me and some usefull method (ex: maintenance methods)
+    # I don't know where to put
+    THEMES_CHOICES = Choices("monokai", "default", "perldoc")
+    maintenance_state = models.BooleanField(default=False)
+    code_theme = models.CharField(
+        max_length=10, choices=THEMES_CHOICES, default="monokai"
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=12, blank=True)
-    github_profile = models.URLField()
-    telegram_link = models.URLField(blank=True, null=True)
-    twitter_profile = models.URLField(blank=True, null=True)
-    linkedIn_profile = models.URLField(blank=True, null=True)
+    phone_number = models.CharField(max_length=12, default="+22963588213")
+    github = models.URLField(default="https://github.com/Tobi-De")
+    telegram = models.URLField(default="https://t.me/Tobi_DE1999")
+    twitter = models.URLField(
+        default="https://twitter.com/Tobi71110248?ref_src=twsrc%5Etfw"
+    )
+    linkedIn = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "ToolBox"
 
     def __str__(self):
-        return self.user.username
+        return f"Tobi ToolBox"
 
     @property
-    def github(self):
-        return self.github_profile
-
-    @property
-    def linkedin(self):
-        return self.linkedIn_profile
-
-    @property
-    def twitter(self):
-        return self.twitter_profile
-
-    @property
-    def telegram(self):
-        return self.telegram_link
-
-    @property
-    def email(self):
-        return self.user.email
-
-
-class Maintenance(models.Model):
-    value = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.value)
+    def user_links(self):
+        return {
+            "email": User.objects.all().first().email,
+            "github": self.github,
+            "telegram": self.telegram,
+            "twitter": self.twitter,
+            "linkedIn": self.linkedIn,
+        }
 
     @classmethod
-    def get_value(cls):
-        m = Maintenance.objects.last()
-        return m.value if m else False
-
-    @classmethod
-    def set_value(cls, value):
-        m = Maintenance.objects.last()
-        if m:
-            m.value = value
-            m.save()
+    def get_toolbox(cls):
+        toolbox = ToolBox.objects.all().first()
+        if not toolbox:
+            return ToolBox.objects.create()
         else:
-            Maintenance.objects.create(value=value)
+            return toolbox
+
+    def set_maintenance_state(self, value):
+        self.maintenance_state = value
+        self.save()

@@ -3,10 +3,10 @@ from django.shortcuts import reverse
 from django.utils.safestring import mark_safe
 from sorl.thumbnail.admin import AdminImageMixin
 
-from .models import Profile, Thumbnail, Maintenance
+from .models import Thumbnail, ToolBox
 
 
-@admin.register(Maintenance)
+@admin.register(ToolBox)
 class MaintenanceAdmin(admin.ModelAdmin):
     pass
 
@@ -25,8 +25,3 @@ class ThumbnailLinkMixin:
 class ThumbnailAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ["slug", "image", "source", "alt", "created", "modified"]
     list_filter = ["primary"]
-
-
-@admin.register(Profile)
-class ProfileAdmin(ThumbnailLinkMixin, admin.ModelAdmin):
-    list_display = ["user", "github_profile", "modified", "created"]

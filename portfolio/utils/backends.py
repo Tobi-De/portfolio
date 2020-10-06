@@ -1,8 +1,8 @@
 from django.core.cache import cache
 from maintenance_mode.backends import AbstractStateBackend
 
+from core.models import ToolBox
 
-from core.models import Maintenance
 
 class CacheBackend(AbstractStateBackend):
     def get_value(self):
@@ -21,7 +21,7 @@ class CacheBackend(AbstractStateBackend):
 
 class DatabaseBackend(AbstractStateBackend):
     def get_value(self):
-        return Maintenance.get_value()
+        return ToolBox.get_toolbox().maintenance_state
 
     def set_value(self, value):
-        Maintenance.set_value(value=value)
+        ToolBox.get_toolbox().set_maintenance_state(value=value)
