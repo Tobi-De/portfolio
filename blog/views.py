@@ -14,7 +14,7 @@ from django.views.generic import (
 )
 
 from newsletter.forms import SubscriptionForm
-from .forms import BlogPostContentForm, PostForm
+from .forms import BlogPostContentForm, PostForm, SeriesForm
 from .helpers import postable_add_extra_context, post_filter
 from .models import Post, Series
 from .viewmixins import PostPublishedRequiredMixin
@@ -124,7 +124,7 @@ class PostDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
 
 class SeriesCreateView(CreateView):
     model = Series
-    fields = ["thumbnail", "title", "overview", "body", "status"]
+    form_class = SeriesForm
     template_name = "blog/series_create.html"
 
 
@@ -151,7 +151,7 @@ class SeriesDetailView(DetailView):
 
 class SeriesUpdateView(SuperuserRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Series
-    fields = ["thumbnail", "title", "overview", "body", "status"]
+    form_class = SeriesForm
     template_name = "blog/series_update.html"
     form_valid_message = "Blog Series Updated"
 
