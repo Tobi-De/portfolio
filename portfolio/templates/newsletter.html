@@ -1,6 +1,7 @@
 {% load crispy_forms_tags %}
 <div class="rounded card-body bg-white">
-  <p>Subscribe to get notified about new great blog posts about python, django and computer science in general.</p>
+  <p><b>Subscribe to get notified about new posts about python, django and programming in
+    general.</b></p>
   <form method="post" action="{% url "newsletter:subscribe" %}">
     {% csrf_token %}
     {{ n_form | crispy }}

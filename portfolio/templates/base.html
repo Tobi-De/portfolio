@@ -69,24 +69,26 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a href="{% url "projects:project_list" %}" class="nav-link text-big">
-              Projects<i class="fa fa-folder-open" style="margin-left: 3px"></i></a>
+              Projects<i class="fa fa-folder-open" style="margin-left: 3px"></i>
+            </a>
           </li>
-          <li class="nav-item"><a href="{% url "contact_me" %}" class="nav-link text-big">Get in touch
-            <i class="fa fa-address-book" style="margin-left: 3px"></i></a>
+          <li class="nav-item">
+            <a href="{% url "blog:post_list" %}" class="nav-link text-big">
+              Blog<i class="fa fa-book" style="margin-left: 3px"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url "post_feed" %}" class="nav-link text-big">
+              RSS
+              <i class="fa fa-rss" style="margin-right: 3px"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url "contact_me" %}" class="nav-link text-big">Get in touch
+              <i class="fa fa-address-book" style="margin-left: 3px"></i>
+            </a>
           </li>
           {% if user.is_superuser %}
-            {% if maintenance_mode %}
-              <li class="nav-item">
-                <a href="{% url "maintenance_mode_off" %}" class="nav-link text-big">
-                  Maintenance<i class="fa fa-toggle-on" style="margin-left: 3px"></i></a>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a href="{% url "maintenance_mode_on" %}" class="nav-link text-big">
-                  Maintenance<i class="fa fa-toggle-off" style="margin-left: 3px"></i></a>
-              </li>
-            {% endif %}
-            <!-- TODO get blog link out of admin section-->
             <div class="dropdown">
               <button class="btn btn-outline-dark btn-sm dropdown-toggle mt-2" type="button" id="AdminMenuButton"
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -95,16 +97,17 @@
               <div class="dropdown-menu" aria-labelledby="AdminMenuButton">
                 <a href="{% url "admin:index" %}" class="dropdown-item">
                   Home<i class="fa fa-lock" style="margin-left: 3px"></i></a>
-                <a href="{% url "blog:post_list" %}" class="dropdown-item">
-                  Blog<i class="fa fa-book" style="margin-left: 3px"></i></a>
-                <a href="{% url "post_feed" %}" class="dropdown-item">
-                  RSS
-                  <span class="fa fa-rss" style="margin-right: 3px"></span>
-                </a>
                 <a href="{% url "blog:new_post" %}" class="dropdown-item">
                   New<i class="fa fa-plus-square" style="margin-left: 3px"></i></a>
                 <a href="{% url "newsletter:send_news" %}" class="dropdown-item">
                   Send News<i class="fa fa-paper-plane" style="margin-left: 3px"></i></a>
+                {% if maintenance_mode %}
+                  <a href="{% url "maintenance_mode_off" %}" class="dropdown-item">
+                    Maintenance<i class="fa fa-toggle-on" style="margin-left: 3px"></i></a>
+                {% else %}
+                  <a href="{% url "maintenance_mode_on" %}" class="dropdown-item">
+                    Maintenance<i class="fa fa-toggle-off" style="margin-left: 3px"></i></a>
+                {% endif %}
               </div>
             </div>
           {% endif %}

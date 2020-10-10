@@ -2759,3 +2759,7 @@ a.text-dark:hover {
 ul, ol {
   padding-left: 30px;
 }
+
+.post-detail ul {
+  padding-bottom: 15px;
+}
