@@ -1,1 +1,9 @@
 Welcome to my newsletter
+I hope you are doing fine,
+This newsletter serves my personal blog where I post programming tutorials and guides mostly about python and
+Django. The main purpose of this blog to which you have subscribed is to serve as a notebook to me. I'm still a
+student and I was looking for a way to save all the stuff I'm learning.As I learn and develop my programming
+skills I will be sharing all my knowledge and experience through my blog posts.I hope you will learn something
+from it. Feel to contact me for anything programming related using this link https://www.tobidegnon.com/get-in-touch/.
+Best,
+Tobi-De
