@@ -1,6 +1,5 @@
 import re
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -16,8 +15,6 @@ from model_utils.models import TimeStampedModel
 
 from core.templatetags.core_tags import markdown
 from core.utils import get_current_domain_url
-
-DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "contact@tobidegnon.com")
 
 User = get_user_model()
 
@@ -57,7 +54,7 @@ class Subscriber(TimeStampedModel):
         send_mail(
             subject=subject,
             message=_message,
-            from_email=DEFAULT_FROM_EMAIL,
+            from_email=None,
             recipient_list=["contact@tobidegnon.com"],
         )
         sub_obj.delete()
@@ -76,7 +73,7 @@ class Subscriber(TimeStampedModel):
             send_mail,
             subject="Welcome!",
             message=message,
-            from_email=DEFAULT_FROM_EMAIL,
+            from_email=None,
             recipient_list=[self.email],
             html_message=render_to_string(
                 "newsletter/email/welcome_message.html",
@@ -92,7 +89,7 @@ class Subscriber(TimeStampedModel):
             send_mail,
             subject="Confirm Email",
             message=message,
-            from_email=DEFAULT_FROM_EMAIL,
+            from_email=None,
             recipient_list=[self.email],
             html_message=render_to_string(
                 "newsletter/email/confirmation_message.html",
@@ -108,7 +105,7 @@ class Subscriber(TimeStampedModel):
             send_mail,
             subject=subject,
             message=message,
-            from_email=DEFAULT_FROM_EMAIL,
+            from_email=None,
             recipient_list=[self.email],
         )
 
@@ -142,7 +139,7 @@ class News(TimeStampedModel):
         return {
             "subject": self.subject,
             "message": strip_tags(message),
-            "from_email": DEFAULT_FROM_EMAIL,
+            "from_email": None,
             "recipient_list": [subscriber.email],
             "html_message": html_message,
         }

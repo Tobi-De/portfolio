@@ -10,7 +10,6 @@ class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
         "title",
         "thumbnail_link",
         "status",
-        "overview",
         "reading_time",
         "created",
     ]
@@ -18,7 +17,7 @@ class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(PostableAdmin, admin.ModelAdmin):
-    list_display = PostableAdmin.list_display + ["publish_date", "created"]
+    list_display = PostableAdmin.list_display + ["publish_date"]
     list_filter = ["categories", "status"]
     search_fields = ["title"]
 
