@@ -10,7 +10,7 @@
       <main class="col-md-10 post blog-post">
         <div class="card border-0 rounded mb-2">
           {% if series.thumbnail %}
-            {% thumbnail series.thumbnail.image "1000x350" crop="center" as img %}
+            {% thumbnail series.thumbnail.image "1000x420" as img %}
               <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
                    alt="{{ series.thumbnail.alt }}"
                    class="card-img-top">

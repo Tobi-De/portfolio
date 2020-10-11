@@ -42,8 +42,7 @@ class Subscriber(TimeStampedModel):
         if not self.confirmed:
             self.confirmed = True
             self.save()
-            # TODO write a decent welcome message
-            # self.send_welcome_mail()
+            self.send_welcome_mail()
 
     @classmethod
     def add_subscriber(cls, email):
@@ -174,7 +173,7 @@ class News(TimeStampedModel):
     def async_mass_mailing(cls, news_object, offset=0, limit=100):
         if Subscriber.emailable_subscribers()[offset:].count() <= 0:
             return
-        for sub in Subscriber.emailable_subscribers()[offset : offset + limit]:
+        for sub in Subscriber.emailable_subscribers()[offset: offset + limit]:
             send_mail(**news_object.get_mail_content(subscriber=sub))
         async_task(
             News.async_mass_mailing,

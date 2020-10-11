@@ -10,9 +10,9 @@
           <div id="carouselControls" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
               {% for el in project.carousel.all %}
-                {% thumbnail el.image "1000x450" crop="center" as img %}
+                {% thumbnail el.image "1000x450" as img %}
                   <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-                    <img src="{{ img.url }}" class="d-block w-100" alt="{{ el.alt }}">
+                    <img src="{{ img.url }}" class="d-block w-100 img-fluid" alt="{{ el.alt }}">
                   </div>
                 {% endthumbnail %}
               {% endfor %}

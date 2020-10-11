@@ -13,14 +13,13 @@
       <main class="col-md-10 post blog-post">
         <div class="card border-0 rounded mb-2">
           {% if post.thumbnail %}
-            {% thumbnail post.thumbnail.image "1000x350" crop="center" as img %}
-              <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
-                   alt="{{ post.thumbnail.alt }}"
-                   class="card-img-top">
+            {% thumbnail post.thumbnail.image "1000x420" as img %}
+              <img src="{{ img.url }}" alt="{{ post.thumbnail.alt }}"
+                   class="card-img-top" width="{{ img.width }}" height="{{ img.height }}">
             {% endthumbnail %}
           {% endif %}
           {% if post.thumbnail.source %}
-            <p class="text-muted mt-2">(Picture from {{ post.thumbnail.source }} )</p>
+            <p class="text-muted mt-2">(source: {{ post.thumbnail.source }} )</p>
           {% endif %}
           <div class="card-body">
             <div class="post-meta d-flex justify-content-between">

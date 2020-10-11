@@ -30,9 +30,9 @@
           <div class="card-group">
             {% for project in featured %}
               <div class="card">
-                {% thumbnail project.primary_image.image "325x260" crop="center" as img %}
+                {% thumbnail project.primary_image.image "350x150" as img %}
                   <a class="lightbox" href="{{ project.get_absolute_url }}">
-                    <img src="{{ img.url }}" class="card-img-top" alt="{{ project.carousel.first.alt }}">
+                    <img src="{{ img.url }}" class="card-img-top" alt="{{ project.primary_image.alt }}">
                   </a>
                 {% endthumbnail %}
                 <div class="card-body">

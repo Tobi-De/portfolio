@@ -15,7 +15,7 @@
               {% for post in page_obj %}
                 <div class="post card border-0">
                   {% if post.thumbnail %}
-                    {% thumbnail post.thumbnail.image "700x275" crop="center" as img %}
+                    {% thumbnail post.thumbnail.image "653x277" as img %}
                       <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}"
                            alt="{{ post.thumbnail.alt }}" class="card-img-top">
                     {% endthumbnail %}

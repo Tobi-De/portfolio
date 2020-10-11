@@ -24,14 +24,11 @@
           </div>
         </div>
       </div>
-      <br>
-      <br>
-      <h4 class="text-center text-white">DRAFTS</h4>
-      <br>
-      <div class="row">
+      <h4 class="text-center text-white mb-4 mt-4">DRAFTS</h4>
+      <div class="row mb-4">
         {% for post in page_obj %}
-          <div class="col-12 mb-4">
-            <div class="card service-card">
+          <div class="col-md-6 col-lg-4">
+            <div class="card">
               <div class="card-body">
                 <h4 class="card-title">{{ post.title }}</h4>
                 <p class="card-text">
