@@ -33,7 +33,7 @@
                   <div class="card-body">
                     <p>{{ post.overview|markdown }}</p>
                     <footer class="post-footer row justify-content-center">
-                      <div class="date"><i class="icon-clock"></i> {{ post.created|timesince }} ago</div>
+                      <div class="date"><i class="icon-clock"></i> {{ post.publish_date|timesince }} ago</div>
                       <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
                       {#                      <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>#}
                     </footer>
