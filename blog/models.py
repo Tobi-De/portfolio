@@ -14,7 +14,6 @@ from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
 from core.utils import get_current_domain_url
 from newsletter.models import News
-from .utils import queryset_index_of
 
 User = get_user_model()
 
@@ -68,7 +67,6 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     series = models.ForeignKey(
         "blog.Series", null=True, blank=True, on_delete=models.SET_NULL
     )
-    order = models.IntegerField(default=0)
     featured = models.BooleanField(default=False)
 
     def get_absolute_url(self):
@@ -82,27 +80,19 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def next_post(self):
         if not self.series:
             return None
-        posts = (
-            self.series.all_blogpost()
-                .filter(status=Post.STATUS.published)
-                .order_by("order")
-        )
+        posts = self.series.all_published_post()
         if self == posts.last() or self not in posts:
             return None
-        return posts[queryset_index_of(posts, self) + 1]
+        return posts[list(posts).index(self) + 1]
 
     @property
     def previous_post(self):
         if not self.series:
             return None
-        posts = (
-            self.series.all_blogpost()
-                .filter(status=Post.STATUS.published)
-                .order_by("order")
-        )
+        posts = self.series.all_published_post()
         if self == posts.first() or self not in posts:
             return None
-        return posts[queryset_index_of(posts, self) - 1]
+        return posts[list(posts).index(self) - 1]
 
     def publish(self):
         self.status = Post.STATUS.published
@@ -153,6 +143,7 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)
     status_changed = MonitorField(monitor="status")
+    visible = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "series"
@@ -160,13 +151,15 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def get_absolute_url(self):
         return reverse("blog:series_detail", kwargs={"slug": self.slug})
 
-    def all_blogpost(self):
-        return Post.objects.filter(series=self).order_by("created")
+    def all_published_post(self):
+        return Post.objects.filter(series=self, status=Post.STATUS.published).order_by(
+            "publish_date"
+        )
 
     @property
     def categories(self):
         categories = Category.objects.none()
-        posts = self.all_blogpost()
+        posts = self.all_published_post()
         for post in posts:
             categories = Category.objects.filter(
                 Q(id__in=post.categories.all()) | Q(id__in=categories)
@@ -175,5 +168,5 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @property
     def reading_time(self):
-        all_posts = self.all_blogpost()
+        all_posts = self.all_published_post()
         return all_posts.aggregate(Sum("reading_time")).get("reading_time__sum")

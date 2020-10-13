@@ -50,10 +50,10 @@
               </div>
             </div>
             <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
-              <a href="{{ series.all_blogpost.first.get_absolute_url }}"
+              <a href="{{ series.all_published_post.first.get_absolute_url }}"
                  class="next-post text-right d-flex align-items-center justify-content-end">
                 <div class="text"><strong class="text-primary">Start Reading</strong>
-                  <h6>{{ series.all_blogpost.first.title }}</h6>
+                  <h6>{{ series.all_published_post.first.title }}</h6>
                 </div>
                 <div class="icon next"><i class="fa fa-angle-right"> </i></div>
               </a>

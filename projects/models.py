@@ -10,38 +10,6 @@ from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
 User = get_user_model()
 
-# TODO Add these as base in a migration
-STACK_CHOICES = Choices(
-    "django_vuejs_html_css_bootstrap4",
-    "django_vuejs_html_css_bulma",
-    "django_html_css_bootstrap4",
-    "django_html_css_bulma",
-    "vuejs_html_css_bootstrap4",
-    "vuejs_html_css_bulma",
-    "wagtail_html_css_bootstrap4",
-    "wagtail_html_css_vuejs",
-)
-
-
-# from pygments.lexers import get_all_lexers
-# from pygments.styles import get_all_styles
-#
-# LEXERS = [item for item in get_all_lexers() if item[1]]
-# LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
-# STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
-#
-#
-# class Snippet(models.Model):
-#     created = models.DateTimeField(auto_now_add=True)
-#     title = models.CharField(max_length=100, blank=True, default='')
-#     code = models.TextField()
-#     linenos = models.BooleanField(default=False)
-#     language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
-#     style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
-#
-#     class Meta:
-#         ordering = ['created']
-
 
 class Technology(TimeStampedModel):
     name = models.CharField(unique=True, db_index=True, max_length=100)
@@ -56,7 +24,6 @@ class Technology(TimeStampedModel):
 
 
 # TODO add way to showcase code snippets
-# TODO try so seee if those snippets can be used directy in the blog post(tempplate tags)
 class Project(TimeStampedModel, StatusModel, SoftDeletableModel):
     STATUS = Choices("in_development", "deployed")
     carousel = models.ManyToManyField("core.Thumbnail", blank=True)

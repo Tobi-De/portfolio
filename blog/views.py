@@ -45,7 +45,7 @@ class PublishPostView(SuperuserRequiredMixin, TemplateView):
 
 class PostListView(ListView):
     context_object_name = "posts"
-    paginate_by = 4
+    paginate_by = 8
 
     def get_queryset(self):
         queryset = Post.objects.filter(status=Post.STATUS.published).order_by(
@@ -129,9 +129,8 @@ class SeriesCreateView(CreateView):
 
 
 class SeriesListView(ListView):
-    model = Series
-    ordering = ["-created"]
-    paginate_by = 4
+    queryset = Series.objects.filter(visible=True).order_by("created")
+    paginate_by = 8
     context_object_name = "series"
 
     def get_context_data(self, **kwargs):
