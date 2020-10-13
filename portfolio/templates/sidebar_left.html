@@ -1,15 +1,25 @@
-<div class="col-md-3">
-  <div class="mb-2">
+<aside class="col-md-3">
+  <div class="widget categories">
     <header>
-      <h3 class="h6 text-center p-2 bg-light">Categories</h3>
+      <h3 class="h6">Categories</h3>
     </header>
-    <div class="btn-group-vertical btn-block">
-      {% for category in categories %}
-        <a href="{{ category.get_list_url }}"
-           class="btn d-flex justify-content-between align-items-center btn-light">
-          {{ category }}<span class="badge  badge-pill">{{ category.posts_count }}</span>
-        </a>
+    {% for category in categories %}
+      <div class="item d-flex justify-content-between"><a
+              href="{{ category.get_list_url }}">{{ category }}</a><span>{{ category.posts_count }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="widget">
+    <header>
+      <h3 class="h6">Coming Soon</h3>
+    </header>
+    <div class="blog-posts">
+      {% for post in coming_soon %}
+        <div class="item d-flex align-items-center">
+          <div class="title mb-2"><strong>{{ post.title|truncatechars:25 }}</strong>
+          </div>
+        </div>
       {% endfor %}
     </div>
   </div>
-</div>
+</aside>

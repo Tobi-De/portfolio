@@ -18,7 +18,6 @@ from newsletter.models import News
 User = get_user_model()
 
 
-# TODO add a coming soon and a news section
 class Postable(models.Model):
     thumbnail = models.OneToOneField(
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
