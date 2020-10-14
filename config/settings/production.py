@@ -201,3 +201,13 @@ sentry_sdk.init(
 # -------------------------------------------------------------------------------
 # avoid sorl thumbnail to overly query the S3 API.
 THUMBNAIL_FORCE_OVERWRITE = True
+
+# django-q
+# ------------------------------------------------------------------------------
+
+Q_CLUSTER = {
+    'name': 'DJRedis',
+    'workers': 8,
+    'timeout': 120,
+    'django_redis': 'default'
+}
