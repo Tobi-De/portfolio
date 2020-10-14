@@ -17,7 +17,6 @@ from newsletter.forms import SubscriptionForm
 from .forms import BlogPostContentForm, PostForm, SeriesForm
 from .helpers import postable_add_extra_context, post_filter
 from .models import Post, Series
-from .viewmixins import PostPublishedRequiredMixin
 
 
 class NewPostView(SuperuserRequiredMixin, TemplateView):
@@ -93,7 +92,7 @@ class PostContentEditorView(SuperuserRequiredMixin, View):
             return redirect("blog:post_content_editor", kwargs={"slug": post})
 
 
-class PostDetailView(PostPublishedRequiredMixin, DetailView):
+class PostDetailView(DetailView):
     model = Post
 
     def get_context_data(self, **kwargs):
@@ -104,7 +103,6 @@ class PostDetailView(PostPublishedRequiredMixin, DetailView):
 
 class PostUpdateView(
     SuperuserRequiredMixin,
-    PostPublishedRequiredMixin,
     FormValidMessageMixin,
     UpdateView,
 ):
