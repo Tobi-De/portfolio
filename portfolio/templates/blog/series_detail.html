@@ -28,9 +28,9 @@
                 {% endfor %}
               </div>
               {% if user.is_superuser %}
-                <div>
-                  <a href="{% url 'blog:series_update' series.slug %}">Update</a>|
-                  <a href="{% url 'blog:series_delete' series.slug %}">Delete</a>
+                <div class="btn-group btn-group-sm" role="group">
+                  <a class="btn btn-info" href="{% url 'blog:series_update' series.slug %}">Update</a>
+                  <a class="btn btn-danger" href="{% url 'blog:series_delete' series.slug %}">Delete</a>
                 </div>
               {% endif %}
             </div>

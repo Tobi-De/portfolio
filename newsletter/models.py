@@ -130,11 +130,11 @@ class News(TimeStampedModel):
         marked_content = markdown(self.message)
         message = strip_tags(
             f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link {subscriber.get_unsubscribe_link()}"
+            f" via this link {subscriber.get_unsubscribe_link()}."
         )
         html_message = (
-            f"{marked_content}\n\nYou can unsubscribe to this newsletter at anytime"
-            f" via this link <a href='{subscriber.get_unsubscribe_link()}'>Unsubscribe</a>"
+            f"{marked_content}\n\nYou can "
+            f"<a href='{subscriber.get_unsubscribe_link()}'>unsubscribe</a> to this newsletter at anytime."
         )
         return {
             "subject": self.subject,
@@ -170,7 +170,7 @@ class News(TimeStampedModel):
     def async_mass_mailing(cls, news_object, offset=0, limit=100):
         if Subscriber.emailable_subscribers()[offset:].count() <= 0:
             return
-        for sub in Subscriber.emailable_subscribers()[offset: offset + limit]:
+        for sub in Subscriber.emailable_subscribers()[offset : offset + limit]:
             send_mail(**news_object.get_mail_content(subscriber=sub))
         async_task(
             News.async_mass_mailing,

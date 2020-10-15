@@ -1,6 +1,7 @@
 from braces.views import SuperuserRequiredMixin, FormValidMessageMixin
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.generic import (
@@ -95,10 +96,29 @@ class PostContentEditorView(SuperuserRequiredMixin, View):
 class PostDetailView(DetailView):
     model = Post
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        if not obj.is_published and not self.request.user.is_superuser:  # noqa
+            raise Http404
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["newsletter_form"] = SubscriptionForm()
         return context
+
+
+class SecretKeyPostDetailView(DetailView):
+    model = Post
+    slug_url_kwarg = "secret_key"
+    slug_field = "secret_key"
+    template_name = "blog/post_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.is_published:  # noqa
+            return redirect(post.get_absolute_url())  # noqa
+        return super().get(request, *args, **kwargs)
 
 
 class PostUpdateView(

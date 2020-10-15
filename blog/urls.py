@@ -7,6 +7,7 @@ from .views import (
     PostContentEditorView,
     PostListView,
     PostDetailView,
+    SecretKeyPostDetailView,
     PostDeleteView,
     PostUpdateView,
     SeriesListView,
@@ -31,6 +32,11 @@ urlpatterns = [
         "post-detail/<str:slug>/",
         PostDetailView.as_view(),
         name="post_detail",
+    ),
+    path(
+        "post-secret/<str:secret_key>/",
+        SecretKeyPostDetailView.as_view(),
+        name="secret_post_detail",
     ),
     path(
         "post-update/<str:slug>/",

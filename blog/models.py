@@ -5,7 +5,7 @@ from django.db.models import Q, Sum
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django_extensions.db.fields import AutoSlugField
+from django_extensions.db.fields import AutoSlugField, RandomCharField
 from django_q.tasks import Schedule, schedule
 from markdownx.models import MarkdownxField
 from model_utils import Choices
@@ -67,6 +67,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         "blog.Series", null=True, blank=True, on_delete=models.SET_NULL
     )
     featured = models.BooleanField(default=False)
+    secret_key = RandomCharField(length=64)
 
     def get_absolute_url(self):
         return reverse("blog:post_detail", kwargs={"slug": self.slug})
@@ -100,19 +101,13 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         self.send_publish_email()
 
     def send_publish_email(self):
-        # TODO write a decent email for publish post
         # send email to subscribers to inform of new post
-        subject = "New Blog Post"
+        subject = "New Post!"
         message = render_to_string(
             "blog/email/new_post_message.html",
             context={
                 "title": self.title,
                 "link": f"{get_current_domain_url()}{self.get_absolute_url()}",
-                # TODO do something here
-                # "email": self.author.email,
-                # "twitter": self.author.profile.twitter,
-                # "github": self.author.profile.github,
-                # "telegram": self.author.profile.telegram,
             },
         ).format("utf-8")
         News.objects.create(subject=subject, message=message).setup()
@@ -121,7 +116,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         # create scheduled tast if scheduled_publish_date is set
         # ths work like newsletter.News.create_scheduled task, a placeholder task is create
         # and the hook is the one doign the real wok here using the slug of the post
-        if self.status == Post.STATUS.published or not self.scheduled_publish_date:
+        if self.is_published or not self.scheduled_publish_date:
             return
         try:
             schedule(
@@ -136,6 +131,19 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def save(self, *args, **kwargs):
         self.create_scheduled_task()
         super().save(*args, **kwargs)
+
+    @property
+    def sharable_url(self):
+        """
+        An url to reach this post (there is a secret url for sharing unpublished
+        posts to outside users).
+        """
+        if not self.is_published:
+            return reverse(
+                "blog:secret_post_detail", kwargs={"secret_key": self.secret_key}
+            )
+        else:
+            return self.get_absolute_url()
 
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):

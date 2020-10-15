@@ -29,10 +29,13 @@
                 {% endfor %}
               </div>
               {% if user.is_superuser %}
-                <div>
-                  <a href="{% url 'blog:post_update' post.slug %}">Update</a>|
-                  <a href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>|
-                  <a href="{% url 'blog:post_delete' post.slug %}">Delete</a>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button class="btn btn-primary" id="sharableUrl" data-toggle="tooltip" data-placement="buttom"
+                          title="Copy to clipboard">Sharable Url
+                  </button>
+                  <a class="btn btn-info" href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>
+                  <a class="btn btn-info" href="{% url 'blog:post_update' post.slug %}">Update</a>
+                  <a class="btn btn-danger" href="{% url 'blog:post_delete' post.slug %}">Delete</a>
                 </div>
               {% endif %}
             </div>
@@ -95,4 +98,21 @@
       </main>
     </div>
   </div>
+  <script>
+    var copySharableUrlBtn = document.querySelector('#sharableUrl');
+    copySharableUrlBtn.addEventListener('click', function (event) {
+      // Select the email link anchor text
+      const el = document.createElement('textarea');
+      el.value = "{{ post.sharable_url|abs_url:request }}";
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    });
+  </script>
 {% endblock %}
+
+

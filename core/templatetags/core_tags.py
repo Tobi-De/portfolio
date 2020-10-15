@@ -42,3 +42,8 @@ def markdown(value):
             },
         )
     )
+
+
+@register.filter
+def abs_url(path, request):
+    return request.build_absolute_uri(path)
