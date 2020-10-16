@@ -69,6 +69,7 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "rest_framework",
     "rest_framework.authtoken",
+    "django_extensions",
     "maintenance_mode",
     "django_q",
     "markdownx",
