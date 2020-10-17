@@ -25,7 +25,9 @@ class NewPostView(SuperuserRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        drafts = Post.objects.filter(status=Post.STATUS.draft).order_by("-created")
+        drafts = Post.objects.filter(status=Post.STATUS.draft).order_by(
+            "-modified", "-created"
+        )
         paginator = Paginator(drafts, 6)
         page_number = self.request.GET.get("page")
         page_obj = paginator.get_page(page_number)

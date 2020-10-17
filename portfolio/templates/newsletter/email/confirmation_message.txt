@@ -1,3 +1,4 @@
 You're receiving this e-mail because you try to subscribe to my newsletter on my
-personal website www.tobidegnon.com. To confirm this is correct, go to {{ link }}
+personal blog https://www.tobidegnon.com/blog/post-list/.
+To confirm this is correct, go to {{ link }}
 Thank you from Tobi-De!

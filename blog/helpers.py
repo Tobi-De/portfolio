@@ -12,7 +12,7 @@ def postable_add_extra_context(context):
     context["categories"] = Category.objects.all()
     context["newsletter_form"] = SubscriptionForm()
     context["coming_soon"] = Post.objects.filter(status=Post.STATUS.draft).order_by(
-        "-created"
+        "-modified", "-created"
     )[:2]
 
 
