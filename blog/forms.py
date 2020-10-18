@@ -16,7 +16,6 @@ class PostForm(forms.ModelForm):
             "title",
             "overview",
             "status",
-            "reading_time",
             "categories",
             "series",
             "featured",

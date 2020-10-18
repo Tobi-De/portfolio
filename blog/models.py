@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models, IntegrityError, ProgrammingError, OperationalError
-from django.db.models import Q, Sum
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django_extensions.db.fields import AutoSlugField, RandomCharField
 from django_q.tasks import Schedule, schedule
 from markdownx.models import MarkdownxField
@@ -12,6 +13,7 @@ from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
 
+from core.templatetags.core_tags import markdown
 from core.utils import get_current_domain_url
 from newsletter.models import News
 
@@ -19,7 +21,6 @@ User = get_user_model()
 
 
 # TODO autosave content and revert changes and ctrl + s to save
-# TODO automatic calculate reading time
 class Postable(models.Model):
     thumbnail = models.OneToOneField(
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
@@ -62,7 +63,6 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     status = StatusField(default=STATUS.draft)
     status_changed = MonitorField(monitor="status")
     categories = models.ManyToManyField(Category)
-    reading_time = models.IntegerField()
     publish_date = models.DateTimeField(null=True, blank=True)
     scheduled_publish_date = models.DateTimeField(null=True, blank=True)
     series = models.ForeignKey(
@@ -147,6 +147,13 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         else:
             return self.get_absolute_url()
 
+    @property
+    def reading_time(self):
+        word_count = len(strip_tags(markdown(self.body)).split())
+        minutes = int(str(word_count / 200).split(".")[0])
+        seconds = round(int(str(word_count / 200).split(".")[1]) * 0.60)
+        return minutes if seconds < 30 else (minutes + 1)
+
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
@@ -177,5 +184,7 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
 
     @property
     def reading_time(self):
-        all_posts = self.all_published_post()
-        return all_posts.aggregate(Sum("reading_time")).get("reading_time__sum")
+        all_posts_reading_time = [
+            post.reading_time for post in self.all_published_post()
+        ]
+        return sum(all_posts_reading_time)
