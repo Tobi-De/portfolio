@@ -18,6 +18,7 @@ from newsletter.models import News
 User = get_user_model()
 
 
+# TODO autosave content and revert changes
 class Postable(models.Model):
     thumbnail = models.OneToOneField(
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL
