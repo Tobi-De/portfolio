@@ -1,9 +1,11 @@
 .highlight {
   background-color: #08090a;
-  margin: 20px;
-  padding: 20px;
-  border: solid 1px #272822;
-  border-radius: 5px;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
 }
 
 pre {

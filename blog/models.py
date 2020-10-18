@@ -18,7 +18,8 @@ from newsletter.models import News
 User = get_user_model()
 
 
-# TODO autosave content and revert changes
+# TODO autosave content and revert changes and ctrl + s to save
+# TODO automatic calculate reading time
 class Postable(models.Model):
     thumbnail = models.OneToOneField(
         "core.Thumbnail", blank=True, null=True, on_delete=models.SET_NULL

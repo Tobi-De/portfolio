@@ -11,9 +11,13 @@ def postable_add_extra_context(context):
     ).order_by("-created")
     context["categories"] = Category.objects.all()
     context["newsletter_form"] = SubscriptionForm()
-    context["coming_soon"] = Post.objects.filter(status=Post.STATUS.draft).order_by(
-        "-modified", "-created"
-    )[:2]
+    context["coming_soon"] = (
+        Post.objects.filter(status=Post.STATUS.draft)
+            .exclude(title__icontains="!NeverComingSoon!")
+            .order_by("-modified", "-created")[:3]
+    )
+    # !NeverComingSoon! A special string to add when I need
+    # some post to never appear in the coming soon section
 
 
 def post_filter(request, queryset):

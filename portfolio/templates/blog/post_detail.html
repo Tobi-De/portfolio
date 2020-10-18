@@ -42,7 +42,13 @@
             <h1 class="text-center">{{ post.title }}</h1>
             <div class="post-footer row justify-content-center">
               <div class="d-flex align-items-center flex-wrap">
-                <div class="date"><i class="icon-clock"></i> {{ post.publish_date|timesince }} ago</div>
+                <div class="date"><i class="icon-clock"></i>
+                  {% if post.is_published %}
+                    {{ post.publish_date|timesince }}
+                  {% else %}
+                    {{ post.created|timesince }}
+                  {% endif %} ago
+                </div>
                 <div class="views"><i class="icon-eye"></i> {{ post.reading_time }} minutes read</div>
                 {#                <div class="comments meta-last"><i class="icon-comment"></i> {{ comment_count }} comments</div>#}
               </div>
