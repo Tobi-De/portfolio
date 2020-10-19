@@ -154,6 +154,12 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         seconds = round(int(str(word_count / 200).split(".")[1]) * 0.60)
         return minutes if seconds < 30 else (minutes + 1)
 
+    @classmethod
+    def all_published_post(cls):
+        return Post.objects.filter(status=Post.STATUS.published).order_by(
+            "-publish_date"
+        )
+
 
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
