@@ -28,7 +28,7 @@ class Postable(models.Model):
     title = models.CharField(max_length=150)
     overview = MarkdownxField()
     body = MarkdownxField(blank=True)
-    slug = AutoSlugField(populate_from=["title"])
+    slug = AutoSlugField(populate_from=["title"], max_length=120)
 
     class Meta:
         abstract = True
