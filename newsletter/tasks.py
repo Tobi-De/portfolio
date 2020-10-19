@@ -12,3 +12,5 @@ def send_news_task(key_identifier):
 def post_month_recap():
     # filter by last month post
     posts = Post.all_published_post()
+    # read message template
+    # create news and send it
