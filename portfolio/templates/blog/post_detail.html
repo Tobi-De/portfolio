@@ -5,7 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}{{ post.title }}{% endblock %}
-{% block  description %}{{ post.overview|markdown|truncatechars:200 }}{% endblock description %}
+{% block  description %}{{ post.overview|markdown|striptags }}{% endblock description %}
 
 {% block content %}
 

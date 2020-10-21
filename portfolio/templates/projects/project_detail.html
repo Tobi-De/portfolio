@@ -2,7 +2,8 @@
 {% load thumbnail %}
 {% load core_tags %}
 
-{% block  description %}{{ project.description|markdown|truncatechars:200 }}{% endblock description %}
+{% block  title %}{{ product.title }}{% endblock title %}
+{% block  description %}{{ project.description|markdown|striptags|truncatewords:30 }}{% endblock description %}
 
 {% block content %}
   <div class="container">
