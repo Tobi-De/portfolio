@@ -2,6 +2,8 @@
 {% load thumbnail %}
 {% load core_tags %}
 
+{% block  description %}{{ project.description|markdown|truncatechars:200 }}{% endblock description %}
+
 {% block content %}
   <div class="container">
     <main class="row justify-content-center">
