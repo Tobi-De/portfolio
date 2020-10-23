@@ -7,6 +7,7 @@
 {% block  description %}{{ series.overview|markdown|striptags }}{% endblock description %}
 {% if series.thumbnail %}
   {% block shared_link_image %}{{ series.thumbnail.image.url }}{% endblock shared_link_image %}
+  {% block  shared_link_image_alt %}{{ series.thumbnail.alt }}{% endblock shared_link_image_alt %}
 {% endif %}
 {% block extra_meta %}
   {% for category in series.categories %}

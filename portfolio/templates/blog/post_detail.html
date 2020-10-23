@@ -8,6 +8,7 @@
 {% block  description %}{{ post.overview|markdown|striptags }}{% endblock description %}
 {% if post.thumbnail %}
   {% block shared_link_image %}{{ post.thumbnail.image.url }}{% endblock shared_link_image %}
+  {% block  shared_link_image_alt %}{{ post.thumbnail.alt }}{% endblock shared_link_image_alt %}
 {% endif %}
 {% block extra_meta %}
   {% for category in post.categories.all %}

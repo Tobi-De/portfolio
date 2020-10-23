@@ -6,11 +6,14 @@
   <title>{% block title %}Tobi-De{% endblock title %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-        content="{% block description %}Django Freelancer, full Stack Web Development.{% endblock description %}">
+        content="{% block description %}Full Stack Web Development with Django, blog post and more.{% endblock description %}">
   <meta name="author" content="Tobi DEGNON">
   <meta property="og:image"
         content="{% block shared_link_image %}{% static "images/dt150.png" %}{% endblock shared_link_image %}"/>
+  <meta property="og:image:alt"
+        content="{% block shared_link_image_alt %}Tobi-De Django Freelancer{% endblock shared_link_image_alt %}"/>
   <meta name="og:site_name" content="Tobi-De"/>
+  <meta name="twitter:card" content="summary_large_image">
   <!--TODO add twitter meta-->
   {% block extra_meta %}{% endblock extra_meta %}
 
