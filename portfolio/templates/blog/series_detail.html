@@ -5,11 +5,14 @@
 
 {% block title %}{{ series.title }}{% endblock %}
 {% block  description %}{{ series.overview|markdown|striptags }}{% endblock description %}
-{% if series.thumbnail %}
-  {% block shared_link_image %}{{ series.thumbnail.image.url }}{% endblock shared_link_image %}
-  {% block  shared_link_image_alt %}{{ series.thumbnail.alt }}{% endblock shared_link_image_alt %}
-{% endif %}
 {% block extra_meta %}
+  {% if series.thumbnail %}
+    <meta property="og:image" content="{{ series.thumbnail.image.url }}"/>
+    <meta name="twitter:image" content="{{ series.thumbnail.image.url }}"/>
+    <meta property="og:image:width" content="{{ series.thumbnail.image.width }}"/>
+    <meta property="og:image:height" content="{{ series.thumbnail.image.height }}"/>
+    <meta property="og:image:alt" content="{{ series.thumbnail.alt }}"/>
+  {% endif %}
   {% for category in series.categories %}
     <meta property="article:tag" content="{{ category }}"/>
   {% endfor %}
@@ -29,7 +32,7 @@
             {% endthumbnail %}
           {% endif %}
           {% if series.thumbnail.source %}
-            <p class="text-muted mt-2">(Picture from {{ series.thumbnail.source }} )</p>
+            <p class="text-muted mt-2 mt-3">(Picture from: {{ series.thumbnail.source }} )</p>
           {% endif %}
           <div class="card-body">
             <div class="post-meta d-flex justify-content-between">

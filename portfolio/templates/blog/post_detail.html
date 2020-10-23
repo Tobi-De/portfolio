@@ -6,15 +6,19 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 {% block  description %}{{ post.overview|markdown|striptags }}{% endblock description %}
-{% if post.thumbnail %}
-  {% block shared_link_image %}{{ post.thumbnail.image.url }}{% endblock shared_link_image %}
-  {% block  shared_link_image_alt %}{{ post.thumbnail.alt }}{% endblock shared_link_image_alt %}
-{% endif %}
 {% block extra_meta %}
+  {% if post.thumbnail %}
+    <meta property="og:image" content="{{ post.thumbnail.image.url }}"/>
+    <meta name="twitter:image" content="{{ post.thumbnail.image.url }}"/>
+    <meta property="og:image:width" content="{{ post.thumbnail.image.width }}"/>
+    <meta property="og:image:height" content="{{ post.thumbnail.image.height }}"/>
+    <meta property="og:image:alt" content="{{ post.thumbnail.alt }}"/>
+  {% endif %}
   {% for category in post.categories.all %}
     <meta property="article:tag" content="{{ category }}"/>
   {% endfor %}
 {% endblock extra_meta %}
+
 
 {% block content %}
 
@@ -29,7 +33,7 @@
             {% endthumbnail %}
           {% endif %}
           {% if post.thumbnail.source %}
-            <p class="text-muted mt-2">(source: {{ post.thumbnail.source }} )</p>
+            <p class="text-muted mt-2 ml-3">(Picture from: {{ post.thumbnail.source }} )</p>
           {% endif %}
           <div class="card-body">
             <div class="post-meta d-flex justify-content-between">
