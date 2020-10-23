@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 
 from core.models import ToolBox
 
@@ -10,6 +11,12 @@ def settings_context(_request):
     return {"DEBUG": settings.DEBUG}
 
 
-def code_theme(_request):
-    theme = ToolBox.get_toolbox().code_theme
-    return {"code_theme_path": f"css/pygments_{theme}.css"}
+def tobi_de_toolbox(_request):
+    toolbox = cache.get("toolbox")
+    if not toolbox:
+        toolbox = ToolBox.get_toolbox()
+        cache.set("code_theme", toolbox, 60 * 60 * 24)
+    return {
+        "code_theme_path": f"css/pygments_{toolbox.code_theme}.css",
+        **toolbox.get_user_links(),
+    }

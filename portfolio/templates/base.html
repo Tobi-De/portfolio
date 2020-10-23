@@ -6,8 +6,14 @@
   <title>{% block title %}Tobi-De{% endblock title %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-        content="{% block description %}Tobi-De(Full Stack Web Developer) personal website{% endblock description %}">
+        content="{% block description %}Django Freelancer, full Stack Web Development.{% endblock description %}">
   <meta name="author" content="Tobi DEGNON">
+  <meta property="og:image"
+        content="{% block shared_link_image %}{% static "images/dt150.png" %}{% endblock shared_link_image %}"/>
+  <meta name="og:site_name" content="Tobi-De"/>
+  <!--TODO add twitter meta-->
+  {% block extra_meta %}{% endblock extra_meta %}
+
 
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -138,7 +144,20 @@
 
 <!-- Page Footer-->
 <footer class="site-footer">
-  <div class="wrap"><p>©&nbsp;2020 · <a href="https://www.tobidegnon.com">Tobi-De</a></p></div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-3">
+        <p>©&nbsp;2020 · <a href="https://www.tobidegnon.com">Tobi-De</a></p>
+      </div>
+      <div class="col-md-3">
+        <a href="http://www.djangoproject.com/"><img
+                src="https://www.djangoproject.com/m/img/badges/djangomade124x25_grey.gif" border="0"
+                alt="Made with Django." title="Made with Django."/></a>
+      </div>
+
+    </div>
+  </div>
+
 </footer>
 
 <!-- Le javascript

@@ -47,8 +47,7 @@ class ToolBox(TimeStampedModel):
     def __str__(self):
         return f"Tobi ToolBox"
 
-    @property
-    def user_links(self):
+    def get_user_links(self):
         return {
             "email": User.objects.all().first().email,
             "github": self.github,

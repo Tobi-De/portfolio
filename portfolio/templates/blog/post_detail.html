@@ -6,6 +6,14 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 {% block  description %}{{ post.overview|markdown|striptags }}{% endblock description %}
+{% if post.thumbnail %}
+  {% block shared_link_image %}{{ post.thumbnail.image.url }}{% endblock shared_link_image %}
+{% endif %}
+{% block extra_meta %}
+  {% for category in post.categories.all %}
+    <meta property="article:tag" content="{{ category }}"/>
+  {% endfor %}
+{% endblock extra_meta %}
 
 {% block content %}
 

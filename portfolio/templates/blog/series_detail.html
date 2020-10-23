@@ -5,6 +5,15 @@
 
 {% block title %}{{ series.title }}{% endblock %}
 {% block  description %}{{ series.overview|markdown|striptags }}{% endblock description %}
+{% if series.thumbnail %}
+  {% block shared_link_image %}{{ series.thumbnail.image.url }}{% endblock shared_link_image %}
+{% endif %}
+{% block extra_meta %}
+  {% for category in series.categories %}
+    <meta property="article:tag" content="{{ category }}"/>
+  {% endfor %}
+{% endblock extra_meta %}
+
 
 {% block content %}
   <div class="container">

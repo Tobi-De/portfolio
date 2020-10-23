@@ -16,8 +16,7 @@ def home(request):
     featured = Project.objects.filter(featured=True).order_by("-priority", "-created")[
         :3
     ]
-    context = {"featured": featured, **ToolBox.get_toolbox().user_links}
-    return render(request, "core/home.html", context)
+    return render(request, "core/home.html", {"featured": featured})
 
 
 # TODO write a telegram bot that send message whenever a message is sent

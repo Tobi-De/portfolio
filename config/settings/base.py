@@ -154,7 +154,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "portfolio.utils.context_processors.settings_context",
-                "portfolio.utils.context_processors.code_theme",
+                "portfolio.utils.context_processors.tobi_de_toolbox",
                 "maintenance_mode.context_processors.maintenance_mode",
             ],
         },
