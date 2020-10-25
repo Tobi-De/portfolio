@@ -1,7 +1,8 @@
 from django.db.models import Q
+from taggit.models import Tag
 
 from newsletter.forms import SubscriptionForm
-from .models import Post, Category
+from .models import Post
 
 
 def postable_add_extra_context(context):
@@ -9,7 +10,7 @@ def postable_add_extra_context(context):
     context["featured"] = Post.objects.filter(
         featured=True, status=Post.STATUS.published
     ).order_by("-created")
-    context["categories"] = Category.objects.all()
+    context["tags"] = Tag.objects.all()
     context["newsletter_form"] = SubscriptionForm()
     context["coming_soon"] = (
         Post.objects.filter(status=Post.STATUS.draft)
@@ -20,11 +21,10 @@ def postable_add_extra_context(context):
     # some post to never appear in the coming soon section
 
 
-def post_filter(request, queryset):
+def post_filter(request, tag, queryset):
     q = request.GET.get("q")
-    category = request.GET.get("category")
-    if category:
-        queryset = queryset.filter(categories__name=category)
+    if tag:
+        queryset = queryset.filter(tags__name__in=[tag])
     if q:
         queryset = queryset.filter(
             Q(title__icontains=q) | Q(body__icontains=q) | Q(overview__contains=q)

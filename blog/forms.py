@@ -16,7 +16,7 @@ class PostForm(forms.ModelForm):
             "title",
             "overview",
             "status",
-            "categories",
+            "tags",
             "series",
             "featured",
             "scheduled_publish_date",

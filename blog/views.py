@@ -53,7 +53,7 @@ class PostListView(ListView):
         queryset = Post.objects.filter(status=Post.STATUS.published).order_by(
             "-publish_date"
         )
-        filtered_post = post_filter(self.request, queryset=queryset)
+        filtered_post = post_filter(self.request, tag=self.kwargs.get("tag"), queryset=queryset)
         return filtered_post
 
     def get_context_data(self, **kwargs):

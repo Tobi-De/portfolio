@@ -14,8 +14,8 @@
     <meta property="og:image:height" content="{{ post.thumbnail.image.height }}"/>
     <meta property="og:image:alt" content="{{ post.thumbnail.alt }}"/>
   {% endif %}
-  {% for category in post.categories.all %}
-    <meta property="article:tag" content="{{ category }}"/>
+  {% for tag in post.tags.all %}
+    <meta property="article:tag" content="{{ tag }}"/>
   {% endfor %}
 {% endblock extra_meta %}
 
@@ -33,26 +33,25 @@
             {% endthumbnail %}
           {% endif %}
           {% if post.thumbnail.source %}
-            <p class="text-muted mt-2 ml-3">(Picture from: {{ post.thumbnail.source }} )</p>
+            <p class="text-muted mt-2 ml-3">(picture from: {{ post.thumbnail.source }} )</p>
           {% endif %}
           <div class="card-body">
-            <div class="post-meta d-flex justify-content-between">
-              <div class="category">
-                {% for category in post.categories.all %}
-                  <a href="{{ category.get_list_url }}">{{ category }}</a>
-                {% endfor %}
-              </div>
-              {% if user.is_superuser %}
-                <div class="btn-group btn-group-sm" role="group">
-                  <button class="btn btn-primary" id="sharableUrl" data-toggle="tooltip" data-placement="buttom"
-                          title="Copy to clipboard">Sharable Url
-                  </button>
-                  <a class="btn btn-info" href="{% url 'blog:post_content_editor' post.slug %}">Edit Content</a>
-                  <a class="btn btn-info" href="{% url 'blog:post_update' post.slug %}">Update</a>
-                  <a class="btn btn-danger" href="{% url 'blog:post_delete' post.slug %}">Delete</a>
+            {% if user.is_superuser %}
+              <div class="row justify-content-center mb-3">
+                <div class="col-md-5">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-outline-primary" id="sharableUrl" data-toggle="tooltip"
+                            data-placement="buttom"
+                            title="Copy to clipboard">Sharable Url
+                    </button>
+                    <a class="btn btn-outline-info" href="{% url 'blog:post_content_editor' post.slug %}">Edit
+                      Content</a>
+                    <a class="btn btn-outline-info" href="{% url 'blog:post_update' post.slug %}">Update</a>
+                    <a class="btn btn-outline-danger" href="{% url 'blog:post_delete' post.slug %}">Delete</a>
+                  </div>
                 </div>
-              {% endif %}
-            </div>
+              </div>
+            {% endif %}
             <h1 class="text-center">{{ post.title }}</h1>
             <div class="post-footer row justify-content-center">
               <div class="d-flex align-items-center flex-wrap">
@@ -73,6 +72,11 @@
                 <hr>
                 <p class="text-justify">{{ post.body|markdown }}</p>
               </div>
+            </div>
+            <div class="post-tags">
+              {% for tag in post.tags.all %}
+                <a class="tag" href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a>
+              {% endfor %}
             </div>
             {% if user.is_superuser and not post.is_published %}
               <a href="{% url "blog:post_publish" post.slug %}"

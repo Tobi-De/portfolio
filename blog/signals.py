@@ -7,7 +7,7 @@ from .models import Post
 @receiver(post_save, sender=Post)
 def update_series_visibility(sender, instance=None, created=False, **kwargs):
     try:
-        post_count = instance.series.all_published_post().count()
+        post_count = instance.series.published_post().count()
     except Exception:
         pass
     else:

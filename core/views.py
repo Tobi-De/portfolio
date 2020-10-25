@@ -24,12 +24,6 @@ class GetInTouchView(FormView):
     form_class = GetInTouchForm
     template_name = "core/get_in_touch.html"
 
-    def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            **ToolBox.get_toolbox().user_links,
-        }
-
     def form_valid(self, form):
         message = (
             f"Full Name: {form.cleaned_data['full_name']}\n"

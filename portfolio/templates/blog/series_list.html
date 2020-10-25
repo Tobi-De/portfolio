@@ -2,7 +2,8 @@
 {% load thumbnail %}
 {% load core_tags %}
 
-{% block description %} Blog articles about django, python and web development in general.{% endblock description %}
+{% block description %} Series of articles about django, python and web development in
+  general.{% endblock description %}
 
 {% block content %}
   <div class="container">
@@ -20,8 +21,8 @@
               {% endif %}
               <div class="post-meta ml-3 d-flex justify-content-between">
                 <div class="category">
-                  {% for category in series.categories %}
-                    <a href="{{ category.get_list_url }}">{{ category }}</a>
+                  {% for tag in series.get_tags %}
+                    <a href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a>
                   {% endfor %}
                 </div>
               </div>

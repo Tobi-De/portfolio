@@ -14,7 +14,7 @@ def send_news_task(key_identifier):
 
 def post_month_recap():
     last_month_datetime = timezone.now() + timezone.timedelta(days=-30)
-    posts = Post.all_published_post().filter(publish_date__gt=last_month_datetime)
+    posts = Post.published_post().filter(publish_date__gt=last_month_datetime)
     message = render_to_string(
         "newsletter/email/monthly_posts_recap.html", context={"posts": posts}
     )

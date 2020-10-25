@@ -13,8 +13,8 @@
     <meta property="og:image:height" content="{{ series.thumbnail.image.height }}"/>
     <meta property="og:image:alt" content="{{ series.thumbnail.alt }}"/>
   {% endif %}
-  {% for category in series.categories %}
-    <meta property="article:tag" content="{{ category }}"/>
+  {% for tag in series.get_tags %}
+    <meta property="article:tag" content="{{ tag }}"/>
   {% endfor %}
 {% endblock extra_meta %}
 
@@ -32,22 +32,19 @@
             {% endthumbnail %}
           {% endif %}
           {% if series.thumbnail.source %}
-            <p class="text-muted mt-2 mt-3">(Picture from: {{ series.thumbnail.source }} )</p>
+            <p class="text-muted mt-2 mt-3">(picture from: {{ series.thumbnail.source }} )</p>
           {% endif %}
-          <div class="card-body">
-            <div class="post-meta d-flex justify-content-between">
-              <div class="category">
-                {% for category in series.categories %}
-                  <a href="{{ category.get_list_url }}">{{ category }}</a>
-                {% endfor %}
-              </div>
-              {% if user.is_superuser %}
+          {% if user.is_superuser %}
+            <div class="row justify-content-center">
+              <div class="col-md-5">
                 <div class="btn-group btn-group-sm" role="group">
                   <a class="btn btn-info" href="{% url 'blog:series_update' series.slug %}">Update</a>
                   <a class="btn btn-danger" href="{% url 'blog:series_delete' series.slug %}">Delete</a>
                 </div>
-              {% endif %}
+              </div>
             </div>
+          {% endif %}
+          <div class="card-body">
             <h1 class="text-center">{{ series.title }}</h1>
             <div class="post-footer row justify-content-center">
               <div class="d-flex align-items-center flex-wrap">
@@ -62,6 +59,11 @@
                 <hr>
                 <p class="text-justify">{{ series.body|markdown }}</p>
               </div>
+            </div>
+            <div class="post-tags">
+              {% for tag in series.get_tags %}
+                <a class="tag" href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a>
+              {% endfor %}
             </div>
             <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
               <a href="{{ series.all_published_post.first.get_absolute_url }}"

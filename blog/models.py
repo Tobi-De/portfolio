@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models, IntegrityError, ProgrammingError, OperationalError
-from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -12,6 +11,7 @@ from markdownx.models import MarkdownxField
 from model_utils import Choices
 from model_utils.fields import MonitorField, StatusField
 from model_utils.models import TimeStampedModel, SoftDeletableModel, StatusModel
+from taggit.managers import TaggableManager
 
 from core.templatetags.core_tags import markdown
 from core.utils import get_current_domain_url
@@ -37,32 +37,10 @@ class Postable(models.Model):
         return self.title
 
 
-class Category(TimeStampedModel):
-    name = models.CharField(max_length=30)
-    description = models.TextField(blank=True)
-
-    class Meta:
-        verbose_name_plural = "categories"
-
-    def __str__(self):
-        return self.name
-
-    def get_list_url(self):
-        url = reverse("blog:post_list") + f"?category={self.name}"
-        return url
-
-    @property
-    def posts_count(self):
-        return Post.objects.filter(
-            categories__name=self.name, status=Post.STATUS.published
-        ).count()
-
-
 class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("draft", "published")
     status = StatusField(default=STATUS.draft)
     status_changed = MonitorField(monitor="status")
-    categories = models.ManyToManyField(Category)
     publish_date = models.DateTimeField(null=True, blank=True)
     scheduled_publish_date = models.DateTimeField(null=True, blank=True)
     series = models.ForeignKey(
@@ -70,6 +48,9 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     )
     featured = models.BooleanField(default=False)
     secret_key = RandomCharField(length=64)
+
+    # Managers
+    tags = TaggableManager()
 
     def get_absolute_url(self):
         return reverse("blog:post_detail", kwargs={"slug": self.slug})
@@ -82,7 +63,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def next_post(self):
         if not self.series:
             return None
-        posts = self.series.all_published_post()
+        posts = self.series.published_post()
         if self == posts.last() or self not in posts:
             return None
         return posts[list(posts).index(self) + 1]
@@ -91,7 +72,7 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def previous_post(self):
         if not self.series:
             return None
-        posts = self.series.all_published_post()
+        posts = self.series.published_post()
         if self == posts.first() or self not in posts:
             return None
         return posts[list(posts).index(self) - 1]
@@ -121,8 +102,10 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         if self.is_published or not self.scheduled_publish_date:
             return
         try:
+            print("here")
             schedule(
                 func="blog.tasks.publish_post_task",
+                name=f"{self.slug}",
                 slug=self.slug,
                 schedule_type=Schedule.ONCE,
                 next_run=self.scheduled_publish_date,
@@ -155,12 +138,13 @@ class Post(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
         return minutes if seconds < 30 else (minutes + 1)
 
     @classmethod
-    def all_published_post(cls):
+    def published_post(cls):
         return Post.objects.filter(status=Post.STATUS.published).order_by(
             "-publish_date"
         )
 
 
+# TODO generate a body if empty
 class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     STATUS = Choices("in_progress", "on_break", "finished")
     status = StatusField(default=STATUS.in_progress)
@@ -173,24 +157,20 @@ class Series(Postable, StatusModel, TimeStampedModel, SoftDeletableModel):
     def get_absolute_url(self):
         return reverse("blog:series_detail", kwargs={"slug": self.slug})
 
-    def all_published_post(self):
+    def published_post(self):
         return Post.objects.filter(series=self, status=Post.STATUS.published).order_by(
             "publish_date"
         )
 
-    @property
-    def categories(self):
-        categories = Category.objects.none()
-        posts = self.all_published_post()
-        for post in posts:
-            categories = Category.objects.filter(
-                Q(id__in=post.categories.all()) | Q(id__in=categories)
-            )
-        return categories
+    def get_tags(self):
+        tags = []
+        for post in self.published_post():
+            tags += post.tags.all()
+        return tags
 
     @property
     def reading_time(self):
         all_posts_reading_time = [
-            post.reading_time for post in self.all_published_post()
+            post.reading_time for post in self.published_post()
         ]
         return sum(all_posts_reading_time)

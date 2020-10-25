@@ -21,8 +21,8 @@
               {% endif %}
               <div class="post-meta ml-3 d-flex justify-content-between">
                 <div class="category">
-                  {% for category in post.categories.all %}
-                    <a href="{{ category.get_list_url }}">{{ category }}</a>
+                  {% for tag in post.tags.all %}
+                    <a href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a>
                   {% endfor %}
                 </div>
               </div>

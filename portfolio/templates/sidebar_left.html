@@ -1,11 +1,12 @@
+{% load blog_tags %}
 <aside class="col-md-3">
   <div class="widget categories">
     <header>
-      <h3 class="h6">Categories</h3>
+      <h3 class="h6">Tags</h3>
     </header>
-    {% for category in categories %}
+    {% for tag in tags %}
       <div class="item d-flex justify-content-between"><a
-              href="{{ category.get_list_url }}">{{ category }}</a><span>{{ category.posts_count }}</span>
+              href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a><span> {{ tag|tag_post_count }}</span>
       </div>
     {% endfor %}
   </div>

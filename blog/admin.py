@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from markdownx.admin import MarkdownxModelAdmin
 
 from core.admin import ThumbnailLinkMixin
-from .models import Category, Post, Series
+from .models import Post, Series
 
 
 class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
@@ -20,7 +20,7 @@ class PostableAdmin(ThumbnailLinkMixin, MarkdownxModelAdmin):
 @admin.register(Post)
 class PostAdmin(PostableAdmin, admin.ModelAdmin):
     list_display = PostableAdmin.list_display + ["publish_date", "series_link"]
-    list_filter = ["categories", "status"]
+    list_filter = ["status"]
     search_fields = ["title"]
 
     def series_link(self, obj):
@@ -41,8 +41,3 @@ class SeriesAdmin(PostableAdmin, admin.ModelAdmin):
     list_display = PostableAdmin.list_display + ["reading_time"]
     list_filter = ["status", "visible"]
     search_fields = ["title"]
-
-
-@admin.register(Category)
-class CatergoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "created"]

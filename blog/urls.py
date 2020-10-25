@@ -22,6 +22,7 @@ urlpatterns = [
     path("new-post/", NewPostView.as_view(), name="new_post"),
     path("post-publish/<str:slug>/", PublishPostView.as_view(), name="post_publish"),
     path("post-list/", PostListView.as_view(), name="post_list"),
+    path("post-list/<str:tag>/", PostListView.as_view(), name="post_list_filtered"),
     path("post-create/", PostCreateView.as_view(), name="post_create"),
     path(
         "post-content-editor/<str:slug>/",

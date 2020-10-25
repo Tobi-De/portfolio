@@ -74,6 +74,7 @@ THIRD_PARTY_APPS = [
     "django_q",
     "markdownx",
     "sorl.thumbnail",
+    "taggit"
 ]
 
 LOCAL_APPS = [
