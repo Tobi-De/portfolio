@@ -9,6 +9,7 @@
               href="{% url "blog:post_list_filtered" tag %}">#{{ tag }}</a><span> {{ tag|tag_post_count }}</span>
       </div>
     {% endfor %}
+    <a class="a-title row justify-content-center" href="{% url "blog:tag_list" %}">All tags</a>
   </div>
   <div class="widget">
     <header>

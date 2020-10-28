@@ -13,6 +13,7 @@ from django.views.generic import (
     DetailView,
     UpdateView,
 )
+from taggit.models import Tag
 
 from newsletter.forms import SubscriptionForm
 from .forms import BlogPostContentForm, PostForm, SeriesForm
@@ -181,3 +182,9 @@ class SeriesDeleteView(SuperuserRequiredMixin, FormValidMessageMixin, DeleteView
 
     def get_success_url(self):
         return reverse("blog:series_list")
+
+
+class TagListView(ListView):
+    queryset = Tag.objects.all()
+    template_name = "blog/tag_list.html"
+    context_object_name = "tags"

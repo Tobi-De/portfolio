@@ -15,6 +15,7 @@ from .views import (
     SeriesDetailView,
     SeriesUpdateView,
     SeriesDeleteView,
+    TagListView
 )
 
 app_name = "blog"
@@ -74,4 +75,5 @@ urlpatterns = [
         SeriesDeleteView.as_view(),
         name="series_delete",
     ),
+    path("tags/", TagListView.as_view(), name="tag_list")
 ]
