@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 
-from core.models import ToolBox
+from portfolio.core.models import ToolBox
 
 
 def settings_context(_request):

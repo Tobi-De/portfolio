@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from maintenance_mode.backends import AbstractStateBackend
 
-from core.models import ToolBox
+from portfolio.core.models import ToolBox
 
 
 class CacheBackend(AbstractStateBackend):
