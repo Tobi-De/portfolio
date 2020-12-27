@@ -4,16 +4,16 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from rest_framework.authtoken.views import obtain_auth_token
-from blog.feeds import LatestPostsFeed
+from portfolio.blog.feeds import LatestPostsFeed
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path("markdownx/", include("markdownx.urls")),
-    path("", include("core.urls")),
-    path("projects/", include("projects.urls", namespace="projects")),
-    path("blog/", include("blog.urls", namespace="blog")),
+    path("", include("portfolio.core.urls")),
+    path("projects/", include("portfolio.projects.urls", namespace="projects")),
+    path("blog/", include("portfolio.blog.urls", namespace="blog")),
     path("feed/rss/", LatestPostsFeed(), name="post_feed"),
-    path("newsletter/", include("newsletter.urls", namespace="newsletter")),
+    path("newsletter/", include("portfolio.newsletter.urls", namespace="newsletter")),
     path("maintenance-mode/", include("maintenance_mode.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

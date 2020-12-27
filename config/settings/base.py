@@ -74,14 +74,14 @@ THIRD_PARTY_APPS = [
     "django_q",
     "markdownx",
     "sorl.thumbnail",
-    "taggit"
+    "taggit",
 ]
 
 LOCAL_APPS = [
-    "core.apps.CoreConfig",
-    "projects.apps.ProjectsConfig",
-    "blog.apps.BlogConfig",
-    "newsletter.apps.NewsletterConfig",
+    "portfolio.core.apps.CoreConfig",
+    "portfolio.projects.apps.ProjectsConfig",
+    "portfolio.blog.apps.BlogConfig",
+    "portfolio.newsletter.apps.NewsletterConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -213,7 +213,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-                      "%(process)d %(thread)d %(message)s"
+            "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -260,4 +260,4 @@ MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 # Markdownx settings
 # -------------------------------------------------------------------------------
 MARKDOWNX_MARKDOWNIFY_FUNCTION = "core.templatetags.core_tags.markdown"
-MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdownx/%Y/%m/%d')
+MARKDOWNX_MEDIA_PATH = datetime.now().strftime("markdownx/%Y/%m/%d")

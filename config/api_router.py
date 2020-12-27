@@ -1,12 +1,9 @@
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-from blog.api.viewsets import PostViewSet, SeriesViewSet
-from newsletter.api.viewsets import (
-    SubscriberViewSet,
-    NewsViewSet
-)
-from projects.api.viewsets import ProjectViewSet
+from portfolio.blog.api.viewsets import PostViewSet, SeriesViewSet
+from portfolio.newsletter.api.viewsets import SubscriberViewSet, NewsViewSet
+from portfolio.projects.api.viewsets import ProjectViewSet
 
 if settings.DEBUG:
     router = DefaultRouter()
