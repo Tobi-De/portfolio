@@ -7,7 +7,7 @@ class Command(BaseCommand):
         User = get_user_model()
         if not User.objects.filter(username="tobi").exists():
             User.objects.create_superuser(
-                "tobi", "contact@tobidegnon.com", "**blumen**"
+                "tobi", "contact@tobidegnon.com", "mypassword"
             )
             self.stdout.write(self.style.SUCCESS("Admin user has created"))
         else:
