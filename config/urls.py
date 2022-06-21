@@ -8,7 +8,7 @@ from portfolio.blog.feeds import LatestPostsFeed
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("markdownx/", include("markdownx.urls")),
+    # path("markdownx/", include("markdownx.urls")),
     path("", include("portfolio.core.urls")),
     path("projects/", include("portfolio.projects.urls", namespace="projects")),
     path("blog/", include("portfolio.blog.urls", namespace="blog")),

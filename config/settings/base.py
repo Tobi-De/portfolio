@@ -44,7 +44,7 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
 DATABASES = {"default": env.db("DATABASE_URL", default="postgres:///portfolio")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
-
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # URLS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
@@ -240,16 +240,13 @@ REST_FRAMEWORK = {
 # Django Q
 # -------------------------------------------------------------------------------
 Q_CLUSTER = {
-    "name": "tobi_de",
-    "workers": 8,
-    "recycle": 500,
-    "timeout": 120,
-    "compress": True,
-    "save_limit": 250,
-    "queue_limit": 500,
-    "cpu_affinity": 1,
-    "label": "Django Q",
-    "redis": env("REDIS_URL", default="redis://localhost:6379"),
+    "name": "Django-ORM",
+    "workers": 4,
+    "timeout": 90,
+    "retry": 120,
+    "queue_limit": 50,
+    "bulk": 10,
+    "orm": "default",
 }
 
 # Maintencance mode
